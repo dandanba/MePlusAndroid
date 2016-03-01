@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 
+import im.fir.sdk.FIR;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -14,5 +15,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        FIR.init(this);
     }
 }
