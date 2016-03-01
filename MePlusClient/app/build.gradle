@@ -22,15 +22,25 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-pcollections:2.7.2'
+    compile 'com.facebook.fresco:fresco:0.9.0+'
+    compile 'com.marvinlabs:android-intents:1.5.1@aar'
+    compile 'cn.trinea.android.common:trinea-android-common:4.2.15'
     compile 'im.fir:fir-sdk:latest.integration@aar'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-pcollections:2.7.2'
+    //avoscloud-sdk 为 LeanCloud基础包
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
+    compile 'me.dm7.barcodescanner:zbar:1.8.4'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
