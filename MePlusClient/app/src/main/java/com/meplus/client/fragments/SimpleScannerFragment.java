@@ -2,7 +2,6 @@ package com.meplus.client.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
-public class SimpleScannerFragment extends Fragment implements ZBarScannerView.ResultHandler {
+public class SimpleScannerFragment extends BaseFragment implements ZBarScannerView.ResultHandler {
     private static final String TAG = SimpleScannerFragment.class.getSimpleName();
     private ZBarScannerView mScannerView;
 
