@@ -1,74 +1,74 @@
 me plus android 项目说明
 
-1. 图书借阅机器人应用
-1.1 前驱：
-	1. 接口文档调用说明
-	2. UI设计和确认
-	3. 测试账号
-1.2 后继：
-	1. 阶段调试
-	2. 测试上线
-1.3 模块和开发周期：
-	1. 借书还书系统：
-		1. 二维码扫描开发 			2天
-		2. 网络模块的架构 			2天
-		3. 数据解析模块的结构 			1天
-		4. UI部分的调整				3天
-	2. 多媒体信息的展示
-		1. 音频视频连接的加密处理 		2天
-		2. 视频播放音频播放模块开发		3天
- 		3. UI部分的调整				2天
-	3. 图书查询
-		1. UI部分的调整			3天
-	4.整合测试修改BUG				5天
-1.4 合计：23个工作日
-
-2. 多我机器人
-2.1 前驱：
-	1. UI设计和确认
-	2. 底盘确认
-	3. 主板和显示器的确认
-2.2 后继：
-	1. 阶段调试
-	2. 测试上线
-2.3 模块和开发周期：
-	1. 注册机器人
-		1. 模块接口设计开发 		2天
-		2. UI部分的调整			2天
-	2. 检测机器人
-		1. 硬件接口的调用测试
-			1. 上下左右（底盘测试） 		1天	
-			2. 旋转90度					1天
-			3. 视频通话					2天
-			4. 播放本地的声音和视频  		1天
- 		2. UI部分的调整					2天
-	3. 视频和移动				
-		1. 实时通讯模块					3天
-	4. 配置人工地图						2天
-	5.整合测试修改BUG						3天
-2.4 合计：19个工作日
-
-3. 多我客户端
-3.1 前驱：
-	1. UI设计和确认
-	2. 多我机器人客户端
-3.2 后继：
-	1. 阶段调试
-	2. 测试上线
-3.3 模块和开发周期：
-	1. 登录用户
-		1. 模块接口设计开发 		2天
-		2. UI部分的调整			2天
-	2. 控制机器人					2天
-	3. 视频和移动					1天
-	3.整合测试修改BUG				2天
-
-3.4 合计：9个工作日
-
+1.图书借阅机器人应用
+  1.1前驱：
+    1.接口文档调用说明
+    2.UI设计和确认
+    3.测试账号
+    4.室内导航的协议和解决方案的确认
+  1.2后继：
+    1.阶段调试
+    2.测试上线
+  1.3模块和开发周期：
+    1.借书还书系统：
+      1.二维码扫描开发                             2天
+      2.网络模块的架构                             2天
+      3.数据解析模块的结构                         1天
+      4.UI部分的调整                              3天
+    2.多媒体信息的展示
+      1.音频视频连接的加密处理                      2天
+      2.视频播放音频播放模块开发                    3天
+      3.UI部分的调整                              2天
+    3.图书查询
+      1.UI部分的调整                              3天
+    4.室内导航
+      1.ROS的模块移植                             5天
+      2.协议接口的调用和调试                        5天
+    5.整合测试修改BUG                              5天
+  1.4合计：                            33个工作日
+2.多我机器人
+  2.1前驱：
+    1.UI设计和确认
+    2.底盘确认
+    3.主板和显示器的确认
+  2.2后继：
+    1.阶段调试
+    2.测试上线
+  2.3模块和开发周期：
+    1.注册机器人
+      1.模块接口设计开发                            2天
+      2.UI部分的调整                               2天
+    2.检测机器人
+      1.硬件接口的调用测试
+        1.上下左右（底盘测试）                      1天
+        2.旋转90度                                1天
+        3.视频通话                                 2天
+        4.播放本地的声音和视频                       1天
+      2.UI部分的调整                                2天
+    3.视频和移动
+      1.实时通讯模块                                3天
+    4.配置人工地图                                  2天
+    5.整合测试修改BUG                               3天
+  2.4合计：                            19个工作日
+3.多我客户端
+  3.1前驱：
+    1.UI设计和确认
+    2.多我机器人客户端
+  3.2后继：
+    1.阶段调试
+    2.测试上线
+  3.3模块和开发周期：
+    1.登录用户
+      1.模块接口设计开发                            2天
+      2.UI部分的调整                               2天
+    2.控制机器人                                   2天
+    3.视频和移动                                   1天
+    4.整合测试修改BUG                              2天
+  3.4合计：                            9个工作日
 4.通用功能
-4.1 自动升级					2天
-4.2 崩溃后台日志				2天
-4.3 合计：4个工作日
+  4.1自动升级                                      2天
+  4.2崩溃后台日志                                   2天
+  4.3合计：4个工作日
 
 技术方案：
 1. 声网
@@ -80,9 +80,9 @@ me plus android 项目说明
 7. 自动升级					fir 		@http://bughd.com/doc/ios-version-update
 8. 崩溃检测					fabric 		@https://www.fabric.io
 9. jackson					json		@https://github.com/FasterXML/jackson
-10. pubnb 					im				@https://www.pubnub.com/,https://github.com/pubnub/ # me@meplusplus.com  @Thingstec703
-11. trinea 					common utils	@https://github.com/Trinea/android-common
-12. android intents 		intents			@https://github.com/marvinlabs/android-intents
+10. pubnb 					im					@https://www.pubnub.com/,https://github.com/pubnub/ # me@meplusplus.com  @Thingstec703
+11. trinea 					common utils		@https://github.com/Trinea/android-common
+12. android intents 		intents				@https://github.com/marvinlabs/android-intents
 13. eventbus				event communication @https://github.com/greenrobot/EventBus
-14. butterknife				注入				@https://github.com/JakeWharton/butterknife
-15. Fresco					图片处理			@http://www.fresco-cn.org/,https://github.com/facebook/fresco
+14. butterknife				注入					@https://github.com/JakeWharton/butterknife
+15. Fresco					图片处理				@http://www.fresco-cn.org/,https://github.com/facebook/fresco
