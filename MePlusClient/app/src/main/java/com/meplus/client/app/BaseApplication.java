@@ -1,7 +1,5 @@
 package com.meplus.client.app;
 
-import android.app.Application;
-
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
@@ -9,18 +7,18 @@ import com.meplus.client.Constants;
 import com.meplus.client.api.model.User;
 
 import im.fir.sdk.FIR;
+import io.agora.sample.agora.AgoraApplication;
 import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by dandanba on 3/1/16.
  */
-public class BaseApplication extends Application {
+public class BaseApplication extends AgoraApplication {
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         FIR.init(this);
-
 
         AVObject.registerSubclass(User.class);
 

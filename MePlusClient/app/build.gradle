@@ -46,4 +46,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.pubnub:pubnub-android:3.7.6'
+    compile project(':agora')
 }

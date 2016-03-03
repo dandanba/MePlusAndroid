@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@color/app_background">
+
+    <RelativeLayout
+        android:id="@+id/login_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_key_rectangle_blue">
+
+        <!--Back Button-->
+
+        <ImageView
+            android:id="@+id/login_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_key_navi_button_back"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_actionbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp">
+
+            <!--Logo-->
+
+            <RelativeLayout
+                android:id="@+id/login_logo"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@drawable/ic_key_rectangle_bg">
+
+                <ImageView
+                    android:id="@+id/login_logo_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_key_logo"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_below="@+id/login_logo_image"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/app_name_total"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
+
+            </RelativeLayout>
+
+            <!--Login-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/login_logo"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp"
+                android:paddingBottom="40dp">
+
+                <!--Input Key-->
+
+                <EditText
+                    android:id="@+id/login_key_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="28dp"
+                    android:paddingLeft="13dp"
+                    android:paddingRight="13dp"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/ic_key_input_cell_key"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:hint="@string/login_key"
+                    android:textSize="15sp"
+                    android:text="6D7A26A1D3554A54A9F43BE6797FE3E2"
+                    android:background="@drawable/ic_key_input"/>
+
+                <!--Input Username-->
+
+                <EditText
+                    android:id="@+id/login_user_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_below="@+id/login_key_input"
+                    android:paddingLeft="13dp"
+                    android:paddingRight="13dp"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/ic_key_input_cell_user"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:hint="@string/login_user"
+                    android:textSize="15sp"
+                    android:background="@drawable/ic_key_input"/>
+
+                <Button
+                    android:id="@+id/login_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_below="@+id/login_user_input"
+                    android:text="@string/login"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:background="@drawable/ic_key_button"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

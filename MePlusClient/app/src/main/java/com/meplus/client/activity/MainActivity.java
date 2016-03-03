@@ -9,15 +9,12 @@ import com.meplus.client.utils.IntentUtils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.agora.sample.agora.EntryActivity;
 
 /**
  * 主页面
  */
 public class MainActivity extends BaseActivity {
-    @OnClick(R.id.button)
-    public void onButtonClick(View view) {
-        startActivity(IntentUtils.generateIntent(this, TestPNActivity.class));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,4 +24,17 @@ public class MainActivity extends BaseActivity {
         FIRUtils.checkForUpdateInFIR(this);
     }
 
+    @OnClick({R.id.button, R.id.button1})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button:
+                startActivity(IntentUtils.generateIntent(this, TestPNActivity.class));
+                break;
+            case R.id.button1:
+                startActivity(IntentUtils.generateIntent(this, EntryActivity.class));
+                break;
+            default:
+                break;
+        }
+    }
 }
