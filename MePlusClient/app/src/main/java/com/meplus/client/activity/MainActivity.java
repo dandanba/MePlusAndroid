@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity {
         FIRUtils.checkForUpdateInFIR(this);
     }
 
-    @OnClick({R.id.button, R.id.button1})
+    @OnClick({R.id.button, R.id.button1, R.id.button2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button:
@@ -32,6 +32,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.button1:
                 startActivity(IntentUtils.generateIntent(this, EntryActivity.class));
+                break;
+            case R.id.button2:
+                startActivity(IntentUtils.generateIntent(this, TestScannerActivity.class));
                 break;
             default:
                 break;

@@ -70,6 +70,9 @@
         <activity
             android:name=".activity.TestPNActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TestScannerActivity"
+            android:screenOrientation="portrait" />
         <!-- agora -->
         <activity
             android:name="io.agora.sample.agora.EntryActivity"

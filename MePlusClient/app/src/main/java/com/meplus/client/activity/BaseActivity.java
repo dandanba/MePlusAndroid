@@ -34,4 +34,9 @@ public class BaseActivity extends AppCompatActivity {
         transaction.replace(containerViewId, fragment);
         transaction.commitAllowingStateLoss();
     }
+
+    public Fragment findFragmentById(int containerViewId) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        return fragmentManager.findFragmentById(containerViewId);
+    }
 }
