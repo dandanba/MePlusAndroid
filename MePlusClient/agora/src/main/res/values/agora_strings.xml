@@ -1,4 +1,7 @@
 <resources>
+    <string name="vendor_key">522add3faf8546f4a5536584166bf1e9</string>
+    <string name="vendor_name">meplus</string>
+
     <string name="app_name_chinese">会议宝</string>
     <string name="app_name_total">Agora——会议宝</string>
 
@@ -54,7 +57,7 @@
     <string name="sliding_value_150">150</string>
     <string name="sliding_value_200">200</string>
     <string name="sliding_value_255">255</string>
-    
+
     <string name="profile_title">个人信息</string>
     <string name="profile_key_input">请输入厂商Key</string>
     <string name="profile_user_input">请输入用户名</string>
