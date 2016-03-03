@@ -21,6 +21,8 @@ android {
     packagingOptions {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
     lintOptions {
         abortOnError false
@@ -43,4 +45,5 @@ dependencies {
     compile 'me.dm7.barcodescanner:zbar:1.8.4'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.pubnub:pubnub-android:3.7.6'
 }

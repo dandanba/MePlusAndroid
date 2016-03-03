@@ -1,4 +1,4 @@
-package com.meplus.client.api.avos;
+package com.meplus.client.api.model;
 
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVUser;
