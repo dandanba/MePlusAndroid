@@ -69,20 +69,3 @@ me plus android 项目说明
   4.1自动升级                                      2天
   4.2崩溃后台日志                                   2天
   4.3合计：4个工作日
-
-技术方案：
-1. 声网
-2. LeanCloudIM
-3. 视频和声音播放
-4. com口或者蓝牙解决方案
-5. 二维码扫描					barcode		@https://github.com/dm77/barcodescanner
-6. LeanCloud数据文件部分的API	leancloud	@https://leancloud.cn/docs/sdk_setup-android.html,https://leancloud.cn/docs/android_guide.html
-7. 自动升级					fir 		@http://bughd.com/doc/ios-version-update
-8. 崩溃检测					fabric 		@https://www.fabric.io
-9. jackson					json		@https://github.com/FasterXML/jackson
-10. pubnb 					im					@https://www.pubnub.com/,https://github.com/pubnub/ # me@meplusplus.com  @Thingstec703
-11. trinea 					common utils		@https://github.com/Trinea/android-common
-12. android intents 		intents				@https://github.com/marvinlabs/android-intents
-13. eventbus				event communication @https://github.com/greenrobot/EventBus
-14. butterknife				注入					@https://github.com/JakeWharton/butterknife
-15. Fresco					图片处理				@http://www.fresco-cn.org/,https://github.com/facebook/fresco
