@@ -1,8 +1,8 @@
 技术方案：
-1. 声网
-2. LeanCloudIM
+1. 声网						sdk 		@http://cn.agora.io/
+2. LeanCloudIM				暂时不用
 3. 视频和声音播放
-4. com口或者蓝牙解决方案
+4. com口或者蓝牙解决方案		
 5. 二维码扫描					barcode		@https://github.com/dm77/barcodescanner
 6. LeanCloud数据文件部分的API	leancloud	@https://leancloud.cn/docs/sdk_setup-android.html,https://leancloud.cn/docs/android_guide.html
 7. 自动升级					fir 		@http://bughd.com/doc/ios-version-update
@@ -14,3 +14,5 @@
 13. eventbus				event communication @https://github.com/greenrobot/EventBus
 14. butterknife				注入					@https://github.com/JakeWharton/butterknife
 15. Fresco					图片处理				@http://www.fresco-cn.org/,https://github.com/facebook/fresco
+16. ROS						室内导航				@http://www.ros.org/
+17. Face＋＋					

@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 主页面
+ * 测试PN
  */
 public class TestPNActivity extends PNActivity {
     @Bind(R.id.textText)
