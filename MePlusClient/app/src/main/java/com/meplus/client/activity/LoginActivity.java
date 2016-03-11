@@ -8,7 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.SignUpCallback;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
 import com.meplus.client.utils.IntentUtils;
@@ -51,7 +52,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
-
     }
 
     @OnClick({R.id.password_button, R.id.login_button, R.id.register_button})
@@ -89,12 +89,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         final String username = mPhoneEdit.getText().toString();
         final String password = mPasswordEdit.getText().toString();
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(AVException e) {
+        User.logInInBackground(username, password, new LogInCallback<AVUser>() {
+            @Override
+            public void done(AVUser avUser, AVException e) {
                 if (e == null) {
                     startActivity(IntentUtils.generateIntent(LoginActivity.this, MainActivity.class));
                     finish();
@@ -103,6 +100,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 }
             }
         });
-
     }
+
 }
