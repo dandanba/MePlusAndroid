@@ -28,8 +28,8 @@ public class NavHeaderViewHolder {
     public void updateUserView() {
         User user = User.getCurrentUser(User.class);
         final String robotId = user.getRobotId();
-        mTitle.setText(user.getUsername());
-        mContent.setText(TextUtils.isEmpty(robotId) ? "未绑定多我机器人" : robotId);
-        mText.setText(user.getEmail());
+        mTitle.setText(String.format("用户名:%1$s", user.getUsername()));
+        mContent.setText(TextUtils.isEmpty(robotId) ? "未绑定多我机器人" : String.format("机器人:%1$s", robotId));
+        mText.setText(String.format("邮箱:%1$s", user.getEmail()));
     }
 }
