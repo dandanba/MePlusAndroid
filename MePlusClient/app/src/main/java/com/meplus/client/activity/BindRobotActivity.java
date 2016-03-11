@@ -62,6 +62,8 @@ public class BindRobotActivity extends BaseActivity implements Validator.Validat
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+
+        mBindEdit.setText(User.getCurrentUser(User.class).getRobotId());
     }
 
     @Override
