@@ -12,11 +12,17 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
+import com.meplus.client.events.Event;
+import com.meplus.client.events.SignUpEvent;
 import com.meplus.client.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -49,9 +55,16 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.password_button, R.id.login_button, R.id.register_button})
@@ -63,6 +76,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 mValidator.validate();
                 break;
             case R.id.register_button:
+                startActivity(IntentUtils.generateIntent(LoginActivity.this, RegisterActivity.class));
                 break;
         }
     }
@@ -82,6 +96,13 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             } else {
                 Snackbar.make(mRoot, message, Snackbar.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSignUpEvent(SignUpEvent event) {
+        if (event.getStatus().equals(Event.STATUS_OK)) {
+            finish();
         }
     }
 

@@ -11,12 +11,16 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SignUpCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
+import com.meplus.client.events.Event;
+import com.meplus.client.events.SignUpEvent;
 import com.meplus.client.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -49,7 +53,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
         mValidator = new Validator(this);
@@ -96,6 +100,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {
                 if (e == null) {
+                    EventBus.getDefault().post(new SignUpEvent(Event.STATUS_OK));
                     startActivity(IntentUtils.generateIntent(RegisterActivity.this, MainActivity.class));
                     finish();
                 } else {
