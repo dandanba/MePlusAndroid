@@ -62,8 +62,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StartAppTheme" />
+        <activity
             android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/StartAppTheme" />
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.meplus.client.app.activity.TestPNActivity">
+    tools:context="com.meplus.client.activity.TestPNActivity">
 
     <TextView
         android:id="@+id/textText"

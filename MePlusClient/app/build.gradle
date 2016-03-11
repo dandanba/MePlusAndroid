@@ -59,6 +59,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     // pubnub
     compile 'com.pubnub:pubnub-android:3.7.6'
-
+    // design
+    compile 'com.android.support:design:23.2.0'
+    // validation
+    compile 'com.mobsandgeeks:android-saripaar:2.0.3'
+    // agora
     compile project(':agora')
+
 }

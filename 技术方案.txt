@@ -19,5 +19,8 @@
 18. android 				框架					@http://arccode.net/
 19. greendao				数据库				@http://greenrobot.org/greendao/features/
 20. glide					图片处理				@https://github.com/bumptech/glide
-21. retrofit				rest网络引擎			@http://square.github.io/retrofit/
-22. Dagger2.0 				注入
+21. glide transform			转换					@https://github.com/wasabeef/glide-transformations
+22. retrofit				rest网络引擎			@http://square.github.io/retrofit/
+23. Dagger2.0 				注入
+24. validation				验证				@https://github.com/ragunathjawahar/android-saripaar
+25. android design 
