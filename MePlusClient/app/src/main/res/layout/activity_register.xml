@@ -61,6 +61,34 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/phone_selected"
+                android:drawablePadding="10dp"
+                android:hint="@string/me_email"
+                android:singleLine="true"
+                android:textColor="@color/meTextColor"
+                android:textColorHint="@color/meTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/meTextColor" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

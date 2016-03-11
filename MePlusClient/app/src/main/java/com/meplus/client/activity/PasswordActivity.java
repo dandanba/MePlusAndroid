@@ -7,57 +7,39 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.SignUpCallback;
+import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
-import com.meplus.client.events.Event;
-import com.meplus.client.events.SignUpEvent;
-import com.meplus.client.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ToastUtils;
 
 /**
- * 注册
- * meplus 13641194007@139.com
+ * 修改密码
  */
-public class RegisterActivity extends BaseActivity implements Validator.ValidationListener {
+public class PasswordActivity extends BaseActivity implements Validator.ValidationListener {
     @Bind(R.id.root)
     ViewGroup mRoot;
 
-    @NotEmpty
-    @Bind(R.id.phone_edit)
-    EditText mPhoneEdit;
-
     @Email
+    @NotEmpty
     @Bind(R.id.email_edit)
     EditText mEmailEdit;
-
-    @Password(min = 6)
-    @Bind(R.id.password_edit)
-    EditText mPasswordEdit;
-
-    @ConfirmPassword
-    @Bind(R.id.confirm_edit)
-    EditText mConfirmEdit;
 
     private Validator mValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_password);
         ButterKnife.bind(this);
 
         mValidator = new Validator(this);
@@ -65,7 +47,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
 
     }
 
-    @OnClick({R.id.register_button})
+    @OnClick({R.id.password_button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.register_button:
@@ -76,7 +58,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
 
     @Override
     public void onValidationSucceeded() {
-        doRegister();
+        doResetPassword();
     }
 
     @Override
@@ -92,23 +74,16 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         }
     }
 
-    private void doRegister() {
-        final String username = mPhoneEdit.getText().toString();
-        final String password = mPasswordEdit.getText().toString();
+    private void doResetPassword() {
         final String email = mEmailEdit.getText().toString();
-
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-
-        user.signUpInBackground(new SignUpCallback() {
+        User.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
             public void done(AVException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new SignUpEvent(Event.STATUS_OK));
-                    startActivity(IntentUtils.generateIntent(RegisterActivity.this, MainActivity.class));
+                    // 已发送一份重置密码的指令到用户的邮箱
+                    ToastUtils.show(PasswordActivity.this, "已发送一份重置密码的指令到用户的邮箱");
                     finish();
                 } else {
+                    // 重置密码出错。
                     Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
                 }
             }

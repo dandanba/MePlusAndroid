@@ -6,4 +6,6 @@
     <string name="me_password_forgot">忘记密码 ？</string>
     <string name="me_login">登录</string>
     <string name="me_password_confirm">确认密码</string>
+    <string name="me_email">邮箱</string>
+    <string name="me_reset_passwrod">重置密码</string>
 </resources>

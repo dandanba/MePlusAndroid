@@ -5,7 +5,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
@@ -42,12 +41,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @Password(min = 6)
     @Bind(R.id.password_edit)
     EditText mPasswordEdit;
-    @Bind(R.id.password_button)
-    TextView mPasswordButton;
-    @Bind(R.id.login_button)
-    TextView mLoginButton;
-    @Bind(R.id.register_button)
-    TextView mRegisterButton;
     private Validator mValidator;
 
     @Override
@@ -71,6 +64,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.password_button:
+                startActivity(IntentUtils.generateIntent(LoginActivity.this, PasswordActivity.class));
                 break;
             case R.id.login_button:
                 mValidator.validate();
