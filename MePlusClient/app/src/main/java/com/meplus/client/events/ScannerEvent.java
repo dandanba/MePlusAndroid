@@ -15,6 +15,7 @@ public class ScannerEvent extends Event {
     }
 
     public ScannerEvent(String content) {
+        super(STATUS_OK);
         this.content = content;
     }
 

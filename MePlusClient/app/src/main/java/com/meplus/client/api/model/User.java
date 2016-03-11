@@ -7,12 +7,13 @@ import com.avos.avoscloud.AVUser;
 public class User extends AVUser {
     public static final Creator CREATOR = AVObjectCreator.instance;
 
-    public String getBirthday() {
-        return getString("birthday");
+    public String getRobotId() {
+        return getString("robotId");
     }
 
-    public void setBirthday(String birthday) {
-        put("birthday", birthday);
+    public void setRobotId(String birthday) {
+        put("robotId", birthday);
     }
+
 
 }

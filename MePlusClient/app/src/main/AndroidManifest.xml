@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.meplus.client">
+
     <!-- fabric -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- fir.im -->
     <!-- 必选 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 可选 -->
-    <uses-permission android:name="android.permission.GET_TASKS"></uses-permission>
+    <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- leancloud 基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -57,6 +58,7 @@
             android:theme="@style/StartAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -73,13 +75,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/StartAppTheme" />
         <activity
+            android:name=".activity.EditPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StartAppTheme" />
+        <activity
             android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StartAppTheme" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BindRobotActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TestActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TestPNActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TestScannerActivity"
+            android:name=".activity.ScannerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TestFaceActivity"
@@ -89,50 +105,42 @@
             android:name="io.agora.sample.agora.EntryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name="io.agora.sample.agora.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.SelectActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.ChannelActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.ProfileActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.RecordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.AboutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="io.agora.sample.agora.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

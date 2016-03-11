@@ -15,24 +15,26 @@ import cn.trinea.android.common.util.ToastUtils;
 /**
  * 测试扫描页面
  */
-public class TestScannerActivity extends BaseActivity {
+public class ScannerActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_testscanner);
+        setContentView(R.layout.activity_scanner);
         replaceContainer(R.id.frame_layout, SimpleScannerFragment.newInstance());
 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
-        if (!Constants.sRelease) {
-            final String content = event.getContent();
-            ToastUtils.show(this, content);
+        if (event.ok()) {
+            if (!Constants.sRelease) {
+                final String content = event.getContent();
+                ToastUtils.show(this, content);
+            }
+            SimpleScannerFragment simpleScannerFragment =
+                    (SimpleScannerFragment) findFragmentById(R.id.frame_layout);
+            simpleScannerFragment.resumeScanner();
         }
-        SimpleScannerFragment simpleScannerFragment =
-                (SimpleScannerFragment) findFragmentById(R.id.frame_layout);
-        simpleScannerFragment.resumeScanner();
     }
 }

@@ -39,7 +39,9 @@ public class TestPNActivity extends PNActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPNEvent(PNEvent event) {
-        String message = event.getMessage().toString();
-        textText.setText(message);
+        if (event.ok()) {
+            String message = event.getMessage().toString();
+            textText.setText(message);
+        }
     }
 }
