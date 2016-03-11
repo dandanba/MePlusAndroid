@@ -65,6 +65,4 @@ dependencies {
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
     // agora
     compile project(':agora')
-
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

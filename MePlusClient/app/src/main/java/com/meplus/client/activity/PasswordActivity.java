@@ -50,7 +50,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
     @OnClick({R.id.password_button})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.register_button:
+            case R.id.password_button:
                 mValidator.validate();
                 break;
         }
@@ -80,7 +80,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             public void done(AVException e) {
                 if (e == null) {
                     // 已发送一份重置密码的指令到用户的邮箱
-                    ToastUtils.show(PasswordActivity.this, "已发送一份重置密码的指令到用户的邮箱");
+                    ToastUtils.show(PasswordActivity.this, "已发送一份重置密码的指令到用户的邮箱!");
                     finish();
                 } else {
                     // 重置密码出错。
