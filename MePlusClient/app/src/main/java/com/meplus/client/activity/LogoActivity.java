@@ -17,8 +17,9 @@ import butterknife.ButterKnife;
  */
 public class LogoActivity extends BaseActivity implements Handler.Callback {
     private static final String TAG = LogoActivity.class.getSimpleName();
-    @Bind(R.id.image)
-    ImageView mImage;
+
+    @butterknife.Bind(R.id.shimmer_view_container)
+    com.facebook.shimmer.ShimmerFrameLayout mShimmerViewContainer;
     private Handler mHandler;
 
     @Override
@@ -26,6 +27,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
         ButterKnife.bind(this);
+        mShimmerViewContainer.startShimmerAnimation();
         mHandler = new Handler(this);
         mHandler.sendEmptyMessageDelayed(1, 3000);
     }

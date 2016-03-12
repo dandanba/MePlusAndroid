@@ -65,4 +65,6 @@ dependencies {
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
     // agora
     compile project(':agora')
+    // shimmer
+    compile 'com.facebook.shimmer:shimmer:0.1.0@aar'
 }
