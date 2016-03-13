@@ -1,7 +1,6 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,6 +13,8 @@ import com.meplus.client.api.model.User;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.SignUpEvent;
 import com.meplus.client.utils.IntentUtils;
+import com.meplus.client.utils.SnackBarUtils;
+import com.meplus.client.utils.UUIDUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -96,20 +97,21 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                Snackbar.make(mRoot, message, Snackbar.LENGTH_LONG).show();
+                SnackBarUtils.show(mRoot, message);
             }
         }
     }
 
     private void doRegister() {
-        String username = mPhoneEdit.getText().toString();
-        String password = mPasswordEdit.getText().toString();
-        String email = mEmailEdit.getText().toString();
+        final String username = mPhoneEdit.getText().toString();
+        final String password = mPasswordEdit.getText().toString();
+        final String email = mEmailEdit.getText().toString();
 
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
+        user.setUserId(UUIDUtils.getUUID(this));
 
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {
@@ -118,7 +120,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
                     startActivity(IntentUtils.generateIntent(RegisterActivity.this, MainActivity.class));
                     finish();
                 } else {
-                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                    SnackBarUtils.show(mRoot, e.toString());
                 }
             }
         });

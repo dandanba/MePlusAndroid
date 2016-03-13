@@ -67,15 +67,14 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
                                 public void done(List<Robot> results, AVException e) {
                                     if (e == null) {
                                         user.setRobotList(results);
+                                    } else {
+                                        ToastUtils.show(LogoActivity.this, e.toString());
                                     }
                                     startActivity(IntentUtils.generateIntent(LogoActivity.this, MainActivity.class));
                                 }
                             });
-
-
                         }
                         finish();
-
                     } else {
                         ToastUtils.show(LogoActivity.this, e.toString());
                     }

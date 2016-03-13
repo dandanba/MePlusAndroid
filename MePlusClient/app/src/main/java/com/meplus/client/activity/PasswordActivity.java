@@ -1,7 +1,6 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -10,6 +9,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
+import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -69,7 +69,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                Snackbar.make(mRoot, message, Snackbar.LENGTH_LONG).show();
+                SnackBarUtils.show(mRoot, message);
             }
         }
     }
@@ -84,7 +84,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
                     finish();
                 } else {
                     // 重置密码出错。
-                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                    SnackBarUtils.show(mRoot, e.toString());
                 }
             }
         });

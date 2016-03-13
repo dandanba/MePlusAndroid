@@ -1,7 +1,6 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import com.meplus.client.R;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.SignUpEvent;
 import com.meplus.client.utils.IntentUtils;
+import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -87,7 +87,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                Snackbar.make(mRoot, message, Snackbar.LENGTH_LONG).show();
+                SnackBarUtils.show(mRoot, message);
             }
         }
     }
@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     startActivity(IntentUtils.generateIntent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {
-                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                    SnackBarUtils.show(mRoot, e.toString());
                 }
             }
         });

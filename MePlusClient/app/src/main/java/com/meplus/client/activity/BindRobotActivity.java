@@ -1,7 +1,6 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.meplus.client.events.BindEvent;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.utils.IntentUtils;
+import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -149,22 +149,22 @@ public class BindRobotActivity extends BaseActivity implements Validator.Validat
                                                 EventBus.getDefault().post(new BindEvent(Event.STATUS_OK));
                                                 finish();
                                             } else {
-                                                Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                                                SnackBarUtils.show(mRoot, e.toString());
                                             }
                                         }
                                     });
 
 
                                 } else {
-                                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                                    SnackBarUtils.show(mRoot, e.toString());
                                 }
                             }
                         });
                     } else {
-                        Snackbar.make(mRoot, "机器人ID有误！", Snackbar.LENGTH_LONG).show();
+                        SnackBarUtils.show(mRoot, "机器人ID有误！");
                     }
                 } else {
-                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                    SnackBarUtils.show(mRoot, e.toString());
                 }
             }
         });
@@ -178,7 +178,7 @@ public class BindRobotActivity extends BaseActivity implements Validator.Validat
 //                    EventBus.getDefault().post(new BindEvent(Event.STATUS_OK));
 //                    finish();
 //                } else {
-//                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+//                    SnackbarUtils.show(mRoot, e.toString());
 //                }
 //            }
 //        });

@@ -1,7 +1,6 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.UpdatePasswordCallback;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
+import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -93,7 +93,7 @@ public class EditPasswordActivity extends BaseActivity implements Validator.Vali
             if (view instanceof EditText) {
                 ((EditText) view).setError(message);
             } else {
-                Snackbar.make(mRoot, message, Snackbar.LENGTH_LONG).show();
+                SnackBarUtils.show(mRoot, message);
             }
         }
     }
@@ -110,7 +110,7 @@ public class EditPasswordActivity extends BaseActivity implements Validator.Vali
                     finish();
                 } else {
                     // 修改密码出错。
-                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                    SnackBarUtils.show(mRoot, e.toString());
                 }
             }
         });

@@ -13,6 +13,7 @@ import com.meplus.client.events.Event;
 import com.meplus.client.events.LogoutEvent;
 import com.meplus.client.utils.FIRUtils;
 import com.meplus.client.utils.IntentUtils;
+import com.meplus.client.utils.SnackBarUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,7 +41,7 @@ public class SettingsActivity extends BaseActivity {
 
         @Override
         public void onFail(Exception e) {
-            Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+            SnackBarUtils.show(mRoot, e.toString());
         }
 
         @Override
