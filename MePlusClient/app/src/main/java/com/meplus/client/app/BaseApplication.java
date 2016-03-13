@@ -5,6 +5,7 @@ import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.meplus.client.Constants;
+import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 
 import im.fir.sdk.FIR;
@@ -21,6 +22,7 @@ public class BaseApplication extends AgoraApplication {
         Fabric.with(this, new Crashlytics(), new Answers());
         FIR.init(this);
 
+        AVObject.registerSubclass(Robot.class);
         AVObject.registerSubclass(User.class);
 
         AVOSCloud.initialize(this, Constants.AVOS_APP_ID, Constants.AVOS_APP_KEY); // 初始化参数依次为 this, AppId, AppKey

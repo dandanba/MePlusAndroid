@@ -9,8 +9,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVRelation;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.meplus.client.R;
+import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.BindEvent;
 import com.meplus.client.events.Event;
@@ -29,6 +33,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ListUtils;
 
 /**
  * 绑定机器人
@@ -63,7 +68,8 @@ public class BindRobotActivity extends BaseActivity implements Validator.Validat
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
-        mBindEdit.setText(User.getCurrentUser(User.class).getRobotId());
+        final List<Robot> robotList = User.getCurrentUser(User.class).getRobotList();
+        mBindEdit.setText(ListUtils.isEmpty(robotList) ? "" : robotList.get(0).getRobotId());
     }
 
     @Override
@@ -112,20 +118,70 @@ public class BindRobotActivity extends BaseActivity implements Validator.Validat
         }
     }
 
-    private void doBindRobot(String robotId) {
-        User user = User.getCurrentUser(User.class);
-        user.setRobotId(robotId);
-        user.saveInBackground(new SaveCallback() {
+    private void doBindRobot(final String robotId) {
+
+        // 通过机器人的ID查找机器人
+        // 创建关系
+
+        AVQuery<Robot> query = Robot.getQuery(Robot.class);
+        query.whereEqualTo(Robot.KEY_ROBOT_ID, robotId);
+        query.findInBackground(new FindCallback<Robot>() {
             @Override
-            public void done(AVException e) {
+            public void done(List<Robot> results, AVException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new BindEvent(Event.STATUS_OK));
-                    finish();
+                    final int size = ListUtils.getSize(results);
+                    if (size > 0) {
+                        final Robot robot = results.get(0);
+                        final User user = User.getCurrentUser(User.class);
+                        final AVRelation<Robot> relation = user.getRelation(User.RELATION_ROBOTS);
+                        relation.add(robot);
+                        user.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    final AVQuery<Robot> query = relation.getQuery();
+                                    query.limit(1);
+                                    query.findInBackground(new FindCallback<Robot>() {
+                                        @Override
+                                        public void done(List<Robot> results, AVException e) {
+                                            if (e == null) {
+                                                user.setRobotList(results);
+                                                EventBus.getDefault().post(new BindEvent(Event.STATUS_OK));
+                                                finish();
+                                            } else {
+                                                Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+
+
+                                } else {
+                                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    } else {
+                        Snackbar.make(mRoot, "机器人ID有误！", Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
                     Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
                 }
             }
         });
+
+//
+//        user.setRobotId(robotId);
+//        user.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(AVException e) {
+//                if (e == null) {
+//                    EventBus.getDefault().post(new BindEvent(Event.STATUS_OK));
+//                    finish();
+//                } else {
+//                    Snackbar.make(mRoot, e.toString(), Snackbar.LENGTH_LONG).show();
+//                }
+//            }
+//        });
     }
 
 }

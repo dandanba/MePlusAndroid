@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.meplus.client.R;
+import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.BindEvent;
 import com.meplus.client.events.LogoutEvent;
@@ -23,9 +24,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ListUtils;
 import io.agora.sample.agora.EntryActivity;
 
 /**
@@ -121,7 +125,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (view.getId()) {
             case R.id.fab:
                 User user = User.getCurrentUser(User.class);
-                final String robotId = user.getRobotId();
+                final List<Robot> robotList = user.getRobotList();
+
+
+                final String robotId = ListUtils.isEmpty(robotList) ? "" : robotList.get(0).getRobotId();
                 final boolean binded = !TextUtils.isEmpty(robotId);
                 Snackbar.make(view, binded ? "唤醒多我机器人吗？" : "绑定多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
                     @Override

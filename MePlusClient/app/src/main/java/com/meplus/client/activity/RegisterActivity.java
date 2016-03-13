@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SignUpCallback;
+import com.meplus.client.Constants;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.Event;
@@ -30,7 +31,8 @@ import butterknife.OnClick;
 
 /**
  * 注册
- * meplus 13641194007@139.com
+ * 用户名：meplus 密码：meplus 注册邮箱：13641194007@139.com
+ * 机器人：robot2 密码：robot2 注册邮箱：wanggeng@meplusplus.com
  */
 public class RegisterActivity extends BaseActivity implements Validator.ValidationListener {
     @Bind(R.id.root)
@@ -63,6 +65,13 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
+        if (!Constants.sRelease) {
+            mPhoneEdit.setText("meplus");
+            mPasswordEdit.setText("meplus");
+            mConfirmEdit.setText("meplus");
+            mEmailEdit.setText("13641194007@139.com");
+        }
+
     }
 
     @OnClick({R.id.register_button})
@@ -93,9 +102,9 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
     }
 
     private void doRegister() {
-        final String username = mPhoneEdit.getText().toString();
-        final String password = mPasswordEdit.getText().toString();
-        final String email = mEmailEdit.getText().toString();
+        String username = mPhoneEdit.getText().toString();
+        String password = mPasswordEdit.getText().toString();
+        String email = mEmailEdit.getText().toString();
 
         User user = new User();
         user.setUsername(username);
@@ -113,5 +122,6 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
                 }
             }
         });
+
     }
 }
