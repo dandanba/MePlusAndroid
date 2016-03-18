@@ -116,7 +116,7 @@
             android:theme="@style/StartAppTheme" />
         <!-- bluetooth -->
         <activity
-            android:name="app.akexorcist.bluetoothspp.DeviceList"
+            android:name="com.meplus.robot.activity.DeviceListActivity"
             android:screenOrientation="landscape"
             android:theme="@style/StartAppTheme" />
         <!-- agora -->

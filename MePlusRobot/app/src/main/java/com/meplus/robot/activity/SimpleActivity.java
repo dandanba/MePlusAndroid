@@ -25,7 +25,6 @@ import android.widget.Toast;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
-import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class SimpleActivity extends BaseActivity {
     BluetoothSPP bt;
@@ -89,7 +88,7 @@ public class SimpleActivity extends BaseActivity {
     }
 
     public void connect() {
-        Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+        Intent intent = new Intent(getApplicationContext(), DeviceListActivity.class);
         startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
     }
 

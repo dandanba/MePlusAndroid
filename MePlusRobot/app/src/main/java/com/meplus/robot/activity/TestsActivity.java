@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.marvinlabs.intents.PhoneIntents;
 import com.meplus.client.R;
 
 public class TestsActivity extends SimpleActivity {
@@ -50,7 +49,9 @@ public class TestsActivity extends SimpleActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "有问题需要反馈给我们吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
-            startActivity(PhoneIntents.newCallNumberIntent("13641194007"));
+//            startActivity(PhoneIntents.newCallNumberIntent("13641194007"));
+
+            connect();
         }).show());
 
     }
@@ -82,11 +83,10 @@ public class TestsActivity extends SimpleActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tests, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            textView.setText(String.format("%1$d", getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
