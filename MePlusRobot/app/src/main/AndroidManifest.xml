@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.meplus.client">
-    <uses-sdk tools:overrideLibrary="com.facebook.shimmer"/>
+
+    <uses-sdk tools:overrideLibrary="com.facebook.shimmer" />
 
     <!-- fabric -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -43,6 +44,9 @@
     <!-- bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!-- phone intent -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name="com.meplus.robot.app.MPApplication"
@@ -106,6 +110,15 @@
         <activity
             android:name="com.meplus.robot.activity.TestFaceActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name="com.meplus.robot.activity.TestsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/StartAppTheme" />
+        <!-- bluetooth -->
+        <activity
+            android:name="app.akexorcist.bluetoothspp.DeviceList"
+            android:screenOrientation="landscape"
+            android:theme="@style/StartAppTheme" />
         <!-- agora -->
         <activity
             android:name="io.agora.sample.agora.EntryActivity"
