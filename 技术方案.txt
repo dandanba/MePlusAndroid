@@ -1,26 +1,25 @@
-技术方案：
-1. 声网						sdk 		@http://cn.agora.io/
-2. LeanCloudIM				暂时不用
-3. 视频和声音播放
-4. com口或者蓝牙解决方案		
-5. 二维码扫描					barcode		@https://github.com/dm77/barcodescanner
-6. LeanCloud数据文件部分的API	leancloud	@https://leancloud.cn/docs/sdk_setup-android.html,https://leancloud.cn/docs/android_guide.html
-7. 自动升级					fir 		@http://bughd.com/doc/ios-version-update
-8. 崩溃检测					fabric 		@https://www.fabric.io
-9.  jackson					json		@https://github.com/FasterXML/jackson
-10. pubnb 					im					@https://www.pubnub.com/,https://github.com/pubnub/ # me@meplusplus.com  @Thingstec703
-11. trinea 					common utils		@https://github.com/Trinea/android-common
-12. android intents 		intents				@https://github.com/marvinlabs/android-intents
-13. eventbus				event communication @https://github.com/greenrobot/EventBus
-14. butterknife				注入					@https://github.com/JakeWharton/butterknife
-15. Fresco					暂时不用				@http://www.fresco-cn.org/,https://github.com/facebook/fresco
-16. ROS						室内导航				@http://www.ros.org/
-17. Face＋＋					
-18. android 				框架					@http://arccode.net/
-19. greendao				数据库				@http://greenrobot.org/greendao/features/
-20. glide					图片处理				@https://github.com/bumptech/glide
-21. glide transform			转换					@https://github.com/wasabeef/glide-transformations
-22. retrofit				rest网络引擎			@http://square.github.io/retrofit/
-23. Dagger2.0 				注入
-24. validation				验证				@https://github.com/ragunathjawahar/android-saripaar
-25. android design 
+## 技术方案
+1. 声网 [agora](http://cn.agora.io/)
+2. 视频播放
+3. 声音播放
+4. 蓝牙2.0 [Android-BluetoothSPPLibrary](https://github.com/akexorcist/Android-BluetoothSPPLibrary) [SimpleBluetoothLibrary](https://github.com/DeveloperPaul123/SimpleBluetoothLibrary)
+5. 二维码扫描 [barcodescanner](https://github.com/dm77/barcodescanner)
+6. 二维码生成
+7. 自动升级 [fir](http://bughd.com/doc/ios-version-update)
+8. 崩溃监测 [fabric](https://www.fabric.io)
+9. JSON数据解析 [jackson](https://github.com/FasterXML/jackson)
+10. 即时通讯im [pubnb](https://www.pubnub.com/) `帐号：`me@meplusplus.com `密码：`@Thingstec703
+11. common utils [trinea](https://github.com/Trinea/android-common) [Litesuits](http://litesuits.com/)
+12. android intents [intents](https://github.com/marvinlabs/android-intents)
+13. EventBus [EventBus](https://github.com/greenrobot/EventBus)
+14. butterknife [ButterKnife](https://github.com/JakeWharton/butterknife)
+15. 导航和 [ROS](http://www.ros.org/) [SLAMTEC](http://www.slamtec.com/)
+16. android 框架 [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui) [awesome-android-libraries](https://github.com/wasabeef/awesome-android-libraries) [awesome-android](https://github.com/snowdream/awesome-android) [Android-Tips](https://github.com/tangqi92/Android-Tips) [https://github.com/tangqi92/Android-Tips](https://github.com/Juude/awesome-android-performance) [awesome-android](https://github.com/JStumpp/awesome-android)
+17. 图片处理 [glide](https://github.com/bumptech/glide) [glide-transform](https://github.com/wasabeef/glide-transformations)
+18. 网络 [retrofit](http://square.github.io/retrofit/)
+19. 注入 [dagger2.0](https://github.com/square/dagger)
+20. 验证 [validation](https://github.com/ragunathjawahar/android-saripaar)
+21. LeanColoudAPI [sdk setup](https://leancloud.cn/docs/sdk_setup-android.html),[guide](https://leancloud.cn/docs/android_guide.html)
+22. android design
+23. 蓝牙4.0
+24. 
