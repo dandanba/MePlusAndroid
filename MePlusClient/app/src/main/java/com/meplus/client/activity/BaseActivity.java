@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.meplus.client.app.MPApplication;
+import com.squareup.leakcanary.RefWatcher;
+//import com.squareup.leakcanary.RefWatcher;
+
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -23,9 +27,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
     }
 
+
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
+        RefWatcher refWatcher = MPApplication.getsInstance().getRefWatcher();
+        refWatcher.watch(this);
     }
 
     public void replaceContainer(int containerViewId, Fragment fragment) {

@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

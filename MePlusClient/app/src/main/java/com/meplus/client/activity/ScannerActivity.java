@@ -2,7 +2,7 @@ package com.meplus.client.activity;
 
 import android.os.Bundle;
 
-import com.meplus.client.Constants;
+import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.fragments.SimpleScannerFragment;
@@ -28,7 +28,7 @@ public class ScannerActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
         if (event.ok()) {
-            if (!Constants.sRelease) {
+            if (BuildConfig.DEBUG) {
                 final String content = event.getContent();
                 ToastUtils.show(this, content);
             }

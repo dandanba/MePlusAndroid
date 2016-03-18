@@ -52,7 +52,7 @@ public class PNActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (mPubNub != null) {
             mPubNub.shutdown();

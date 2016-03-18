@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.meplus.client.activity.BaseActivity;
+import com.meplus.client.app.MPApplication;
+import com.squareup.leakcanary.RefWatcher;
 
 public class BaseFragment extends Fragment {
     private static final String TAG = BaseFragment.class.getSimpleName();
@@ -40,6 +42,13 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MPApplication.getsInstance().getRefWatcher();
+        refWatcher.watch(this);
     }
 
 }

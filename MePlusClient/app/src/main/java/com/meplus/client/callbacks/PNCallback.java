@@ -3,7 +3,7 @@ package com.meplus.client.callbacks;
 import android.content.Context;
 import android.util.Log;
 
-import com.meplus.client.Constants;
+import com.meplus.client.BuildConfig;
 import com.pubnub.api.Callback;
 import com.pubnub.api.PubnubError;
 
@@ -40,7 +40,7 @@ public class PNCallback extends Callback {
 
     private void log(String message) {
         Log.d(TAG, message);
-        if (Constants.sRelease) {
+        if (BuildConfig.DEBUG) {
             ToastUtils.show(mContext, message);
         }
     }

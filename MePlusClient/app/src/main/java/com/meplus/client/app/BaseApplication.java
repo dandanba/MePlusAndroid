@@ -4,21 +4,46 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.meplus.client.BuildConfig;
 import com.meplus.client.Constants;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import im.fir.sdk.FIR;
 import io.agora.sample.agora.AgoraApplication;
 import io.fabric.sdk.android.Fabric;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by dandanba on 3/1/16.
  */
 public class BaseApplication extends AgoraApplication {
+    public RefWatcher getRefWatcher() {
+        return mRefWatcher;
+    }
+
+    protected RefWatcher mRefWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BuildConfig.DEBUG) {
+            mRefWatcher = RefWatcher.DISABLED;
+        } else {
+            mRefWatcher = LeakCanary.install(this);
+        }
+
+        // stetho
+        Stetho.initializeWithDefaults(this);
+
+        new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
+
         Fabric.with(this, new Crashlytics(), new Answers());
         FIR.init(this);
 
@@ -31,4 +56,6 @@ public class BaseApplication extends AgoraApplication {
         AVOSCloud.setLastModifyEnabled(true);
         AVOSCloud.setDebugLogEnabled(true);
     }
+
+
 }

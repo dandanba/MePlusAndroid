@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SignUpCallback;
-import com.meplus.client.Constants;
+import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.Event;
@@ -66,7 +66,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
-        if (!Constants.sRelease) {
+        if (BuildConfig.DEBUG) {
             mPhoneEdit.setText("meplus");
             mPasswordEdit.setText("meplus");
             mConfirmEdit.setText("meplus");
