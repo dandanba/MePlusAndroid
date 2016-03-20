@@ -85,16 +85,17 @@ public class Robot extends AVObject {
         Observable.just(robot)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .map(slef -> {
-                    try {
-                        slef.save();
-                    } catch (AVException e) {
-                        Observable.error(e);
-                    }
-                    return slef;
-                })
+                .doOnSubscribe(
+                        () -> {
+                            try {
+                                robot.save();
+                            } catch (AVException e) {
+                                Observable.error(e);
+                            }
+                        }
+                )
                 .subscribe(
-                        slef -> EventBus.getDefault().post(new ModifyEvent<>(Event.STATUS_OK, slef)),
+                        result -> EventBus.getDefault().post(new ModifyEvent<>(Event.STATUS_OK, result)),
                         throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
                 );
     }

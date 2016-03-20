@@ -12,8 +12,9 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.meplus.client.R;
+import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.BindEvent;
+import com.meplus.robot.events.ModifyEvent;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
@@ -25,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 
 /**
  * 主页面
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         final View headerView = mNavigationView.getHeaderView(0);
         mHeaderHolder = new NavHeaderViewHolder(headerView);
-        mHeaderHolder.updateUserView();
+        mHeaderHolder.updateView(MPApplication.getsInstance().getRobot());
     }
 
     @Override
@@ -99,10 +101,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+
+    @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindEvent(BindEvent event) {
+    public void onModifyEvent(ModifyEvent<Robot> event) {
         if (event.ok()) {
-            mHeaderHolder.updateUserView();
+            mHeaderHolder.updateView(event.getData());
         }
     }
 
@@ -118,7 +122,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void showQRDialog() {
         boolean wrapInScrollView = true;
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title(R.string.me_qr_title)
+                .title(R.string.me_bind_tip)
                 .customView(R.layout.dialog_qr, wrapInScrollView)
                 .positiveText(R.string.me_ok)
                 .show();

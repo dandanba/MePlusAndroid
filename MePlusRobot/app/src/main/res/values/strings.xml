@@ -1,20 +1,14 @@
 <resources>
     <string name="app_name">MePlusRobot</string>
     <string name="me_phone_number">手机号</string>
-    <string name="me_register">注册</string>
-    <string name="me_password_number">密码</string>
-    <string name="me_password_forgot">忘记密码 ？</string>
-    <string name="me_login">登录</string>
-    <string name="me_password_confirm">确认密码</string>
-    <string name="me_email">邮箱</string>
-    <string name="me_reset_passwrod">重置密码</string>
+    <string name="me_modify">修改</string>
     <string name="me_nav_history">通话记录</string>
     <string name="me_nav_home">首页</string>
     <string name="me_nav_settings">设置</string>
-    <string name="me_robot_name">机器人ID</string>
+    <string name="me_robot_name">机器人名字</string>
     <string name="me_slogan">make people more simple</string>
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>
     <string name="me_ok">确定</string>
-    <string name="me_qr_title">请扫描二维码</string>
+    <string name="me_bind_tip">请认真填写机器人ID或通过扫描的方式</string>
 </resources>

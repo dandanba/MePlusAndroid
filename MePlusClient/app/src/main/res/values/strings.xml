@@ -18,7 +18,7 @@
     <string name="me_bind_robot">绑定机器人</string>
     <string name="me_robot_name">机器人ID</string>
     <string name="me_scan_robot">扫描机器</string>
-    <string name="me_bind_tip">请认真填写机器人ID获通过扫描的方式</string>
+    <string name="me_bind_tip">请认真填写机器人ID或通过扫描的方式</string>
     <string name="me_slogan">make people more simple</string>
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>

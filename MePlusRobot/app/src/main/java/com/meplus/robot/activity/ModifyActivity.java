@@ -7,19 +7,24 @@ import android.widget.EditText;
 
 import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
+import com.meplus.robot.api.model.Robot;
+import com.meplus.robot.app.MPApplication;
+import com.meplus.robot.events.ModifyEvent;
 import com.meplus.robot.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 
 /**
  * 修改机器人信息
@@ -29,20 +34,8 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
     ViewGroup mRoot;
 
     @NotEmpty
-    @Bind(R.id.phone_edit)
-    EditText mPhoneEdit;
-
-    @Email
-    @Bind(R.id.email_edit)
-    EditText mEmailEdit;
-
-    @Password(min = 6)
-    @Bind(R.id.password_edit)
-    EditText mPasswordEdit;
-
-    @ConfirmPassword
-    @Bind(R.id.confirm_edit)
-    EditText mConfirmEdit;
+    @Bind(R.id.name_edit)
+    EditText mNameEdit;
 
     private Validator mValidator;
 
@@ -51,17 +44,19 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify);
         ButterKnife.bind(this);
-
+        EventBus.getDefault().register(this);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
         if (BuildConfig.DEBUG) {
-            mPhoneEdit.setText("meplus");
-            mPasswordEdit.setText("meplus");
-            mConfirmEdit.setText("meplus");
-            mEmailEdit.setText("13641194007@139.com");
+            mNameEdit.setText("meplus");
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick({R.id.register_button})
@@ -78,8 +73,6 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         doModify();
     }
 
-    private void doModify() {
-    }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
@@ -93,5 +86,21 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
             }
         }
     }
+
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onModifyEvent(ModifyEvent<Robot> event) {
+        if (event.ok()) {
+            finish();
+        }
+    }
+
+    private void doModify() {
+        final Robot robot = MPApplication.getsInstance().getRobot();
+        robot.setRobotName(mNameEdit.getText().toString());
+        Robot.modify(robot);
+    }
+
 
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.marvinlabs.intents.PhoneIntents;
 import com.meplus.client.R;
 
 /**
@@ -52,9 +53,7 @@ public class TestsActivity extends SimpleActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "有问题需要反馈给我们吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
-//            startActivity(PhoneIntents.newCallNumberIntent("13641194007"));
-
-            connect();
+            startActivity(PhoneIntents.newCallNumberIntent("13641194007"));
         }).show());
 
     }

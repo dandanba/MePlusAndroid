@@ -1,15 +1,18 @@
 package com.meplus.robot.viewholder;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.meplus.client.R;
+import com.meplus.robot.activity.ModifyActivity;
 import com.meplus.robot.api.model.Robot;
-import com.meplus.robot.app.MPApplication;
+import com.meplus.robot.utils.IntentUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NavHeaderViewHolder {
     @Bind(R.id.image)
@@ -25,10 +28,16 @@ public class NavHeaderViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void updateUserView() {
-        final Robot user = MPApplication.getsInstance().getRobot();
-        mTitle.setText(String.format("机器人:%1$s", user.getRobotName()));
+    public void updateView(Robot robot) {
+        mTitle.setText(String.format("机器人:%1$s", robot.getRobotName()));
         mContent.setText("写点什么内容呢？");
-        mText.setText(String.format("机器ID:%1$s", user.getRobotId()));
+        mText.setText(String.format("机器ID:%1$s", robot.getRobotId()));
     }
+
+    @OnClick(R.id.image)
+    public void onClick(View view) {
+        final Context context = view.getContext();
+        context.startActivity(IntentUtils.generateIntent(context, ModifyActivity.class));
+    }
+
 }
