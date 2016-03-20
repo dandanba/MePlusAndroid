@@ -20,6 +20,9 @@ import android.os.Bundle;
 
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
+/**
+ * 蓝牙设备列表
+ */
 public class DeviceListActivity extends DeviceList {
     @Override
     public void onCreate(Bundle savedInstanceState) {

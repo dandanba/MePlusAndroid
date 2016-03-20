@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.meplus.client.R;
 
+/**
+ * 自检
+ */
 public class TestsActivity extends SimpleActivity {
 
     /**

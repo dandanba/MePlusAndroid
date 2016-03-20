@@ -12,7 +12,6 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.meplus.client.BuildConfig;
 import com.meplus.robot.Constants;
 import com.meplus.robot.api.model.Robot;
-import com.meplus.robot.api.model.User;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -51,7 +50,6 @@ public class BaseApplication extends AgoraApplication {
         FIR.init(this);
 
         AVObject.registerSubclass(Robot.class);
-        AVObject.registerSubclass(User.class);
 
         AVOSCloud.initialize(this, Constants.AVOS_APP_ID, Constants.AVOS_APP_KEY); // 初始化参数依次为 this, AppId, AppKey
         // AVOSCloud.useAVCloudUS(); // 启用北美节点

@@ -1,86 +1,90 @@
 package com.meplus.robot.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.meplus.client.R;
+import com.meplus.robot.api.model.Robot;
+import com.meplus.robot.app.MPApplication;
+import com.meplus.robot.events.CreateEvent;
+import com.meplus.robot.events.ErrorEvent;
+import com.meplus.robot.events.Event;
+import com.meplus.robot.events.QueryEvent;
 import com.meplus.robot.utils.IntentUtils;
+import com.meplus.robot.utils.UUIDUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
+import cn.trinea.android.common.util.ListUtils;
+import cn.trinea.android.common.util.ToastUtils;
+import hugo.weaving.DebugLog;
 
 /**
  * 启动Logo页面
  */
-public class LogoActivity extends BaseActivity implements Handler.Callback {
+public class LogoActivity extends BaseActivity {
     private static final String TAG = LogoActivity.class.getSimpleName();
 
     @butterknife.Bind(R.id.shimmer_view_container)
-    com.facebook.shimmer.ShimmerFrameLayout mShimmerViewContainer;
-    private Handler mHandler;
+    ShimmerFrameLayout mShimmerViewContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
         ButterKnife.bind(this);
+
         mShimmerViewContainer.startShimmerAnimation();
-        mHandler = new Handler(this);
-        mHandler.sendEmptyMessageDelayed(1, 3000);
+
+        EventBus.getDefault().register(this);
+        Robot.query(UUIDUtils.getUUID(this));
     }
 
     @Override
-    public boolean handleMessage(Message msg) {
-        if (msg.what == 1) {
-            startActivity(IntentUtils.generateIntent(LogoActivity.this, TestsActivity.class));
-            finish();
-//
-//            final String username = "robot2";
-//            final String password = "robot2";
-//            final String email = "wanggeng@meplusplus.com";
-//
-//            final Robot robot = new Robot();
-//            robot.setRobotName(username);
-//            robot.setRobotId(UUIDUtils.getUUID(this));
-//
-//            final SaveCallback callback = new SaveCallback() {
-//                public void done(AVException e) {
-//                    if (e == null) {
-//                        final User user = User.getCurrentUser(User.class);
-//                        if (user == null) {
-//                            startActivity(IntentUtils.generateIntent(LogoActivity.this, LoginActivity.class));
-//                        } else {
-//                            final AVRelation<Robot> relation = user.getRelation(User.RELATION_ROBOTS);
-//                            final AVQuery<Robot> query = relation.getQuery();
-//                            query.setLimit(1);
-//                            query.findInBackground(new FindCallback<Robot>() {
-//                                @Override
-//                                public void done(List<Robot> results, AVException e) {
-//                                    if (e == null) {
-//                                        user.setRobotList(results);
-//                                    } else {
-//                                        ToastUtils.show(LogoActivity.this, e.toString());
-//                                    }
-//                                    startActivity(IntentUtils.generateIntent(LogoActivity.this, MainActivity.class));
-//                                }
-//                            });
-//                        }
-//                        finish();
-//                    } else {
-//                        ToastUtils.show(LogoActivity.this, e.toString());
-//                    }
-//                }
-//            };
-//            robot.saveInBackground(callback);
-//            callback.done(null);
-            return true;
-        }
-        return false;
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
+    }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onQueryEvent(QueryEvent<Robot> event) {
+        if (event.ok()) {
+            final List<Robot> robotList = event.getList();
+            if (ListUtils.isEmpty(robotList)) {
+                Robot.save(UUIDUtils.getUUID(this));
+            } else {
+                onCreateEvent(new CreateEvent<>(Event.STATUS_OK, robotList.get(0)));
+            }
+        }
+    }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCreateEvent(CreateEvent<Robot> event) {
+        if (event.ok()) {
+            MPApplication.getsInstance().setRobot(event.getData());
+            startActivity(IntentUtils.generateIntent(this, MainActivity.class));
+            finish();
+        }
+    }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(ErrorEvent event) {
+        if (event.ok()) {
+            ToastUtils.show(this, event.getThrowable().getMessage());
+        }
     }
 
 }

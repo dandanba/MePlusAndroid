@@ -3,20 +3,15 @@ package com.meplus.robot.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.meplus.client.R;
-import com.meplus.robot.api.model.Robot;
-import com.meplus.robot.api.model.User;
 import com.meplus.robot.events.BindEvent;
-import com.meplus.robot.events.LogoutEvent;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 
@@ -24,13 +19,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.trinea.android.common.util.ListUtils;
-import io.agora.sample.agora.EntryActivity;
 
 /**
  * 主页面
@@ -106,14 +97,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLogoutEvent(LogoutEvent event) {
-        if (event.ok()) {
-            startActivity(IntentUtils.generateIntent(this, LoginActivity.class));
-            finish();
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBindEvent(BindEvent event) {
         if (event.ok()) {
             mHeaderHolder.updateUserView();
@@ -123,23 +106,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @OnClick(R.id.fab)
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.fab:
-                User user = User.getCurrentUser(User.class);
-                final List<Robot> robotList = user.getRobotList();
-
-
-                final String robotId = ListUtils.isEmpty(robotList) ? "" : robotList.get(0).getRobotId();
-                final boolean binded = !TextUtils.isEmpty(robotId);
-                Snackbar.make(view, binded ? "唤醒多我机器人吗？" : "绑定多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (binded) {
-                            startActivity(IntentUtils.generateIntent(MainActivity.this, EntryActivity.class));
-                        } else {
-                            startActivity(IntentUtils.generateIntent(MainActivity.this, BindRobotActivity.class));
-                        }
-                    }
-                }).show();
+            case R.id.fab: // 展示二维码的图片
+                break;
         }
     }
 }

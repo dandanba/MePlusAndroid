@@ -60,7 +60,7 @@
             android:value="9fbcf46a17338c0ed7859bc5de7a96c85313f88d" />
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
-            android:value="f16c6cd760c3fc803e8376bb14b8475a" />
+            android:value="3193935cc8df0170d8e975183cbec4b0" />
 
         <activity
             android:name="com.meplus.robot.activity.LogoActivity"
@@ -73,19 +73,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.meplus.robot.activity.LoginActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/StartAppTheme" />
-        <activity
-            android:name="com.meplus.robot.activity.RegisterActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/StartAppTheme" />
-        <activity
-            android:name="com.meplus.robot.activity.PasswordActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/StartAppTheme" />
-        <activity
-            android:name="com.meplus.robot.activity.EditPasswordActivity"
+            android:name="com.meplus.robot.activity.ModifyActivity"
             android:screenOrientation="landscape"
             android:theme="@style/StartAppTheme" />
         <activity
@@ -94,21 +82,6 @@
             android:theme="@style/StartAppTheme" />
         <activity
             android:name="com.meplus.robot.activity.SettingsActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.meplus.robot.activity.BindRobotActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.meplus.robot.activity.TestActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.meplus.robot.activity.TestPNActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.meplus.robot.activity.ScannerActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.meplus.robot.activity.TestFaceActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.meplus.robot.activity.TestsActivity"

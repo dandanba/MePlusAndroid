@@ -5,7 +5,8 @@ import android.util.Log;
 
 import com.meplus.robot.Constants;
 import com.meplus.robot.api.model.Command;
-import com.meplus.robot.api.model.User;
+import com.meplus.robot.api.model.Robot;
+import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.callbacks.PNCallback;
 import com.meplus.robot.events.PNEvent;
 import com.meplus.robot.utils.JsonUtils;
@@ -28,7 +29,7 @@ public class PNActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        User currentUser = User.getCurrentUser(User.class);
+        Robot currentUser = MPApplication.getsInstance().getRobot();
         mUUID = currentUser.getObjectId();
         mChannel = "test";
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.meplus.robot.activity.LogoActivity">
+    tools:context="com.meplus.robot.activity.ModifyActivity">
 
     <View
         android:layout_width="wrap_content"
@@ -61,6 +61,34 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/phone_selected"
+                android:drawablePadding="10dp"
+                android:hint="@string/me_email"
+                android:singleLine="true"
+                android:textColor="@color/meTextColor"
+                android:textColorHint="@color/meTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/meTextColor" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,40 +117,48 @@
 
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/password_button"
+        <LinearLayout
+            android:id="@+id/confirm_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:gravity="right"
-            android:text="@string/me_password_forgot"
-            android:textColor="@color/meTextColor"
-            android:textSize="@dimen/meTextSize"
-            android:textStyle="bold" />
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/confirm_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/password_selected"
+                android:drawablePadding="10dp"
+                android:hint="@string/me_password_confirm"
+                android:password="true"
+                android:singleLine="true"
+                android:textColor="@color/meTextColor"
+                android:textColorHint="@color/meTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/meTextColor" />
+
+        </LinearLayout>
 
 
         <TextView
-            android:id="@+id/login_button"
+            android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
             android:background="@drawable/button_blue"
             android:gravity="center"
-            android:text="@string/me_login"
+            android:text="@string/me_register"
             android:textColor="@color/white"
             android:textSize="@dimen/meTextSize"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/register_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="@string/me_register"
-            android:textColor="@color/meTextColor"
-            android:textSize="@dimen/meTextSize"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
