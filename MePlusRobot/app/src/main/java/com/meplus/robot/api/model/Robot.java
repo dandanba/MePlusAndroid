@@ -7,7 +7,6 @@ import com.avos.avoscloud.AVQuery;
 import com.meplus.robot.events.CreateEvent;
 import com.meplus.robot.events.ErrorEvent;
 import com.meplus.robot.events.Event;
-import com.meplus.robot.events.ModifyEvent;
 import com.meplus.robot.events.QueryEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +66,7 @@ public class Robot extends AVObject {
                 .observeOn(Schedulers.io())
                 .map(id -> {
                     Robot robot = new Robot();
+                    robot.setRobotName("meplus");
                     robot.setRobotId(id);
                     try {
                         robot.save();
@@ -81,22 +81,4 @@ public class Robot extends AVObject {
                 );
     }
 
-    public static void modify(Robot robot) {
-        Observable.just(robot)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .doOnSubscribe(
-                        () -> {
-                            try {
-                                robot.save();
-                            } catch (AVException e) {
-                                Observable.error(e);
-                            }
-                        }
-                )
-                .subscribe(
-                        result -> EventBus.getDefault().post(new ModifyEvent<>(Event.STATUS_OK, result)),
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
-                );
-    }
 }
