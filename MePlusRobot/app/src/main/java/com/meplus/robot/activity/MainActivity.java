@@ -10,10 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.meplus.client.R;
+import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BindEvent;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
+import com.meplus.robot.viewholder.QRViewHolder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -107,7 +110,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab: // 展示二维码的图片
+                showQRDialog();
                 break;
         }
     }
+
+    private void showQRDialog() {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title(R.string.me_qr_title)
+                .customView(R.layout.dialog_qr, wrapInScrollView)
+                .positiveText(R.string.me_ok)
+                .show();
+        final View view = dialog.getView();
+        final QRViewHolder viewHolder = new QRViewHolder(view);
+        final String code = MPApplication.getsInstance().getRobot().getRobotId();
+        viewHolder.update(code);
+    }
+
+
 }

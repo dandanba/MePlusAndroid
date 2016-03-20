@@ -106,4 +106,8 @@ dependencies {
     compile 'com.akexorcist:bluetoothspp:1.0.0'
     // multidex
     compile 'com.android.support:multidex:1.0.0'
+    // material-dialogs
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.7@aar') {
+        transitive = true
+    }
 }
