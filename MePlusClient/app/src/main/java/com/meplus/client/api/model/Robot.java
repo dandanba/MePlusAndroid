@@ -1,18 +1,20 @@
 package com.meplus.client.api.model;
 
-import android.util.Log;
-
 import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.meplus.client.api.MePlus;
+import com.meplus.client.events.ErrorEvent;
+import com.meplus.client.events.Event;
+import com.meplus.client.events.QueryEvent;
+import com.meplus.client.events.SaveEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import cn.trinea.android.common.util.ListUtils;
-import hugo.weaving.DebugLog;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 @AVClassName("Robot")
 public class Robot extends AVObject {
@@ -38,43 +40,37 @@ public class Robot extends AVObject {
         put(KEY_ROBOT_NAME, robotName);
     }
 
-    @DebugLog
-    public static Observable<Robot> getRobot(String robotId) {
-
-        Observable.OnSubscribe<Robot> function = subscriber -> {
-            subscriber.onStart();
-
-            AVQuery<Robot> query = Robot.getQuery(Robot.class);
-            query.whereEqualTo(Robot.KEY_ROBOT_ID, robotId);
-            List<Robot> robotList = null;
-            Robot robot = null;
-            try {
-                robotList = query.find();
-            } catch (AVException e) {
-                Log.e(TAG, "getRobot", e);
-            }
-
-            final int size = ListUtils.getSize(robotList);
-            if (size > 0) {
-                for (Robot item : robotList) {
-                    if (item.getRobotId().equals(robotId)) {
-                        robot = item;
-                        break;
+    public static void queryByRobotId(String robotId) {
+        Observable.just(robotId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .map(id -> {
+                    List<Robot> list = null;
+                    AVQuery<Robot> query = Robot.getQuery(Robot.class);
+                    query.whereEqualTo(Robot.KEY_ROBOT_ID, id);
+                    try {
+                        list = query.find();
+                    } catch (AVException e) {
+                        Observable.error(e);
                     }
-                }
-            }
+                    return list;
+                })
+                .subscribe(
+                        result -> EventBus.getDefault().post(new QueryEvent<>(Event.STATUS_OK, result)),
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
+                );
+    }
 
-            if (robot == null) {
-                final int code = MePlus.ErrorCodeEmptyData;
-                final String description = MePlus.getDescrpition(code);
-                subscriber.onError(new AVException(code, description));
-            } else {
-                subscriber.onNext(robot);
-            }
-
-            subscriber.onCompleted();
-        };
-
-        return Observable.create(function);
+    public void saveRotot() {
+        Observable.just(this)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(
+                        robot -> {
+                            robot.saveEventually();
+                            EventBus.getDefault().post(new SaveEvent<>(Event.STATUS_OK, robot));
+                        },
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
+                );
     }
 }

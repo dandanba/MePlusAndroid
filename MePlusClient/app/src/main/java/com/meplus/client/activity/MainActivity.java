@@ -8,15 +8,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
-import com.meplus.client.events.BindEvent;
 import com.meplus.client.events.LogoutEvent;
+import com.meplus.client.events.SaveEvent;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.viewholder.NavHeaderViewHolder;
 
@@ -24,12 +23,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.trinea.android.common.util.ListUtils;
 import io.agora.sample.agora.EntryActivity;
 
 /**
@@ -66,7 +62,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         final View headerView = mNavigationView.getHeaderView(0);
         mHeaderHolder = new NavHeaderViewHolder(headerView);
-        mHeaderHolder.updateUserView();
+        final User user = User.getCurrentUser(User.class);
+        mHeaderHolder.updateUser(user);
     }
 
     @Override
@@ -114,9 +111,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindEvent(BindEvent event) {
+    public void onBindEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
-            mHeaderHolder.updateUserView();
+            final User user = User.getCurrentUser(User.class);
+            user.setRobot(event.getData());
+            mHeaderHolder.updateUser(user);
         }
     }
 
@@ -125,19 +124,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (view.getId()) {
             case R.id.fab:
                 User user = User.getCurrentUser(User.class);
-                final List<Robot> robotList = user.getRobotList();
-
-
-                final String robotId = ListUtils.isEmpty(robotList) ? "" : robotList.get(0).getRobotId();
-                final boolean binded = !TextUtils.isEmpty(robotId);
-                Snackbar.make(view, binded ? "唤醒多我机器人吗？" : "绑定多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (binded) {
-                            startActivity(IntentUtils.generateIntent(MainActivity.this, EntryActivity.class));
-                        } else {
-                            startActivity(IntentUtils.generateIntent(MainActivity.this, BindRobotActivity.class));
-                        }
+                final Robot robot = user.getRobot();
+                Snackbar.make(view, robot == null ? "绑定多我机器人吗？" : "唤醒多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
+                    if (robot == null) {
+                        startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
+                    } else {
+                        startActivity(IntentUtils.generateIntent(this, EntryActivity.class));
                     }
                 }).show();
         }
