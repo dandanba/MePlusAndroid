@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindEvent(SaveEvent<Robot> event) {
+    public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
             final User user = User.getCurrentUser(User.class);
             user.setRobot(event.getData());
