@@ -4,7 +4,7 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
-import com.meplus.robot.events.CreateEvent;
+import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.events.ErrorEvent;
 import com.meplus.robot.events.Event;
 import com.meplus.robot.events.QueryEvent;
@@ -22,6 +22,7 @@ public class Robot extends AVObject {
     public static final Creator CREATOR = AVObjectCreator.instance;
     public final static String KEY_ROBOT_ID = "robotId";
     public final static String KEY_ROBOT_NAME = "robotName";
+    public final static String KEY_ROBOT_DESCRIPTION = "robotDescription";
 
     public String getRobotId() {
         return getString(KEY_ROBOT_ID);
@@ -39,7 +40,15 @@ public class Robot extends AVObject {
         put(KEY_ROBOT_NAME, robotName);
     }
 
-    public static void query(String robotId) {
+    public String getRobotDescription() {
+        return getString(KEY_ROBOT_DESCRIPTION);
+    }
+
+    public void setRobotDescription(String robotDescription) {
+        put(KEY_ROBOT_DESCRIPTION, robotDescription);
+    }
+
+    public static void queryByRobotId(String robotId) {
         Observable.just(robotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -55,28 +64,20 @@ public class Robot extends AVObject {
                     return list;
                 })
                 .subscribe(
-                        list -> EventBus.getDefault().post(new QueryEvent<>(Event.STATUS_OK, list)),
+                        result -> EventBus.getDefault().post(new QueryEvent<>(Event.STATUS_OK, result)),
                         throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
                 );
     }
 
-    public static void save(String robotId) {
-        Observable.just(robotId)
+    public void saveRotot() {
+        Observable.just(this)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .map(id -> {
-                    Robot robot = new Robot();
-                    robot.setRobotName("meplus");
-                    robot.setRobotId(id);
-                    try {
-                        robot.save();
-                    } catch (AVException e) {
-                        Observable.error(e);
-                    }
-                    return robot;
-                })
                 .subscribe(
-                        robot -> EventBus.getDefault().post(new CreateEvent<>(Event.STATUS_OK, robot)),
+                        robot -> {
+                            robot.saveEventually();
+                            EventBus.getDefault().post(new SaveEvent<>(Event.STATUS_OK, robot));
+                        },
                         throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
                 );
     }

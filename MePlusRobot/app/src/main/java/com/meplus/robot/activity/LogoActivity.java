@@ -6,7 +6,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.meplus.client.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.CreateEvent;
+import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.events.ErrorEvent;
 import com.meplus.robot.events.Event;
 import com.meplus.robot.events.QueryEvent;
@@ -42,7 +42,7 @@ public class LogoActivity extends BaseActivity {
         mShimmerViewContainer.startShimmerAnimation();
 
         EventBus.getDefault().register(this);
-        Robot.query(UUIDUtils.getUUID(this));
+        Robot.queryByRobotId(UUIDUtils.getUUID(this));
     }
 
     @Override
@@ -62,16 +62,18 @@ public class LogoActivity extends BaseActivity {
         if (event.ok()) {
             final List<Robot> robotList = event.getList();
             if (ListUtils.isEmpty(robotList)) {
-                Robot.save(UUIDUtils.getUUID(this));
+                final Robot robot = new Robot();
+                robot.setRobotId(UUIDUtils.getUUID(this));
+                robot.saveRotot();
             } else {
-                onCreateEvent(new CreateEvent<>(Event.STATUS_OK, robotList.get(0)));
+                onCreateEvent(new SaveEvent<>(Event.STATUS_OK, robotList.get(0)));
             }
         }
     }
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCreateEvent(CreateEvent<Robot> event) {
+    public void onCreateEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
             MPApplication.getsInstance().setRobot(event.getData());
             startActivity(IntentUtils.generateIntent(this, MainActivity.class));

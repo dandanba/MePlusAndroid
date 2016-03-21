@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.meplus.client.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.ModifyEvent;
+import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
@@ -104,9 +104,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onModifyEvent(ModifyEvent<Robot> event) {
+    public void onModifyEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
-            mHeaderHolder.updateView(event.getData());
+            final Robot robot = event.getData();
+            MPApplication.getsInstance().setRobot(robot);
+            mHeaderHolder.updateView(robot);
         }
     }
 

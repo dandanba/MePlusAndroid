@@ -1,6 +1,7 @@
 package com.meplus.robot.viewholder;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,8 +30,10 @@ public class NavHeaderViewHolder {
     }
 
     public void updateView(Robot robot) {
-        mTitle.setText(String.format("机器人:%1$s", robot.getRobotName()));
-        mContent.setText("写点什么内容呢？");
+        final String name = robot.getRobotName();
+        final String description = robot.getRobotDescription();
+        mTitle.setText(String.format("机器人:%1$s", TextUtils.isEmpty(name) ? "" : robot.getRobotName()));
+        mContent.setText(TextUtils.isEmpty(description) ? "写点什么内容呢？" : description);
         mText.setText(String.format("机器ID:%1$s", robot.getRobotId()));
     }
 

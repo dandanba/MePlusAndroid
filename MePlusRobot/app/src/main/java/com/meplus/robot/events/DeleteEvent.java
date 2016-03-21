@@ -2,13 +2,14 @@ package com.meplus.robot.events;
 
 /**
  * Created by dandanba on 3/11/16.
+ * 删除
  */
-public class ModifyEvent<T> extends Event {
-    public ModifyEvent(String status) {
+public class DeleteEvent<T> extends Event {
+    public DeleteEvent(String status) {
         super(status);
     }
 
-    public ModifyEvent(String status, T data) {
+    public DeleteEvent(String status, T data) {
         this(status);
         setData(data);
     }
