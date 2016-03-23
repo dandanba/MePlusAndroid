@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.meplus.client.R;
 import com.meplus.client.api.model.User;
 import com.meplus.client.events.Event;
@@ -85,18 +86,17 @@ public class SettingsActivity extends BaseActivity {
                 startActivity(IntentUtils.generateIntent(this, EditPasswordActivity.class));
                 break;
             case R.id.feeback_layout:
+                FeedbackAgent agent = new FeedbackAgent(this);
+                agent.startDefaultThreadActivity();
                 break;
             case R.id.update_layout:
                 FIRUtils.checkForUpdateInFIR(this, mCallback);
                 break;
             case R.id.logout_button:
-                Snackbar.make(view, "是否退出当前账户吗？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        User.logOut();
-                        EventBus.getDefault().post(new LogoutEvent(Event.STATUS_OK));
-                        finish();
-                    }
+                Snackbar.make(view, "是否退出当前账户吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
+                    User.logOut();
+                    EventBus.getDefault().post(new LogoutEvent(Event.STATUS_OK));
+                    finish();
                 }).show();
 
                 break;

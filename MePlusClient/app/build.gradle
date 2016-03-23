@@ -71,6 +71,8 @@ dependencies {
     }
     // avoscloud-sdk 为 LeanCloud基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
+    //avoscloud-feedback 为 LeanCloud 用户反馈包
+    compile ('cn.leancloud.android:avoscloud-feedback:v3.+@aar')
     // bar code
     compile 'me.dm7.barcodescanner:zbar:1.8.4'
     // event bus

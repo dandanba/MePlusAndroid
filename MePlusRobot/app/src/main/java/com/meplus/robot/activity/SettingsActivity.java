@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.meplus.client.R;
 import com.meplus.robot.utils.FIRUtils;
 import com.meplus.robot.utils.IntentUtils;
@@ -72,14 +73,12 @@ public class SettingsActivity extends BaseActivity {
     @OnClick({R.id.bind_layout, R.id.password_layout, R.id.feeback_layout, R.id.update_layout})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bind_layout:
-//                startActivity(IntentUtils.generateIntent(this, ModifyActivity.class));
-
-                break;
             case R.id.password_layout:
                 startActivity(IntentUtils.generateIntent(this, TestsActivity.class));
                 break;
             case R.id.feeback_layout:
+                FeedbackAgent agent = new FeedbackAgent(this);
+                agent.startDefaultThreadActivity();
                 break;
             case R.id.update_layout:
                 FIRUtils.checkForUpdateInFIR(this, mCallback);

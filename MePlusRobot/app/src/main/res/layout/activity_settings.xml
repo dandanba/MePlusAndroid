@@ -27,31 +27,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <LinearLayout
-            android:id="@+id/bind_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:drawableLeft="@drawable/me_icon_home"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="语音控制"
-                android:textColor="@color/meItemTextColor"
-                android:textSize="@dimen/meTitleSize" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/meDivider" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/password_layout"
