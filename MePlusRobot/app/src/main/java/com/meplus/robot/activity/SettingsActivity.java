@@ -70,7 +70,7 @@ public class SettingsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.bind_layout, R.id.password_layout, R.id.feeback_layout, R.id.update_layout})
+    @OnClick({R.id.password_layout, R.id.feeback_layout, R.id.update_layout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.password_layout:

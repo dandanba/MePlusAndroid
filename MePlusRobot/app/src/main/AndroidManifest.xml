@@ -100,7 +100,7 @@
             android:theme="@style/StartAppTheme" />
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
         <!-- agora -->
         <activity
             android:name="io.agora.sample.agora.EntryActivity"
