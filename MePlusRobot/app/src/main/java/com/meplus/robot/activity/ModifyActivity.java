@@ -108,5 +108,4 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         robot.saveRotot();
     }
 
-
 }

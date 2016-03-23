@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 import io.agora.sample.agora.EntryActivity;
 
 /**
@@ -110,6 +111,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
@@ -119,6 +121,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @DebugLog
     @OnClick(R.id.fab)
     public void onClick(View view) {
         switch (view.getId()) {

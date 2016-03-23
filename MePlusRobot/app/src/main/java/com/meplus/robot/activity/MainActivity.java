@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onModifyEvent(SaveEvent<Robot> event) {
+    public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
             final Robot robot = event.getData();
             MPApplication.getsInstance().setRobot(robot);
