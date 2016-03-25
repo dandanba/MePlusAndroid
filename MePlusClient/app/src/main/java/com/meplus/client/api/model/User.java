@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -48,13 +49,12 @@ public class User extends AVUser {
                 );
     }
 
-
+    @DebugLog
     public void queryRobot() {
         Observable.just(this)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(user -> {
-
                             final AVRelation<Robot> relation = user.getRelation(User.RELATION_ROBOTS);
                             final AVQuery<Robot> query = relation.getQuery();
                             query.setLimit(1);
@@ -70,11 +70,4 @@ public class User extends AVUser {
                 );
     }
 
-    public Robot getRobot() {
-        return mRobot;
-    }
-
-    public void setRobot(Robot robot) {
-        mRobot = robot;
-    }
 }

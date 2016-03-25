@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,8 +27,9 @@ public class NavHeaderViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void updateUser(User user) {
-        final Robot robot = user.getRobot();
+    public void updateHeader() {
+        final User user = User.getCurrentUser(User.class);
+        final Robot robot = MPApplication.getsInstance().getRobot();
         final String robotId = robot == null ? "" : robot.getRobotId();
         mTitle.setText(String.format("用户名:%1$s", user.getUsername()));
         mContent.setText(TextUtils.isEmpty(robotId) ? "未绑定多我机器人" : String.format("机器人:%1$s", robotId));

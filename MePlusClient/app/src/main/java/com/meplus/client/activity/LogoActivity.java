@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.QueryEvent;
 import com.meplus.client.utils.IntentUtils;
@@ -29,7 +31,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
     private static final String TAG = LogoActivity.class.getSimpleName();
 
     @butterknife.Bind(R.id.shimmer_view_container)
-    com.facebook.shimmer.ShimmerFrameLayout mShimmerViewContainer;
+    ShimmerFrameLayout mShimmerViewContainer;
     private Handler mHandler;
 
     @Override
@@ -55,8 +57,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
         if (event.ok()) {
             final List<Robot> robotList = event.getList();
             if (!ListUtils.isEmpty(robotList)) {
-                final User user = User.getCurrentUser(User.class);
-                user.setRobot(robotList.get(0));
+                MPApplication.getsInstance().setRobot(robotList.get(0));
             }
             startActivity(IntentUtils.generateIntent(LogoActivity.this, MainActivity.class));
             finish();

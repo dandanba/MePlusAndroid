@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.LogoutEvent;
 import com.meplus.client.events.SaveEvent;
 import com.meplus.client.utils.IntentUtils;
@@ -54,8 +54,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setTitle("首页");
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -63,8 +62,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         final View headerView = mNavigationView.getHeaderView(0);
         mHeaderHolder = new NavHeaderViewHolder(headerView);
-        final User user = User.getCurrentUser(User.class);
-        mHeaderHolder.updateUser(user);
+        mHeaderHolder.updateHeader();
     }
 
     @Override
@@ -115,9 +113,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
-            final User user = User.getCurrentUser(User.class);
-            user.setRobot(event.getData());
-            mHeaderHolder.updateUser(user);
+            mHeaderHolder.updateHeader();
         }
     }
 
@@ -126,8 +122,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                User user = User.getCurrentUser(User.class);
-                final Robot robot = user.getRobot();
+                final Robot robot = MPApplication.getsInstance().getRobot();
                 Snackbar.make(view, robot == null ? "绑定多我机器人吗？" : "唤醒多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));

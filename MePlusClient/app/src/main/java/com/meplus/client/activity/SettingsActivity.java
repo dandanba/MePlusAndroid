@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.meplus.client.R;
-import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.LogoutEvent;
 import com.meplus.client.utils.FIRUtils;
@@ -94,7 +94,7 @@ public class SettingsActivity extends BaseActivity {
                 break;
             case R.id.logout_button:
                 Snackbar.make(view, "是否退出当前账户吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
-                    User.logOut();
+                    MPApplication.getsInstance().logOut();
                     EventBus.getDefault().post(new LogoutEvent(Event.STATUS_OK));
                     finish();
                 }).show();

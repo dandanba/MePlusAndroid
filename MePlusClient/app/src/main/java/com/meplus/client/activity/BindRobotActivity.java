@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.QueryEvent;
 import com.meplus.client.events.SaveEvent;
@@ -66,8 +67,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
-
-        final Robot robot = User.getCurrentUser(User.class).getRobot();
+        final Robot robot = MPApplication.getsInstance().getRobot();
         mBindEdit.setText(robot == null ? "" : robot.getRobotId());
     }
 

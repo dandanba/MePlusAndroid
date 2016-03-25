@@ -9,7 +9,11 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.meplus.client.R;
+import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
+import com.meplus.client.app.MPApplication;
+import com.meplus.client.events.ErrorEvent;
+import com.meplus.client.events.QueryEvent;
 import com.meplus.client.events.SignUpEvent;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.utils.SnackBarUtils;
@@ -27,6 +31,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ListUtils;
+import cn.trinea.android.common.util.ToastUtils;
+import hugo.weaving.DebugLog;
 
 /**
  * 登录 username: meplus password:meplus
@@ -58,6 +65,30 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onQueryEvent(QueryEvent<Robot> event) {
+        if (event.ok()) {
+            final List<Robot> robotList = event.getList();
+            if (!ListUtils.isEmpty(robotList)) {
+                MPApplication.getsInstance().setRobot(robotList.get(0));
+            }
+            startActivity(IntentUtils.generateIntent(this, MainActivity.class));
+            finish();
+        }
+    }
+
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(ErrorEvent event) {
+        if (event.ok()) {
+            finish();
+            ToastUtils.show(this, event.getThrowable().getMessage());
+        }
+    }
+
 
     @OnClick({R.id.password_button, R.id.login_button, R.id.register_button})
     public void onClick(View view) {
@@ -107,8 +138,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             @Override
             public void done(AVUser avUser, AVException e) {
                 if (e == null) {
-                    startActivity(IntentUtils.generateIntent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    final User user = User.getCurrentUser(User.class);
+                    user.queryRobot();
                 } else {
                     SnackBarUtils.show(mRoot, e.toString());
                 }
