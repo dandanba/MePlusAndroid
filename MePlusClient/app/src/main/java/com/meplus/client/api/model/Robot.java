@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -40,6 +41,7 @@ public class Robot extends AVObject {
         put(KEY_ROBOT_NAME, robotName);
     }
 
+    @DebugLog
     public static void queryByRobotId(String robotId) {
         Observable.just(robotId)
                 .subscribeOn(Schedulers.io())
@@ -61,6 +63,7 @@ public class Robot extends AVObject {
                 );
     }
 
+    @DebugLog
     public void saveRotot() {
         Observable.just(this)
                 .subscribeOn(Schedulers.io())

@@ -23,7 +23,6 @@ public class User extends AVUser {
     public static final Creator CREATOR = AVObjectCreator.instance;
     public static final String RELATION_ROBOTS = "robots";
     public final static String KEY_USER_ID = "userId";
-    private Robot mRobot;
 
     public String getUserId() {
         return getString(KEY_USER_ID);
@@ -33,6 +32,7 @@ public class User extends AVUser {
         put(KEY_USER_ID, userId);
     }
 
+    @DebugLog
     public void addRobot(Robot robot) {
         Observable.just(robot)
                 .subscribeOn(Schedulers.io())
