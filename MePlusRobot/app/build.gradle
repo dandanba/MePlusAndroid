@@ -43,6 +43,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    repositories {
+        flatDir {
+            dirs 'outputs'
+        }
+    }
+
 
 }
 
@@ -87,8 +93,6 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
     // validation
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
-    // agora
-    compile project(':agora')
     // shimmer
     compile 'com.facebook.shimmer:shimmer:0.1.0@aar'
     //rxandroid
@@ -112,4 +116,7 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.7@aar') {
         transitive = true
     }
+    // agora
+    compile(name: 'agora', ext: 'aar')
+
 }

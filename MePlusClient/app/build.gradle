@@ -44,11 +44,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    repositories {
+        flatDir {
+            dirs 'outputs'
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    // junit
     testCompile 'junit:junit:4.12'
+    // v7
     compile 'com.android.support:appcompat-v7:23.2.0'
     // glide
     compile 'com.android.support:support-v4:23.2.0'
@@ -72,7 +79,7 @@ dependencies {
     // avoscloud-sdk 为 LeanCloud基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
     //avoscloud-feedback 为 LeanCloud 用户反馈包
-    compile ('cn.leancloud.android:avoscloud-feedback:v3.+@aar')
+    compile 'cn.leancloud.android:avoscloud-feedback:v3.+@aar'
     // bar code
     compile 'me.dm7.barcodescanner:zbar:1.8.4'
     // event bus
@@ -85,8 +92,6 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
     // validation
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
-    // agora
-    compile project(':agora')
     // shimmer
     compile 'com.facebook.shimmer:shimmer:0.1.0@aar'
     //rxandroid
@@ -102,6 +107,8 @@ dependencies {
     // multidex
     compile 'com.android.support:multidex:1.0.0'
     // leakcanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'  // or 1.4-beta1
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'// or 1.4-beta1
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'// or 1.4-beta1
+    // agora
+    compile(name: 'agora', ext: 'aar')
 }

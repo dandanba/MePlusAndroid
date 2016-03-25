@@ -70,7 +70,7 @@
         android:background="@drawable/button_blue"
         android:gravity="center"
         android:text="@string/me_bind_robot"
-        android:textColor="@color/white"
+        android:textColor="@color/meWhite"
         android:textSize="@dimen/meTextSize"
         android:textStyle="bold" />
 
@@ -85,7 +85,7 @@
         android:background="@drawable/button_blue"
         android:gravity="center"
         android:text="@string/me_scan_robot"
-        android:textColor="@color/white"
+        android:textColor="@color/meWhite"
         android:textSize="@dimen/meTextSize"
         android:textStyle="bold" />
 </LinearLayout>

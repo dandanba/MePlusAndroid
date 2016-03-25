@@ -6,4 +6,5 @@
     <color name="meTextColor">#0080FF</color>
     <color name="meDivider">#D0D0D0</color>
     <color name="meItemTextColor">#8E8E8E</color>
+    <color name="meWhite">#ffffff</color>
 </resources>

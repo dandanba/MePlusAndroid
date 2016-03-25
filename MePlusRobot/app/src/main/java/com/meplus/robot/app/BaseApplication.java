@@ -58,9 +58,4 @@ public class BaseApplication extends AgoraApplication {
         AVOSCloud.setDebugLogEnabled(true);
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 }
