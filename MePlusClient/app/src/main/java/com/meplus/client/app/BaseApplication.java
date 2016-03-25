@@ -1,5 +1,8 @@
 package com.meplus.client.app;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
+
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
@@ -57,5 +60,10 @@ public class BaseApplication extends AgoraApplication {
         AVOSCloud.setDebugLogEnabled(true);
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
 }

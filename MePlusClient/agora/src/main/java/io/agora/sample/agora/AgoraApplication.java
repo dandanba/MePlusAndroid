@@ -1,7 +1,7 @@
 package io.agora.sample.agora;
 
-import android.app.Application;
 import android.content.SharedPreferences;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import io.agora.sample.agora.Model.Record;
 /**
  * Created by apple on 15/9/15.
  */
-public class AgoraApplication extends Application {
+public class AgoraApplication extends MultiDexApplication {
     private RtcEngine rtcEngine;
     private MessageHandler messageHandler;
 
