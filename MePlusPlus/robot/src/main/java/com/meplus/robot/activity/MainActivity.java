@@ -45,12 +45,13 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        // 初始化
         final Robot robot = MPApplication.getsInstance().getRobot();
         mUUID = robot.getObjectId();
         mChannel = robot.getObjectId();
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
@@ -131,7 +132,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         super.onMessage(message);
         //
         if (Command.ACTION_CALL.equals(message)) {
-            startActivity(IntentUtils.generateChannelIntent(this, mChannel));
+            startActivity(IntentUtils.generateVideoIntent(this, mChannel));
         }
 
     }

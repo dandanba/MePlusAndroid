@@ -139,7 +139,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
-                        startActivity(IntentUtils.generateChannelIntent(this, mChannel));
+                        startActivity(IntentUtils.generateVideoIntent(this, mChannel));
                         publish(Command.ACTION_CALL);
                     }
                 }).show();

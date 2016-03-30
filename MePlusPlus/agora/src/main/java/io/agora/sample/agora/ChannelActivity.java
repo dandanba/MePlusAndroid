@@ -275,7 +275,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         rtcEngine.joinChannel(((AgoraApplication) getApplication()).getVendorKey(), channel, "", userId);
     }
 
-    private void initViews() {
+    public void initViews() {
         // muter
         CheckBox muter = (CheckBox) findViewById(R.id.action_muter);
         muter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

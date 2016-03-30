@@ -3,6 +3,8 @@ package com.meplus.robot.utils;
 import android.content.Context;
 import android.content.Intent;
 
+import com.meplus.activity.VideoActivity;
+
 import io.agora.sample.agora.ChannelActivity;
 
 /**
@@ -15,9 +17,9 @@ public class IntentUtils extends com.marvinlabs.intents.IntentUtils {
         return new Intent(context, cls);
     }
 
-    public static Intent generateChannelIntent(Context context, String channel) {
-        Intent intent = new Intent(context, ChannelActivity.class);
-        intent.putExtra(ChannelActivity.EXTRA_TYPE, ChannelActivity.CALLING_TYPE_VIDEO);
+    public static Intent generateVideoIntent(Context context, String channel) {
+        Intent intent = new Intent(context, VideoActivity.class);
+        intent.putExtra(ChannelActivity.EXTRA_TYPE, VideoActivity.CALLING_TYPE_VIDEO);
         intent.putExtra(ChannelActivity.EXTRA_CHANNEL, channel);
         return intent;
     }

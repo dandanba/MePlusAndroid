@@ -89,6 +89,10 @@
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity"
             android:screenOrientation="landscape" />
+        <!-- video Activity -->
+        <activity
+            android:name="com.meplus.activity.VideoActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
