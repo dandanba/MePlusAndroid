@@ -12,12 +12,12 @@ import cn.trinea.android.common.util.DigestUtils;
 public class SignUtils {
     /**
      * @param treeMap
-     * @param time    1970-1-1至今的秒数
      * @return
      */
-    public static String sign(TreeMap<String, String> treeMap, String time) {
+    public static String sign(TreeMap<String, String> treeMap) {
         final String key = Constants.KEY;
-        treeMap.put("time", time);
+        final long timestamp = System.currentTimeMillis() / 1000; //  1970-1-1至今的秒数
+        treeMap.put("time", String.valueOf(timestamp));
         final String json = JsonUtils.writeValueAsString(treeMap);
         final String md5 = DigestUtils.md5(key.concat(json));
         final String sign = DigestUtils.md5(md5.concat(key));

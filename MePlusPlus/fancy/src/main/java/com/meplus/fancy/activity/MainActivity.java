@@ -48,11 +48,11 @@ public class MainActivity extends BaseActivity {
                 final String LibraryId = "samplestring2";
                 args.put("Data", Data);
                 args.put("LibraryId", LibraryId);
+                final String sign = SignUtils.sign(args);
+                final String timestamp = args.remove("time");
 
-                final long timestamp = System.currentTimeMillis() / 1000;
-                final String sign = SignUtils.sign(args, String.valueOf(timestamp));
                 final ApiService apiService = FancyApplication.getInstance().getApiService();
-                apiService.getborrowlistbyrobot(Data, LibraryId, timestamp, sign)
+                apiService.getborrowlistbyrobot(args, timestamp, sign)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
