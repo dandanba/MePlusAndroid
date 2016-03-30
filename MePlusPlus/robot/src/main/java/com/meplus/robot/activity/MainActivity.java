@@ -130,7 +130,6 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
     @Override
     public void onMessage(String message) {
         super.onMessage(message);
-        //
         if (Command.ACTION_CALL.equals(message)) {
             startActivity(IntentUtils.generateVideoIntent(this, mChannel));
         }
