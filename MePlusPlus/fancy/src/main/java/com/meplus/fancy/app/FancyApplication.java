@@ -1,10 +1,12 @@
 package com.meplus.fancy.app;
 
-import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
-import com.meplus.fancy.Constants;
+import com.meplus.fancy.BuildConfig;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.utils.RetrofitUtils;
 import com.squareup.leakcanary.LeakCanary;
@@ -17,7 +19,7 @@ import retrofit2.Retrofit;
 /**
  * Created by dandanba on 3/8/16.
  */
-public class FancyApplication extends Application {
+public class FancyApplication extends MultiDexApplication {
 
     private static FancyApplication sInstance;
 
@@ -35,8 +37,15 @@ public class FancyApplication extends Application {
         FIR.init(this);
         Fabric.with(this, new Crashlytics(), new Answers());
         mRetrofit = RetrofitUtils.getClient();
-        mRefWatcher = Constants.sRelease ? RefWatcher.DISABLED : LeakCanary.install(this);
+        mRefWatcher = BuildConfig.DEBUG ? LeakCanary.install(this) : RefWatcher.DISABLED;
         sInstance = this;
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public ApiService getApiService() {

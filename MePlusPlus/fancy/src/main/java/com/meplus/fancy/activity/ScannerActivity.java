@@ -2,7 +2,6 @@ package com.meplus.fancy.activity;
 
 import android.os.Bundle;
 
-import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
 import com.meplus.fancy.events.ScannerEvent;
 import com.meplus.fancy.fragments.SimpleScannerFragment;
@@ -10,8 +9,6 @@ import com.meplus.fancy.fragments.SimpleScannerFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import cn.trinea.android.common.util.ToastUtils;
 
 /**
  * 扫描页面
@@ -34,10 +31,6 @@ public class ScannerActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
-        if (!Constants.sRelease) {
-            final String content = event.getContent();
-            ToastUtils.show(this, content);
-        }
         SimpleScannerFragment simpleScannerFragment =
                 (SimpleScannerFragment) findFragmentById(R.id.frame_layout);
         simpleScannerFragment.resumeScanner();
