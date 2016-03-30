@@ -122,8 +122,8 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         if (event.ok()) {
             final Robot robot = event.getData();
 
-            // 订阅机器人
-            mChannel = robot.getObjectId();
+            MPApplication.getsInstance().setRobot(robot);
+            mChannel = robot.getObjectId();// 订阅机器人
             subscribe();
 
             mHeaderHolder.updateHeader();

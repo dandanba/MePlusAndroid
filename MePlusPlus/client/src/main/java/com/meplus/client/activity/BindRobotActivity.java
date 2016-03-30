@@ -136,7 +136,6 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
-            MPApplication.getsInstance().setRobot(event.getData());
             finish();
         }
     }
