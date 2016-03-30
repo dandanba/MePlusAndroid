@@ -83,6 +83,9 @@
         <activity
             android:name=".activity.BindRobotActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScannerActivity"
+            android:screenOrientation="portrait" />
         <!-- feedback -->
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity"

@@ -3,11 +3,8 @@ package com.meplus.robot.callbacks;
 import android.content.Context;
 import android.util.Log;
 
-import com.meplus.client.BuildConfig;
 import com.pubnub.api.Callback;
 import com.pubnub.api.PubnubError;
-
-import cn.trinea.android.common.util.ToastUtils;
 
 /**
  * Created by dandanba on 3/3/16.
@@ -40,8 +37,5 @@ public class PNCallback extends Callback {
 
     private void log(String message) {
         Log.d(TAG, message);
-        if (BuildConfig.DEBUG) {
-            ToastUtils.show(mContext, message);
-        }
     }
 }
