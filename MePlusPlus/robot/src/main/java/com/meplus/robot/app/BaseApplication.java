@@ -31,9 +31,9 @@ public class BaseApplication extends AgoraApplication {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
-            mRefWatcher = RefWatcher.DISABLED;
-        } else {
             mRefWatcher = LeakCanary.install(this);
+        } else {
+            mRefWatcher = RefWatcher.DISABLED;
         }
 
         // stetho
