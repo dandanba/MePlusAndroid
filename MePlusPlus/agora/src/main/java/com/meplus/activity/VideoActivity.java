@@ -28,6 +28,8 @@ public class VideoActivity extends ChannelActivity {
         findViewById(R.id.channel_actionbar).setVisibility(View.GONE);
         // 禁止滑动
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        // 浮动框不显示
+        setFloat(false);
     }
 
     @Override

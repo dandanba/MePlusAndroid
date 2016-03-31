@@ -986,7 +986,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     }
 
     //set float
-    private void setFloat(boolean isChecked) {
+    public void setFloat(boolean isChecked) {
         mFloatSwitch.setChecked(isChecked);
         ((AgoraApplication) getApplication()).setFloat(isChecked);
         mFloatContainer.setBackgroundResource(isChecked ? R.drawable.ic_room_bg_talk_time : R.color.transparent);
