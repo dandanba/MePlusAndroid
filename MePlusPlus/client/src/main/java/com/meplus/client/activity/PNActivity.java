@@ -8,7 +8,6 @@ import com.meplus.client.Constants;
 import com.meplus.client.R;
 import com.meplus.client.callbacks.PNCallback;
 import com.meplus.client.utils.JsonUtils;
-import com.meplus.command.Command;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
 
@@ -30,24 +29,32 @@ public class PNActivity extends BaseEngineHandlerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initAgora();
         initPubNub();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unsubscribe();
-        if (mPubNub != null) {
-            mPubNub.shutdown();
-            mPubNub = null;
-        }
     }
 
     private void initAgora() {
         final String vendorKey = getString(R.string.vendor_key);
         ((AgoraApplication) getApplication()).setUserInformation(vendorKey, mUUID);
         ((AgoraApplication) getApplication()).setRtcEngine(vendorKey);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ((AgoraApplication) getApplication()).setEngineHandlerActivity(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((AgoraApplication) getApplication()).setEngineHandlerActivity(null);
+        unsubscribe();
+        if (mPubNub != null) {
+            mPubNub.shutdown();
+            mPubNub = null;
+        }
     }
 
     public void initPubNub() {
@@ -69,7 +76,7 @@ public class PNActivity extends BaseEngineHandlerActivity {
                 public void successCallback(String channel, Object message) {
                     super.successCallback(channel, message);
                     if (mChannel.equals(channel)) {
-                        Command command = JsonUtils.readValue(message.toString(), Command.class);
+                        com.meplus.command.Command command = JsonUtils.readValue(message.toString(), com.meplus.command.Command.class);
                         if (!mUUID.equals(command.getSender())) {
                             Log.i(TAG, "delay :" + (command.getTimeStamp() - System.currentTimeMillis()));
                             onMessage(command.getMessage());
@@ -107,7 +114,7 @@ public class PNActivity extends BaseEngineHandlerActivity {
         }
         if (message.equals("")) return; // Return if empty
 
-        final Command command = new Command(mUUID, message, System.currentTimeMillis());
+        final com.meplus.command.Command command = new com.meplus.command.Command(mUUID, message, System.currentTimeMillis());
         message = JsonUtils.writeValueAsString(command);
         mPubNub.publish(mChannel, message, new PNCallback(this) {
             @Override
@@ -120,3 +127,4 @@ public class PNActivity extends BaseEngineHandlerActivity {
     }
 
 }
+

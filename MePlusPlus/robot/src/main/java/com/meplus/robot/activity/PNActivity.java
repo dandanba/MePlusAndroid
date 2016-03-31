@@ -41,8 +41,15 @@ public class PNActivity extends BaseEngineHandlerActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        ((AgoraApplication) getApplication()).setEngineHandlerActivity(this);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        ((AgoraApplication) getApplication()).setEngineHandlerActivity(null);
         unsubscribe();
         if (mPubNub != null) {
             mPubNub.shutdown();
