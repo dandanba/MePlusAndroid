@@ -31,7 +31,6 @@ public class User extends AVUser {
         put(Keys.KEY_USER_ID, userId);
     }
 
-
     public String getUUId() {
         return getString(Keys.KEY_USER_UUID);
     }

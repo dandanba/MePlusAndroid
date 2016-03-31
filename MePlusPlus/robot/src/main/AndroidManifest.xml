@@ -86,7 +86,10 @@
             android:screenOrientation="landscape"
             android:theme="@style/StartAppTheme" />
         <activity
-            android:name=".activity.CallActivity"
+            android:name="com.meplus.activity.VideoActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.meplus.activity.RecordActivity"
             android:screenOrientation="landscape" />
         <!-- feedback -->
         <activity

@@ -1,7 +1,6 @@
 package io.agora.sample.agora;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -102,6 +101,7 @@ public class RecordActivity extends BaseEngineHandlerActivity {
     private class RecordAdapter extends BaseAdapter {
         private Context context;
         private List<Record> items = new ArrayList<Record>();
+
         public RecordAdapter(Context context, List<Record> items) {
             super();
             this.context = context;
@@ -138,17 +138,19 @@ public class RecordActivity extends BaseEngineHandlerActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.itemDate.setText(records.get(position).getRecordValue().substring(0, records.get(position).getRecordValue().indexOf("/") - 1));
+            holder.itemDate.setText(records.get(position).getRecordValue().substring(0, records.get(position).getRecordValue().indexOf("/")));
             holder.itemTime.setText(records.get(position).getRecordValue().substring(records.get(position).getRecordValue().indexOf("/") + 1, records.get(position).getRecordValue().indexOf("+") - 1));
             final int number = position;
-            holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent toWebView = new Intent(RecordActivity.this, WebActivity.class);
-                    toWebView.putExtra(WebActivity.EXTRA_KEY_URL, records.get(number).getRecordValue().substring(records.get(number).getRecordValue().indexOf("+") + 1));
-                    startActivity(toWebView);
-                }
-            });
+            // 不做任何跳转
+//
+//            holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent toWebView = new Intent(RecordActivity.this, WebActivity.class);
+//                    toWebView.putExtra(WebActivity.EXTRA_KEY_URL, records.get(number).getRecordValue().substring(records.get(number).getRecordValue().indexOf("+") + 1));
+//                    startActivity(toWebView);
+//                }
+//            });
             return convertView;
         }
     }

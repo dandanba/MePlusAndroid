@@ -616,6 +616,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public void onUserOffline(final int uid) {
         if (mRemoteUserContainer == null || mLocalView == null) {
             return;

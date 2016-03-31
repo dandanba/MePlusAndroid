@@ -135,12 +135,8 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         if (Command.ACTION_CALL.equals(message)) {
             if (!MPApplication.getsInstance().getIsInChannel()) { // 如果正在通电话那么就不能在进入了
                 Robot robot = MPApplication.getsInstance().getRobot();
-                startActivity(IntentUtils.generateCallIntent(this, mChannel, robot.getRobotId()));
+                startActivity(com.meplus.activity.IntentUtils.generateCallIntent(this, mChannel, robot.getRobotId()));
             }
-        } else if (Command.ACTION_HUNG_UP.equals(message)) {
-            // 通知机器人退出通话的模式
-            final Command command = new Command("", message, System.currentTimeMillis());
-            EventBus.getDefault().post(command);
         }
     }
 

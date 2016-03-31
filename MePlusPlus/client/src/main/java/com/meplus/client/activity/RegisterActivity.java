@@ -112,8 +112,8 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
-        user.setUUId(UUIDUtils.getUUID(this));
         user.setUserId(userId);
+        user.setUUId(UUIDUtils.getUUID(this));
 
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {

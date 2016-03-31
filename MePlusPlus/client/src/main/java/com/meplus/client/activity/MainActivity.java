@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.meplus.activity.RecordActivity;
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
@@ -29,7 +30,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
-import io.agora.sample.agora.RecordActivity;
 
 /**
  * 主页面
@@ -149,7 +149,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
                         User user = User.getCurrentUser(User.class);
-                        startActivity(IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
+                        startActivity(com.meplus.activity.IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
                         publish(Command.ACTION_CALL);
                     }
                 }).show();

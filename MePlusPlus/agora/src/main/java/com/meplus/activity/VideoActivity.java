@@ -32,10 +32,28 @@ public class VideoActivity extends ChannelActivity {
 
     @Override
     public void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats) {
-        // @see ChannelActivity onLeaveChannel
-        ((AgoraApplication) getApplication()).setIsInChannel(false);
-        ((AgoraApplication) getApplication()).setChannelTime(0);
-        finish();
+        // 回调不在UI主线程
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // @see ChannelActivity onLeaveChannel
+                ((AgoraApplication) getApplication()).setIsInChannel(false);
+                ((AgoraApplication) getApplication()).setChannelTime(0);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onUserOffline(final int uid) {
+        super.onUserOffline(uid);
+        // 回调不在UI主线程
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                doBackPressed();
+            }
+        });
     }
 
     @Override

@@ -87,7 +87,10 @@
             android:name=".activity.ScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CallActivity"
+            android:name="com.meplus.activity.VideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.meplus.activity.RecordActivity"
             android:screenOrientation="portrait" />
         <!-- feedback -->
         <activity

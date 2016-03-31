@@ -4,6 +4,7 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.meplus.avos.Keys;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.QueryEvent;
@@ -20,41 +21,37 @@ import rx.schedulers.Schedulers;
 public class Robot extends AVObject {
     private static final String TAG = Robot.class.getSimpleName();
     public static final Creator CREATOR = AVObjectCreator.instance;
-    public final static String KEY_UUID = "uuId";
-    public final static String KEY_ROBOT_ID = "robotId";
-    public final static String KEY_ROBOT_NAME = "robotName";
-    public final static String KEY_ROBOT_DESCRIPTION = "robotDescription";
 
     public String getUUId() {
-        return getString(KEY_UUID);
+        return getString(Keys.KEY_ROBOT_UUID);
     }
 
     public void setUUId(String uuId) {
-        put(KEY_UUID, uuId);
+        put(Keys.KEY_ROBOT_UUID, uuId);
     }
 
     public int getRobotId() {
-        return getInt(KEY_ROBOT_ID);
+        return getInt(Keys.KEY_ROBOT_ID);
     }
 
     public void setRobotId(int robotId) {
-        put(KEY_ROBOT_ID, robotId);
+        put(Keys.KEY_ROBOT_ID, robotId);
     }
 
     public String getRobotName() {
-        return getString(KEY_ROBOT_NAME);
+        return getString(Keys.KEY_ROBOT_NAME);
     }
 
     public void setRobotName(String robotName) {
-        put(KEY_ROBOT_NAME, robotName);
+        put(Keys.KEY_ROBOT_NAME, robotName);
     }
 
     public String getRobotDescription() {
-        return getString(KEY_ROBOT_DESCRIPTION);
+        return getString(Keys.KEY_ROBOT_DESCRIPTION);
     }
 
     public void setRobotDescription(String robotDescription) {
-        put(KEY_ROBOT_DESCRIPTION, robotDescription);
+        put(Keys.KEY_ROBOT_DESCRIPTION, robotDescription);
     }
 
     @DebugLog
@@ -65,7 +62,7 @@ public class Robot extends AVObject {
                 .map(id -> {
                     List<Robot> list = null;
                     AVQuery<Robot> query = Robot.getQuery(Robot.class);
-                    query.whereEqualTo(Robot.KEY_UUID, id);
+                    query.whereEqualTo(Keys.KEY_ROBOT_UUID, id);
                     try {
                         list = query.find();
                     } catch (AVException e) {
