@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.meplus.robot.R;
 import com.meplus.command.Command;
+import com.meplus.robot.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.SaveEvent;
@@ -28,7 +28,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
-import io.agora.sample.agora.RecordActivity;
 
 /**
  * 主页面
@@ -98,7 +97,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
             case R.id.nav_home:
                 break;
             case R.id.nav_history:
-                startActivity(IntentUtils.generateIntent(this, RecordActivity.class));
+                startActivity(com.meplus.activity.IntentUtils.generateRecordIntent(this));
                 break;
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));

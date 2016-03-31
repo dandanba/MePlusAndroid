@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.meplus.activity.RecordActivity;
 import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
@@ -98,7 +97,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
             case R.id.nav_home:
                 break;
             case R.id.nav_history:
-                startActivity(IntentUtils.generateIntent(this, RecordActivity.class));
+                startActivity(com.meplus.activity.IntentUtils.generateRecordIntent(this));
                 break;
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));
