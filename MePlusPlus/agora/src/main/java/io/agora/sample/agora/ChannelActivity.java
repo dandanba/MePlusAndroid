@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
@@ -30,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -73,7 +73,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
 
     private LinearLayout mRemoteUserContainer;
     // 去掉 Evaluation
-   // private RelativeLayout mEvaluationContainer;
+    // private RelativeLayout mEvaluationContainer;
 
 //    private ImageView mStarOne;
 //    private ImageView mStarTwo;
@@ -95,6 +95,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     private int mRemoteUserViewWidth = 0;
 
     private SurfaceView mLocalView;
+    private SurfaceView remoteView;
     private RtcEngine rtcEngine;
 
     private int callingType;
@@ -129,6 +130,13 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         initViews();
         setupChannel();
         setupTime();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyTime();
+        destroyRtcEngine();
     }
 
     @Override
@@ -253,6 +261,13 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         rtcEngine = ((AgoraApplication) getApplication()).getRtcEngine();
         ((AgoraApplication) getApplication()).setEngineHandlerActivity(this);
         rtcEngine.setLogFile(((AgoraApplication) getApplication()).getPath() + "/" + Integer.toString(Math.abs((int) System.currentTimeMillis())) + ".txt");
+    }
+
+    private void destroyRtcEngine() {
+        rtcEngine = ((AgoraApplication) getApplication()).getRtcEngine();
+        ((AgoraApplication) getApplication()).setEngineHandlerActivity(null);
+        mLocalView = null;
+        remoteView = null;
     }
 
     private void setupChannel() {
@@ -562,7 +577,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
                 remoteVideoUser.removeAllViews();
                 remoteVideoUser.setTag(uid);
                 // ensure remote video view setup
-                final SurfaceView remoteView = RtcEngine.CreateRendererView(getApplicationContext());
+                remoteView = RtcEngine.CreateRendererView(getApplicationContext());
                 remoteVideoUser.addView(remoteView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
                 remoteView.setZOrderOnTop(true);
                 remoteView.setZOrderMediaOverlay(true);
@@ -766,7 +781,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                  // 去掉 Evaluation
+                // 去掉 Evaluation
 //                ((AgoraApplication) getApplication()).setIsInChannel(false);
 //                ((AgoraApplication) getApplication()).setChannelTime(0);
 //                if (isCorrect) {
@@ -845,25 +860,29 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         }
     }
 
-    private void setupTime() {
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        time++;
-                        if (time >= 3600) {
-                            mDuration.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
-                        } else {
-                            mDuration.setText(String.format("%02d:%02d", (time % 3600) / 60, (time % 60)));
-                        }
-                    }
-                });
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            handler.removeMessages(1);
+            if (msg.what == 1) {
+                time++;
+                if (time >= 3600) {
+                    mDuration.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
+                } else {
+                    mDuration.setText(String.format("%02d:%02d", (time % 3600) / 60, (time % 60)));
+                }
+                handler.sendEmptyMessageDelayed(1, 1000);
             }
-        };
-        Timer timer = new Timer();
-        timer.schedule(task, 1000, 1000);
+        }
+    };
+
+    private void setupTime() {
+        handler.sendEmptyMessageDelayed(1, 1000);
+    }
+
+    private void destroyTime() {
+        handler.removeMessages(1);
     }
 
     private void setupNotification(String notification) {
@@ -875,24 +894,24 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         }
     }
 
-    private void clearStars() {
-
-        for (int i = 0; i < stars.size(); i++) {
-            stars.get(i).setImageResource(R.drawable.ic_evaluate_dialog_cell_star);
-        }
-    }
-
-    private void setupStars(int i) {
-        clearStars();
-        if (score == i) {
-            score = 0;
-        } else {
-            score = i;
-            for (int j = 0; j < i; j++) {
-                stars.get(j).setImageResource(R.drawable.ic_evaluate_dialog_cell_star_yellow);
-            }
-        }
-    }
+//    private void clearStars() {
+//
+//        for (int i = 0; i < stars.size(); i++) {
+//            stars.get(i).setImageResource(R.drawable.ic_evaluate_dialog_cell_star);
+//        }
+//    }
+//
+//    private void setupStars(int i) {
+//        clearStars();
+//        if (score == i) {
+//            score = 0;
+//        } else {
+//            score = i;
+//            for (int j = 0; j < i; j++) {
+//                stars.get(j).setImageResource(R.drawable.ic_evaluate_dialog_cell_star_yellow);
+//            }
+//        }
+//    }
 
     //set resolution
     private void setResolution(int resolution) {

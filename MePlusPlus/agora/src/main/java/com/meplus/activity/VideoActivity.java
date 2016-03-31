@@ -62,4 +62,5 @@ public class VideoActivity extends ChannelActivity {
     public void onBackPressed() {
         // super.onBackPressed();
     }
+
 }
