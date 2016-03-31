@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.Constants;
 import com.meplus.robot.callbacks.PNCallback;
 import com.meplus.robot.utils.JsonUtils;

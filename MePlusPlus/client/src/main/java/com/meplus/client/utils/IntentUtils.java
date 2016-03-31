@@ -3,7 +3,7 @@ package com.meplus.client.utils;
 import android.content.Context;
 import android.content.Intent;
 
-import com.meplus.activity.VideoActivity;
+import com.meplus.client.activity.CallActivity;
 
 import io.agora.sample.agora.ChannelActivity;
 
@@ -17,9 +17,10 @@ public class IntentUtils extends com.marvinlabs.intents.IntentUtils {
         return new Intent(context, cls);
     }
 
-    public static Intent generateVideoIntent(Context context, String channel) {
-        Intent intent = new Intent(context, VideoActivity.class);
-        intent.putExtra(ChannelActivity.EXTRA_TYPE, VideoActivity.CALLING_TYPE_VIDEO);
+    public static Intent generateCallIntent(Context context, String channel, int userId) {
+        Intent intent = new Intent(context, CallActivity.class);
+        intent.putExtra(ChannelActivity.EXTRA_TYPE, CallActivity.CALLING_TYPE_VIDEO);
+        intent.putExtra(ChannelActivity.EXTRA_USER_ID, userId);
         intent.putExtra(ChannelActivity.EXTRA_CHANNEL, channel);
         return intent;
     }

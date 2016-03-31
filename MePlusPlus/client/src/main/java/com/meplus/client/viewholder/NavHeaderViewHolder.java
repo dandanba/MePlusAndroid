@@ -30,9 +30,9 @@ public class NavHeaderViewHolder {
     public void updateHeader() {
         final User user = User.getCurrentUser(User.class);
         final Robot robot = MPApplication.getsInstance().getRobot();
-        final String robotId = robot == null ? "" : robot.getRobotId();
+        final String uuId = robot == null ? "" : robot.getUUId();
         mTitle.setText(String.format("用户名:%1$s", user.getUsername()));
-        mContent.setText(TextUtils.isEmpty(robotId) ? "未绑定多我机器人" : String.format("机器人:%1$s", robotId));
+        mContent.setText(TextUtils.isEmpty(uuId) ? "未绑定多我机器人" : String.format("机器人:%1$s", uuId));
         mText.setText(String.format("邮箱:%1$s", user.getEmail()));
     }
 }

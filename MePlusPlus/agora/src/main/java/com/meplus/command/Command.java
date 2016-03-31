@@ -1,11 +1,15 @@
 package com.meplus.command;
 
-import java.lang.Override;import java.lang.String; /**
+import java.lang.Override;
+import java.lang.String;
+
+/**
  * Created by GleasonK on 6/25/15.
  */
 public class Command {
 
     public final static String ACTION_CALL = "call";
+    public final static String ACTION_HUNG_UP = "hung_up";
 
     public String sender;
     public String message;

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.utils.QRUtils;
 
 import butterknife.Bind;

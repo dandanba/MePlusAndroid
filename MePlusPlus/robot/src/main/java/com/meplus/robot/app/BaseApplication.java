@@ -1,15 +1,12 @@
 package com.meplus.robot.app;
 
-import android.content.Context;
-import android.support.multidex.MultiDex;
-
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.meplus.client.BuildConfig;
+import com.meplus.robot.BuildConfig;
 import com.meplus.robot.Constants;
 import com.meplus.robot.api.model.Robot;
 import com.squareup.leakcanary.LeakCanary;

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.SaveEvent;

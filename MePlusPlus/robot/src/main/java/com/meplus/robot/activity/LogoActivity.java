@@ -3,13 +3,13 @@ package com.meplus.robot.activity;
 import android.os.Bundle;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.events.ErrorEvent;
 import com.meplus.robot.events.Event;
 import com.meplus.robot.events.QueryEvent;
+import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.utils.UUIDUtils;
 
@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import cn.trinea.android.common.util.ListUtils;
@@ -42,7 +43,7 @@ public class LogoActivity extends BaseActivity {
         mShimmerViewContainer.startShimmerAnimation();
 
         EventBus.getDefault().register(this);
-        Robot.queryByRobotId(UUIDUtils.getUUID(this));
+        Robot.queryByUUId(UUIDUtils.getUUID(this));
     }
 
     @Override
@@ -63,7 +64,9 @@ public class LogoActivity extends BaseActivity {
             final List<Robot> robotList = event.getList();
             if (ListUtils.isEmpty(robotList)) {
                 final Robot robot = new Robot();
-                robot.setRobotId(UUIDUtils.getUUID(this));
+                final int robotId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
+                robot.setRobotId(robotId);
+                robot.setUUId(UUIDUtils.getUUID(this));
                 robot.saveRotot();
             } else {
                 onCreateEvent(new SaveEvent<>(Event.STATUS_OK, robotList.get(0)));

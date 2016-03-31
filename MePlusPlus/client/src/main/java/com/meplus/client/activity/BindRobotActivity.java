@@ -68,7 +68,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
         final Robot robot = MPApplication.getsInstance().getRobot();
-        mBindEdit.setText(robot == null ? "" : robot.getRobotId());
+        mBindEdit.setText(robot == null ? "" : robot.getUUId());
     }
 
     @Override
@@ -100,8 +100,8 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
 
     @Override
     public void onValidationSucceeded() {
-        final String robotId = mBindEdit.getText().toString();
-        Robot.queryByRobotId(robotId);
+        final String uuId = mBindEdit.getText().toString();
+        Robot.queryByUUID(uuId);
     }
 
     @Override
@@ -112,8 +112,8 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
         if (event.ok()) {
-            final String robotId = event.getContent();
-            Robot.queryByRobotId(robotId);
+            final String uuId = event.getContent();
+            Robot.queryByUUID(uuId);
         }
     }
 

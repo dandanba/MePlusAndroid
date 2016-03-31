@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MePlusPlus.iml" filepath="$PROJECT_DIR$/MePlusPlus.iml" />
       <module fileurl="file://$PROJECT_DIR$/agora/agora.iml" filepath="$PROJECT_DIR$/agora/agora.iml" />
+      <module fileurl="file://$PROJECT_DIR$/avos/avos.iml" filepath="$PROJECT_DIR$/avos/avos.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/fancy/fancy.iml" filepath="$PROJECT_DIR$/fancy/fancy.iml" />
       <module fileurl="file://$PROJECT_DIR$/robot/robot.iml" filepath="$PROJECT_DIR$/robot/robot.iml" />

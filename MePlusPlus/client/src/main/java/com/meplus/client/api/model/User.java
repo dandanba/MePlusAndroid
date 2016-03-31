@@ -5,6 +5,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVRelation;
 import com.avos.avoscloud.AVUser;
+import com.meplus.avos.Keys;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.QueryEvent;
@@ -21,15 +22,22 @@ import rx.schedulers.Schedulers;
 @AVClassName("User")
 public class User extends AVUser {
     public static final Creator CREATOR = AVObjectCreator.instance;
-    public static final String RELATION_ROBOTS = "robots";
-    public final static String KEY_USER_ID = "userId";
 
-    public String getUserId() {
-        return getString(KEY_USER_ID);
+    public int getUserId() {
+        return getInt(Keys.KEY_USER_ID);
     }
 
-    public void setUserId(String userId) {
-        put(KEY_USER_ID, userId);
+    public void setUserId(int userId) {
+        put(Keys.KEY_USER_ID, userId);
+    }
+
+
+    public String getUUId() {
+        return getString(Keys.KEY_USER_UUID);
+    }
+
+    public void setUUId(String uuId) {
+        put(Keys.KEY_USER_UUID, uuId);
     }
 
     @DebugLog
@@ -39,7 +47,7 @@ public class User extends AVUser {
                 .observeOn(Schedulers.io())
                 .subscribe(
                         r -> {
-                            AVRelation<Robot> relation = getRelation(User.RELATION_ROBOTS);
+                            AVRelation<Robot> relation = getRelation(Keys.RELATION_ROBOTS);
                             relation.add(r);
                             saveEventually();
 
@@ -55,7 +63,7 @@ public class User extends AVUser {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(user -> {
-                            final AVRelation<Robot> relation = user.getRelation(User.RELATION_ROBOTS);
+                            final AVRelation<Robot> relation = user.getRelation(Keys.RELATION_ROBOTS);
                             final AVQuery<Robot> query = relation.getQuery();
                             query.setLimit(1);
 

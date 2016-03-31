@@ -49,7 +49,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     private TextView mDuration;
     private TextView mByteCounts;
 
-    private DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
 
     private SeekBar mResolutionSeekBar;
     private SeekBar mRateSeekBar;
@@ -98,9 +98,9 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     private RtcEngine rtcEngine;
 
     private int callingType;
-    private String channel;
+    public String channel;
 
-    private int userId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
+    public int userId;
     private String callId;
 
     private boolean isMuted = false;
@@ -109,6 +109,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     private int score = 0;
     private int errorCount = 0;
 
+    public final static String EXTRA_USER_ID = "EXTRA_USER_ID";
     public final static String EXTRA_TYPE = "EXTRA_TYPE";
     public final static String EXTRA_CHANNEL = "EXTRA_CHANNEL";
 
@@ -117,6 +118,8 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         super.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstance);
         setContentView(R.layout.agora_activity_channel);
+
+        userId = getIntent().getIntExtra(EXTRA_USER_ID, new Random().nextInt(Math.abs((int) System.currentTimeMillis())));
         callingType = getIntent().getIntExtra(EXTRA_TYPE, CALLING_TYPE_VIDEO);
         channel = getIntent().getStringExtra(EXTRA_CHANNEL);
         // keep screen on - turned on
@@ -133,8 +136,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         super.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public void onBackPressed() {
+    public void doBackPressed() {
         rtcEngine.leaveChannel();
         // keep screen on - turned off
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -206,61 +208,41 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
                     updateRemoteUserViews(CALLING_TYPE_VOICE);
                 }
             }, 500);
-
-        } else if (id == R.id.action_hung_up || id == R.id.channel_back) {
-            onBackPressed();
-
+        } else if (id == R.id.action_hung_up || id == R.id.channel_back) { // back button in action bar or hung up button
+            doBackPressed();
         } else if (id == R.id.evaluation_star_one) {
             setupStars(1);
-
         } else if (id == R.id.evaluation_star_two) {
             setupStars(2);
-
         } else if (id == R.id.evaluation_star_three) {
             setupStars(3);
-
         } else if (id == R.id.evaluation_star_four) {
             setupStars(4);
-
         } else if (id == R.id.evaluation_star_five) {
             setupStars(5);
-
-
-            //open or close drawer
-        } else if (id == R.id.channel_drawer_button) {
+        } else if (id == R.id.channel_drawer_button) {             //open or close drawer
             if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
                 mDrawerLayout.closeDrawer(GravityCompat.END);
             } else {
                 mDrawerLayout.openDrawer(GravityCompat.END);
             }
-
-
-            //go to Profile
-        } else if (id == R.id.channel_drawer_profile) {
+        } else if (id == R.id.channel_drawer_profile) {            //go to Profile
             mDrawerLayout.closeDrawer(GravityCompat.END);
             ((AgoraApplication) getApplication()).setChannelTime(time);
             Intent i = new Intent(ChannelActivity.this, ProfileActivity.class);
             startActivityForResult(i, 0);
-
-
-            //go to record
-        } else if (id == R.id.channel_drawer_record) {
+        } else if (id == R.id.channel_drawer_record) {            //go to record
             mDrawerLayout.closeDrawer(GravityCompat.END);
             ((AgoraApplication) getApplication()).setChannelTime(time);
             Intent i = new Intent(ChannelActivity.this, RecordActivity.class);
             startActivity(i);
-
-
-            //go to About
-        } else if (id == R.id.channel_drawer_about) {
+        } else if (id == R.id.channel_drawer_about) {            //go to About
             mDrawerLayout.closeDrawer(GravityCompat.END);
             ((AgoraApplication) getApplication()).setChannelTime(time);
             Intent i = new Intent(ChannelActivity.this, AboutActivity.class);
             startActivity(i);
-
         } else {
             super.onUserInteraction(view);
-
         }
     }
 
@@ -361,12 +343,12 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
             // video call
             View simulateClick = new View(getApplicationContext());
             simulateClick.setId(R.id.wrapper_action_video_calling);
-            this.onUserInteraction(simulateClick);
+            onUserInteraction(simulateClick);
         } else if (callingType == CALLING_TYPE_VOICE) {
             // voice call
             View simulateClick = new View(getApplicationContext());
             simulateClick.setId(R.id.wrapper_action_voice_calling);
-            this.onUserInteraction(simulateClick);
+            onUserInteraction(simulateClick);
         }
 
         findViewById(R.id.wrapper_action_video_calling).setOnClickListener(getViewClickListener());
@@ -479,14 +461,14 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
 
     //Show Local
     private void ensureLocalViewIsCreated() {
-        if (this.mLocalView == null) {
+        if (mLocalView == null) {
             // local view has not been added before
             FrameLayout localViewContainer = (FrameLayout) findViewById(R.id.user_local_view);
             SurfaceView localView = rtcEngine.CreateRendererView(getApplicationContext());
-            this.mLocalView = localView;
+            mLocalView = localView;
             localViewContainer.addView(localView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             rtcEngine.enableVideo();
-            rtcEngine.setupLocalVideo(new VideoCanvas(this.mLocalView));
+            rtcEngine.setupLocalVideo(new VideoCanvas(mLocalView));
             mLocalView.setTag(0);
         }
     }
@@ -774,6 +756,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public void onLeaveChannel(final IRtcEngineEventHandler.RtcStats stats) {
         runOnUiThread(new Runnable() {
             @Override

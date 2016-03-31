@@ -25,6 +25,7 @@ import com.mobsandgeeks.saripaar.annotation.Password;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -106,12 +107,13 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         final String username = mPhoneEdit.getText().toString();
         final String password = mPasswordEdit.getText().toString();
         final String email = mEmailEdit.getText().toString();
-
+        final int userId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
-        user.setUserId(UUIDUtils.getUUID(this));
+        user.setUUId(UUIDUtils.getUUID(this));
+        user.setUserId(userId);
 
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {

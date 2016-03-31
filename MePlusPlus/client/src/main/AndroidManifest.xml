@@ -86,14 +86,14 @@
         <activity
             android:name=".activity.ScannerActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CallActivity"
+            android:screenOrientation="portrait" />
         <!-- feedback -->
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity"
             android:screenOrientation="portrait" />
-        <!-- video Activity -->
-        <activity
-            android:name="com.meplus.activity.VideoActivity"
-            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

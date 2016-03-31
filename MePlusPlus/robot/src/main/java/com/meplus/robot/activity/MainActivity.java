@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.command.Command;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
@@ -28,6 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
+import io.agora.sample.agora.RecordActivity;
 
 /**
  * 主页面
@@ -97,6 +98,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
             case R.id.nav_home:
                 break;
             case R.id.nav_history:
+                startActivity(IntentUtils.generateIntent(this, RecordActivity.class));
                 break;
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));
@@ -131,9 +133,15 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
     public void onMessage(String message) {
         super.onMessage(message);
         if (Command.ACTION_CALL.equals(message)) {
-            startActivity(IntentUtils.generateVideoIntent(this, mChannel));
+            if (!MPApplication.getsInstance().getIsInChannel()) { // 如果正在通电话那么就不能在进入了
+                Robot robot = MPApplication.getsInstance().getRobot();
+                startActivity(IntentUtils.generateCallIntent(this, mChannel, robot.getRobotId()));
+            }
+        } else if (Command.ACTION_HUNG_UP.equals(message)) {
+            // 通知机器人退出通话的模式
+            final Command command = new Command("", message, System.currentTimeMillis());
+            EventBus.getDefault().post(command);
         }
-
     }
 
     private void showQRDialog() {
@@ -145,7 +153,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                 .show();
         final View view = dialog.getView();
         final QRViewHolder viewHolder = new QRViewHolder(view);
-        final String code = MPApplication.getsInstance().getRobot().getRobotId();
+        final String code = MPApplication.getsInstance().getRobot().getUUId();
         viewHolder.update(code);
     }
 

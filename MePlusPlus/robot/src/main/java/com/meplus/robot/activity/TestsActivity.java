@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.marvinlabs.intents.PhoneIntents;
-import com.meplus.client.R;
+import com.meplus.robot.R;
 
 /**
  * 自检

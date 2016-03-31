@@ -29,6 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
+import io.agora.sample.agora.RecordActivity;
 
 /**
  * 主页面
@@ -49,8 +50,8 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         // 初始化
         final User user = User.getCurrentUser(User.class);
         final Robot robot = MPApplication.getsInstance().getRobot();
-        final String userName = mUUID = user.getObjectId();
-        final String robotId = mChannel = robot == null ? "" : robot.getObjectId();
+        final String userObjectId = mUUID = user.getObjectId();
+        final String objectId = mChannel = robot == null ? "" : robot.getObjectId();
 
         super.onCreate(savedInstanceState);
 
@@ -97,6 +98,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
             case R.id.nav_home:
                 break;
             case R.id.nav_history:
+                startActivity(IntentUtils.generateIntent(this, RecordActivity.class));
                 break;
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));
@@ -130,6 +132,13 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         }
     }
 
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCommand(Command event) {
+        publish(event.getMessage());
+    }
+
     @OnClick(R.id.fab)
     public void onClick(View view) {
         switch (view.getId()) {
@@ -139,7 +148,8 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
-                        startActivity(IntentUtils.generateVideoIntent(this, mChannel));
+                        User user = User.getCurrentUser(User.class);
+                        startActivity(IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
                         publish(Command.ACTION_CALL);
                     }
                 }).show();
@@ -149,7 +159,5 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
     @Override
     public void onMessage(String message) {
         super.onMessage(message);
-
-
     }
 }

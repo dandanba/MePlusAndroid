@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.activity.ModifyActivity;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.utils.IntentUtils;
@@ -34,7 +34,7 @@ public class NavHeaderViewHolder {
         final String description = robot.getRobotDescription();
         mTitle.setText(String.format("机器人:%1$s", TextUtils.isEmpty(name) ? "" : robot.getRobotName()));
         mContent.setText(TextUtils.isEmpty(description) ? "写点什么内容呢？" : description);
-        mText.setText(String.format("机器ID:%1$s", robot.getRobotId()));
+        mText.setText(String.format("机器ID:%1$s", robot.getUUId()));
     }
 
     @OnClick(R.id.image)

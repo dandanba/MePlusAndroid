@@ -7,7 +7,6 @@ import com.avos.avoscloud.AVQuery;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.QueryEvent;
-import com.meplus.client.events.SaveEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,17 +20,26 @@ import rx.schedulers.Schedulers;
 public class Robot extends AVObject {
     private static final String TAG = Robot.class.getSimpleName();
     public static final Creator CREATOR = AVObjectCreator.instance;
+    public final static String KEY_UUID = "uuId";
     public final static String KEY_ROBOT_ID = "robotId";
     public final static String KEY_ROBOT_NAME = "robotName";
+    public final static String KEY_ROBOT_DESCRIPTION = "robotDescription";
 
-    public String getRobotId() {
-        return getString(KEY_ROBOT_ID);
+    public String getUUId() {
+        return getString(KEY_UUID);
     }
 
-    public void setRobotId(String robotId) {
+    public void setUUId(String uuId) {
+        put(KEY_UUID, uuId);
+    }
+
+    public int getRobotId() {
+        return getInt(KEY_ROBOT_ID);
+    }
+
+    public void setRobotId(int robotId) {
         put(KEY_ROBOT_ID, robotId);
     }
-
 
     public String getRobotName() {
         return getString(KEY_ROBOT_NAME);
@@ -41,15 +49,23 @@ public class Robot extends AVObject {
         put(KEY_ROBOT_NAME, robotName);
     }
 
+    public String getRobotDescription() {
+        return getString(KEY_ROBOT_DESCRIPTION);
+    }
+
+    public void setRobotDescription(String robotDescription) {
+        put(KEY_ROBOT_DESCRIPTION, robotDescription);
+    }
+
     @DebugLog
-    public static void queryByRobotId(String robotId) {
-        Observable.just(robotId)
+    public static void queryByUUID(String uuId) {
+        Observable.just(uuId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map(id -> {
                     List<Robot> list = null;
                     AVQuery<Robot> query = Robot.getQuery(Robot.class);
-                    query.whereEqualTo(Robot.KEY_ROBOT_ID, id);
+                    query.whereEqualTo(Robot.KEY_UUID, id);
                     try {
                         list = query.find();
                     } catch (AVException e) {
@@ -63,17 +79,6 @@ public class Robot extends AVObject {
                 );
     }
 
-    @DebugLog
-    public void saveRotot() {
-        Observable.just(this)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(
-                        robot -> {
-                            robot.saveEventually();
-                            EventBus.getDefault().post(new SaveEvent<>(Event.STATUS_OK, robot));
-                        },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
-                );
-    }
+
+
 }

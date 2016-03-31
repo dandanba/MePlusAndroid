@@ -48,6 +48,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // agora
     compile project(':agora')
+    // avos
+    compile project(':avos')
     // junit
     testCompile 'junit:junit:4.12'
     // v7

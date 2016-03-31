@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
-import com.meplus.client.R;
+import com.meplus.robot.R;
 import com.meplus.robot.utils.FIRUtils;
 import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.utils.SnackBarUtils;
