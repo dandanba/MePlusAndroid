@@ -72,14 +72,14 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     private ImageView mNetworkQuality;
 
     private LinearLayout mRemoteUserContainer;
+    // 去掉 Evaluation
+   // private RelativeLayout mEvaluationContainer;
 
-    private RelativeLayout mEvaluationContainer;
-
-    private ImageView mStarOne;
-    private ImageView mStarTwo;
-    private ImageView mStarThree;
-    private ImageView mStarFour;
-    private ImageView mStarFive;
+//    private ImageView mStarOne;
+//    private ImageView mStarTwo;
+//    private ImageView mStarThree;
+//    private ImageView mStarFour;
+//    private ImageView mStarFive;
 
     private List<ImageView> stars = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     public void onCreate(Bundle savedInstance) {
         super.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstance);
-        setContentView(R.layout.agora_activity_channel);
+        setContentView(getContentView());
 
         userId = getIntent().getIntExtra(EXTRA_USER_ID, new Random().nextInt(Math.abs((int) System.currentTimeMillis())));
         callingType = getIntent().getIntExtra(EXTRA_TYPE, CALLING_TYPE_VIDEO);
@@ -210,17 +210,20 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
             }, 500);
         } else if (id == R.id.action_hung_up || id == R.id.channel_back) { // back button in action bar or hung up button
             doBackPressed();
-        } else if (id == R.id.evaluation_star_one) {
-            setupStars(1);
-        } else if (id == R.id.evaluation_star_two) {
-            setupStars(2);
-        } else if (id == R.id.evaluation_star_three) {
-            setupStars(3);
-        } else if (id == R.id.evaluation_star_four) {
-            setupStars(4);
-        } else if (id == R.id.evaluation_star_five) {
-            setupStars(5);
-        } else if (id == R.id.channel_drawer_button) {             //open or close drawer
+        }
+        // 去掉 Evaluation
+//        else if (id == R.id.evaluation_star_one) {
+//            setupStars(1);
+//        } else if (id == R.id.evaluation_star_two) {
+//            setupStars(2);
+//        } else if (id == R.id.evaluation_star_three) {
+//            setupStars(3);
+//        } else if (id == R.id.evaluation_star_four) {
+//            setupStars(4);
+//        } else if (id == R.id.evaluation_star_five) {
+//            setupStars(5);
+//        }
+        else if (id == R.id.channel_drawer_button) {             //open or close drawer
             if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
                 mDrawerLayout.closeDrawer(GravityCompat.END);
             } else {
@@ -324,20 +327,21 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         mNotificationNew = (TextView) findViewById(R.id.channel_notification_new);
         mNetworkQuality = (ImageView) findViewById(R.id.channel_network_quality);
         mRemoteUserContainer = (LinearLayout) findViewById(R.id.user_remote_views);
-        mEvaluationContainer = (RelativeLayout) findViewById(R.id.channel_evaluation);
-        mEvaluationContainer.setVisibility(View.GONE);
-
-        mStarOne = (ImageView) findViewById(R.id.evaluation_star_one);
-        mStarTwo = (ImageView) findViewById(R.id.evaluation_star_two);
-        mStarThree = (ImageView) findViewById(R.id.evaluation_star_three);
-        mStarFour = (ImageView) findViewById(R.id.evaluation_star_four);
-        mStarFive = (ImageView) findViewById(R.id.evaluation_star_five);
-
-        stars.add(mStarOne);
-        stars.add(mStarTwo);
-        stars.add(mStarThree);
-        stars.add(mStarFour);
-        stars.add(mStarFive);
+        // 去掉 Evaluation
+//        mEvaluationContainer = (RelativeLayout) findViewById(R.id.channel_evaluation);
+//        mEvaluationContainer.setVisibility(View.GONE);
+//
+//        mStarOne = (ImageView) findViewById(R.id.evaluation_star_one);
+//        mStarTwo = (ImageView) findViewById(R.id.evaluation_star_two);
+//        mStarThree = (ImageView) findViewById(R.id.evaluation_star_three);
+//        mStarFour = (ImageView) findViewById(R.id.evaluation_star_four);
+//        mStarFive = (ImageView) findViewById(R.id.evaluation_star_five);
+//
+//        stars.add(mStarOne);
+//        stars.add(mStarTwo);
+//        stars.add(mStarThree);
+//        stars.add(mStarFour);
+//        stars.add(mStarFive);
 
         if (callingType == CALLING_TYPE_VIDEO) {
             // video call
@@ -464,7 +468,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         if (mLocalView == null) {
             // local view has not been added before
             FrameLayout localViewContainer = (FrameLayout) findViewById(R.id.user_local_view);
-            SurfaceView localView = rtcEngine.CreateRendererView(getApplicationContext());
+            SurfaceView localView = RtcEngine.CreateRendererView(getApplicationContext());
             mLocalView = localView;
             localViewContainer.addView(localView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             rtcEngine.enableVideo();
@@ -762,50 +766,51 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((AgoraApplication) getApplication()).setIsInChannel(false);
-                ((AgoraApplication) getApplication()).setChannelTime(0);
-                if (isCorrect) {
-                    mEvaluationContainer.setVisibility(View.VISIBLE);
-                    if (stats.totalDuration >= 3600) {
-                        ((TextView) findViewById(R.id.evaluation_time)).setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
-                    } else {
-                        ((TextView) findViewById(R.id.evaluation_time)).setText(String.format("%02d:%02d", (time % 3600) / 60, (time % 60)));
-                    }
-                    if (((stats.txBytes + stats.rxBytes) / 1024 / 1024) > 0) {
-                        ((TextView) findViewById(R.id.evaluation_bytes)).setText(Integer.toString((stats.txBytes + stats.rxBytes) / 1024 / 1024) + "MB");
-                    } else {
-                        ((TextView) findViewById(R.id.evaluation_bytes)).setText(Integer.toString((stats.txBytes + stats.rxBytes) / 1024) + "KB");
-                    }
-                    mStarOne.setOnClickListener(getViewClickListener());
-                    mStarTwo.setOnClickListener(getViewClickListener());
-                    mStarThree.setOnClickListener(getViewClickListener());
-                    mStarFour.setOnClickListener(getViewClickListener());
-                    mStarFive.setOnClickListener(getViewClickListener());
-                    ((AgoraApplication) getApplication()).setIsInChannel(false);
-                    (findViewById(R.id.evaluation_close)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mEvaluationContainer.setVisibility(View.GONE);
-                            finish();
-                            Intent i = new Intent(ChannelActivity.this, SelectActivity.class);
-                            startActivity(i);
-                        }
-                    });
-                    (findViewById(R.id.evaluation_evaluate)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            rtcEngine.rate(callId, score * 2, "");
-                            mEvaluationContainer.setVisibility(View.GONE);
-                            finish();
-                            Intent i = new Intent(ChannelActivity.this, SelectActivity.class);
-                            startActivity(i);
-                        }
-                    });
-                } else {
-                    finish();
-                    Intent i = new Intent(ChannelActivity.this, LoginActivity.class);
-                    startActivity(i);
-                }
+                  // 去掉 Evaluation
+//                ((AgoraApplication) getApplication()).setIsInChannel(false);
+//                ((AgoraApplication) getApplication()).setChannelTime(0);
+//                if (isCorrect) {
+//                    mEvaluationContainer.setVisibility(View.VISIBLE);
+//                    if (stats.totalDuration >= 3600) {
+//                        ((TextView) findViewById(R.id.evaluation_time)).setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
+//                    } else {
+//                        ((TextView) findViewById(R.id.evaluation_time)).setText(String.format("%02d:%02d", (time % 3600) / 60, (time % 60)));
+//                    }
+//                    if (((stats.txBytes + stats.rxBytes) / 1024 / 1024) > 0) {
+//                        ((TextView) findViewById(R.id.evaluation_bytes)).setText(Integer.toString((stats.txBytes + stats.rxBytes) / 1024 / 1024) + "MB");
+//                    } else {
+//                        ((TextView) findViewById(R.id.evaluation_bytes)).setText(Integer.toString((stats.txBytes + stats.rxBytes) / 1024) + "KB");
+//                    }
+//                    mStarOne.setOnClickListener(getViewClickListener());
+//                    mStarTwo.setOnClickListener(getViewClickListener());
+//                    mStarThree.setOnClickListener(getViewClickListener());
+//                    mStarFour.setOnClickListener(getViewClickListener());
+//                    mStarFive.setOnClickListener(getViewClickListener());
+//                    ((AgoraApplication) getApplication()).setIsInChannel(false);
+//                    (findViewById(R.id.evaluation_close)).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            mEvaluationContainer.setVisibility(View.GONE);
+//                            finish();
+//                            Intent i = new Intent(ChannelActivity.this, SelectActivity.class);
+//                            startActivity(i);
+//                        }
+//                    });
+//                    (findViewById(R.id.evaluation_evaluate)).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            rtcEngine.rate(callId, score * 2, "");
+//                            mEvaluationContainer.setVisibility(View.GONE);
+//                            finish();
+//                            Intent i = new Intent(ChannelActivity.this, SelectActivity.class);
+//                            startActivity(i);
+//                        }
+//                    });
+//                } else {
+//                    finish();
+//                    Intent i = new Intent(ChannelActivity.this, LoginActivity.class);
+//                    startActivity(i);
+//                }
             }
         });
     }
@@ -994,5 +999,9 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         mNotificationOld.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         mNotificationNew.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         (findViewById(R.id.channel_notification_icon)).setVisibility(isChecked ? View.VISIBLE : View.GONE);
+    }
+
+    public int getContentView() {
+        return R.layout.agora_activity_channel;
     }
 }

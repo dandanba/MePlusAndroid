@@ -92,6 +92,9 @@
         <activity
             android:name="com.meplus.activity.RecordActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.meplus.client.activity.CallActivity"
+            android:screenOrientation="portrait" />
         <!-- feedback -->
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity"

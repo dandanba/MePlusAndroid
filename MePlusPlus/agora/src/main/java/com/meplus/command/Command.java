@@ -9,6 +9,10 @@ import java.lang.String;
 public class Command {
 
     public final static String ACTION_CALL = "call";
+    public final static String ACTION_UP = "up";
+    public final static String ACTION_DOWN = "down";
+    public final static String ACTION_LEFT = "left";
+    public final static String ACTION_RIGHT = "right";
 
     public String sender;
     public String message;

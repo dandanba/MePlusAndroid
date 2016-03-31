@@ -41,24 +41,9 @@ public class PNActivity extends BaseEngineHandlerActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (mPubNub == null) {
-            initPubNub();
-        } else {
-            subscribe();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unsubscribe();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        unsubscribe();
         if (mPubNub != null) {
             mPubNub.shutdown();
             mPubNub = null;

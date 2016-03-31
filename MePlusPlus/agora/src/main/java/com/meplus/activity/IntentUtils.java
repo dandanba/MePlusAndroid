@@ -7,7 +7,7 @@ import android.content.Intent;
  * Created by dandanba on 3/31/16.
  */
 public class IntentUtils {
-    public static Intent generateCallIntent(Context context, String channel, int userId) {
+    public static Intent generateVideoIntent(Context context, String channel, int userId) {
         Intent intent = new Intent(context, VideoActivity.class);
         intent.putExtra(VideoActivity.EXTRA_TYPE, VideoActivity.CALLING_TYPE_VIDEO);
         intent.putExtra(VideoActivity.EXTRA_USER_ID, userId);

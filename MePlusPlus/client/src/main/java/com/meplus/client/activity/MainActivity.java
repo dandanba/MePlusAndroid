@@ -15,6 +15,7 @@ import com.meplus.client.R;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 import com.meplus.client.app.MPApplication;
+import com.meplus.client.events.CommandEvent;
 import com.meplus.client.events.LogoutEvent;
 import com.meplus.client.events.SaveEvent;
 import com.meplus.client.utils.IntentUtils;
@@ -131,11 +132,12 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         }
     }
 
-
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCommand(Command event) {
-        publish(event.getMessage());
+    public void onCommandEvent(CommandEvent event) {
+        if (event.ok()) {
+            publish(event.getAction());
+        }
     }
 
     @OnClick(R.id.fab)
@@ -148,7 +150,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
                         User user = User.getCurrentUser(User.class);
-                        startActivity(com.meplus.activity.IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
+                        startActivity(IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
                         publish(Command.ACTION_CALL);
                     }
                 }).show();

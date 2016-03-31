@@ -30,40 +30,24 @@ public class PNActivity extends BaseEngineHandlerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initAgora();
         initPubNub();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unsubscribe();
+        if (mPubNub != null) {
+            mPubNub.shutdown();
+            mPubNub = null;
+        }
     }
 
     private void initAgora() {
         final String vendorKey = getString(R.string.vendor_key);
         ((AgoraApplication) getApplication()).setUserInformation(vendorKey, mUUID);
         ((AgoraApplication) getApplication()).setRtcEngine(vendorKey);
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (mPubNub == null) {
-            initPubNub();
-        } else {
-            subscribe();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unsubscribe();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPubNub != null) {
-            mPubNub.shutdown();
-            mPubNub = null;
-        }
     }
 
     public void initPubNub() {

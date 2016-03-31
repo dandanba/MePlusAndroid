@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ToastUtils;
 import hugo.weaving.DebugLog;
 
 /**
@@ -134,8 +135,10 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         if (Command.ACTION_CALL.equals(message)) {
             if (!MPApplication.getsInstance().getIsInChannel()) { // 如果正在通电话那么就不能在进入了
                 Robot robot = MPApplication.getsInstance().getRobot();
-                startActivity(com.meplus.activity.IntentUtils.generateCallIntent(this, mChannel, robot.getRobotId()));
+                startActivity(com.meplus.activity.IntentUtils.generateVideoIntent(this, mChannel, robot.getRobotId()));
             }
+        } else {
+            runOnUiThread(() -> ToastUtils.show(this, message));
         }
     }
 
