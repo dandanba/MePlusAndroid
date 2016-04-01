@@ -271,7 +271,7 @@ public class AgoraApplication extends MultiDexApplication {
     public void initRecordsList() {
         for (String callIdKey : getAllCallIds().keySet()) {
             for (String recordsKey : getAllRecords().keySet()) {
-                if (!TextUtils.isEmpty(callIdKey)) {
+                if (!TextUtils.isEmpty(callIdKey) && !TextUtils.isEmpty(recordsKey)) {
                     if (recordsKey.equals(callIdKey)) {
                         recordsList.add(new Record(callIdKey, (String) getAllRecords().get(recordsKey)));
                     }
