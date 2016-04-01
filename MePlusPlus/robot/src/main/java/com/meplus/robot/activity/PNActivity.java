@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.meplus.robot.R;
 import com.meplus.robot.Constants;
+import com.meplus.robot.R;
 import com.meplus.robot.callbacks.PNCallback;
 import com.meplus.robot.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
@@ -13,14 +13,13 @@ import com.pubnub.api.PubnubException;
 
 import hugo.weaving.DebugLog;
 import io.agora.sample.agora.AgoraApplication;
-import io.agora.sample.agora.BaseEngineHandlerActivity;
 
 /**
  * PubNub Activity
  * https://www.pubnub.com/docs/tutorials/pubnub-publish-subscribe
  * https://www.pubnub.com/docs/android-java/api-reference
  */
-public class PNActivity extends BaseEngineHandlerActivity {
+public class PNActivity extends SimpleActivity {
     private final static String TAG = "PUBNUB";
     public String mUUID;
     public String mChannel;
@@ -41,15 +40,8 @@ public class PNActivity extends BaseEngineHandlerActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        ((AgoraApplication) getApplication()).setEngineHandlerActivity(this);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        ((AgoraApplication) getApplication()).setEngineHandlerActivity(null);
         unsubscribe();
         if (mPubNub != null) {
             mPubNub.shutdown();

@@ -57,11 +57,6 @@ public class SimpleActivity extends BaseActivity {
 
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        bt.stopService();
-    }
-
     public void onStart() {
         super.onStart();
         if (!bt.isBluetoothEnabled()) {
@@ -75,6 +70,11 @@ public class SimpleActivity extends BaseActivity {
                 connect();
             }
         }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        bt.stopService();
     }
 
     public void send(String text) {

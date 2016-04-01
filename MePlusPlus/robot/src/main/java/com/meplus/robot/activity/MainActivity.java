@@ -27,7 +27,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.trinea.android.common.util.ToastUtils;
 import hugo.weaving.DebugLog;
 
 /**
@@ -138,7 +137,7 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                 startActivity(com.meplus.activity.IntentUtils.generateVideoIntent(this, mChannel, robot.getRobotId()));
             }
         } else {
-            runOnUiThread(() -> ToastUtils.show(this, message));
+            send(message);
         }
     }
 
