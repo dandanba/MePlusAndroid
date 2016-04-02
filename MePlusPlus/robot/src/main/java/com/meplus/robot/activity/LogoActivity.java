@@ -52,11 +52,6 @@ public class LogoActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        // super.onBackPressed();
-    }
-
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onQueryEvent(QueryEvent<Robot> event) {
@@ -90,6 +85,11 @@ public class LogoActivity extends BaseActivity {
         if (event.ok()) {
             ToastUtils.show(this, event.getThrowable().getMessage());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
     }
 
 }

@@ -27,14 +27,12 @@ import im.fir.sdk.VersionCheckCallback;
  * 设置
  */
 public class SettingsActivity extends BaseActivity {
-
     @Bind(R.id.root)
     LinearLayout mRoot;
-
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    private final VersionCheckCallback mCallback = new VersionCheckCallback() {
 
+    private final VersionCheckCallback mCallback = new VersionCheckCallback() {
         @Override
         public void onSuccess(String json) {
             FIRUtils.onSuccess(SettingsActivity.this, json);
@@ -98,7 +96,6 @@ public class SettingsActivity extends BaseActivity {
                     EventBus.getDefault().post(new LogoutEvent(Event.STATUS_OK));
                     finish();
                 }).show();
-
                 break;
         }
     }

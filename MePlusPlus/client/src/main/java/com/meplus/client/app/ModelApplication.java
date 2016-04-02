@@ -29,6 +29,6 @@ public class ModelApplication extends BaseApplication {
 
     public void logOut() {
         User.logOut();
-        mRobot = null;
+        setRobot(null);
     }
 }

@@ -25,7 +25,6 @@ public class ScannerActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
         replaceContainer(R.id.frame_layout, SimpleScannerFragment.newInstance());
-
     }
 
     @Override

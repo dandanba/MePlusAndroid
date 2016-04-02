@@ -49,7 +49,7 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public void onUserOffline(final int uid) {
         super.onUserOffline(uid);
-        // 回调不在UI主线程
+        // 如果有人离线，那么，在 1对1的视频情况下就把当前的视频退出
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

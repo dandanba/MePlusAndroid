@@ -50,6 +50,8 @@ dependencies {
     compile project(':agora')
     // avos
     compile project(':avos')
+    // pubnub
+    compile project(':pubnub')
     // junit
     testCompile 'junit:junit:4.12'
     // v7
@@ -83,8 +85,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     // butterknife
     compile 'com.jakewharton:butterknife:7.0.1'
-    // pubnub
-    compile 'com.pubnub:pubnub-android:3.7.6'
     // design
     compile 'com.android.support:design:23.2.0'
     // validation

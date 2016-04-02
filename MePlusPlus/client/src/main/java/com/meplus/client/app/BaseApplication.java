@@ -7,7 +7,7 @@ import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.meplus.client.BuildConfig;
-import com.meplus.client.Constants;
+import com.meplus.avos.Constants;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 import com.squareup.leakcanary.LeakCanary;

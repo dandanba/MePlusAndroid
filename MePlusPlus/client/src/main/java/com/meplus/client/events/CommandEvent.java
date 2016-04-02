@@ -1,18 +1,23 @@
 package com.meplus.client.events;
 
+
+import com.meplus.punub.Command;
+
 /**
  * Created by dandanba on 3/3/16.
  */
 public class CommandEvent extends Event {
-    public String getAction() {
-        return action;
+    private Command mCommand;
+
+    public CommandEvent(String status) {
+        super(status);
     }
 
-    private String action;
-
-    public CommandEvent(String action) {
-        super(STATUS_OK);
-        this.action = action;
+    public Command getCommand() {
+        return mCommand;
     }
 
+    public void setCommand(Command command) {
+        mCommand = command;
+    }
 }

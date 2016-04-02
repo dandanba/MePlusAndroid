@@ -21,12 +21,11 @@ import im.fir.sdk.VersionCheckCallback;
  * 设置
  */
 public class SettingsActivity extends BaseActivity {
-
     @Bind(R.id.root)
     LinearLayout mRoot;
-
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+
     private final VersionCheckCallback mCallback = new VersionCheckCallback() {
 
         @Override
@@ -73,14 +72,14 @@ public class SettingsActivity extends BaseActivity {
     @OnClick({R.id.password_layout, R.id.feeback_layout, R.id.update_layout})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.password_layout:
+            case R.id.password_layout: // 设备检测
                 startActivity(IntentUtils.generateIntent(this, TestsActivity.class));
                 break;
-            case R.id.feeback_layout:
+            case R.id.feeback_layout: // 问题反馈
                 FeedbackAgent agent = new FeedbackAgent(this);
                 agent.startDefaultThreadActivity();
                 break;
-            case R.id.update_layout:
+            case R.id.update_layout: // 检查更新
                 FIRUtils.checkForUpdateInFIR(this, mCallback);
                 break;
             default:

@@ -92,7 +92,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
+//        super.onBackPressed();
     }
 
 }

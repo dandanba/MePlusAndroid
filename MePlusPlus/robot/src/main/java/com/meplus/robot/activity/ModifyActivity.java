@@ -32,14 +32,11 @@ import hugo.weaving.DebugLog;
 public class ModifyActivity extends BaseActivity implements Validator.ValidationListener {
     @Bind(R.id.root)
     ViewGroup mRoot;
-
     @NotEmpty
     @Bind(R.id.name_edit)
     EditText mNameEdit;
-
     @Bind(R.id.description_edit)
     EditText mDescriptionEdit;
-
     private Validator mValidator;
 
     @Override
@@ -57,27 +54,16 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         mDescriptionEdit.setText(TextUtils.isEmpty(robotDescription) ? "" : robotDescription);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.register_button})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.register_button:
-                mValidator.validate();
-                break;
-        }
-    }
-
     @Override
     public void onValidationSucceeded() {
         doModify();
     }
-
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
@@ -98,6 +84,15 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
     public void onModifyEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
             finish();
+        }
+    }
+
+    @OnClick({R.id.register_button})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.register_button:
+                mValidator.validate();
+                break;
         }
     }
 

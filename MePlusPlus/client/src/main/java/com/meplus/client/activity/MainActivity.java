@@ -1,13 +1,13 @@
 package com.meplus.client.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -18,9 +18,11 @@ import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.CommandEvent;
 import com.meplus.client.events.LogoutEvent;
 import com.meplus.client.events.SaveEvent;
+import com.meplus.client.presenters.PubnubPresenter;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.viewholder.NavHeaderViewHolder;
-import com.meplus.command.Command;
+import com.meplus.presenters.AgoraPresenter;
+import com.meplus.punub.Command;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,35 +32,46 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
+import io.agora.sample.agora.AgoraApplication;
 
 /**
  * 主页面
  */
-public class MainActivity extends PNActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.fab)
-    FloatingActionButton mFab;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
     private NavHeaderViewHolder mHeaderHolder;
 
+    private PubnubPresenter mPubnubPresenter = new PubnubPresenter();
+    private AgoraPresenter mAgoraPresenter = new AgoraPresenter();
+    private String mChannel;
+    private int mUserId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // 初始化
-        final User user = User.getCurrentUser(User.class);
-        final Robot robot = MPApplication.getsInstance().getRobot();
-        final String userObjectId = mUUID = user.getObjectId();
-        final String objectId = mChannel = robot == null ? "" : robot.getObjectId();
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        ButterKnife.bind(this);
 
+        // 初始化
+        final User user = User.getCurrentUser(User.class);
+        final Robot robot = MPApplication.getsInstance().getRobot();
+        mUserId =  user.getUserId();                                  // agora 中的用户名
+        final String uuId = user.getUUId();                             // pubnub 中的用户名
+        mChannel = robot == null ? "" : robot.getObjectId();            // pubnub 中的channel
+
+        mAgoraPresenter.initAgora((AgoraApplication) getApplication(), String.valueOf(mUserId));
+
+        mPubnubPresenter.initPubnub(uuId);
+        if (!TextUtils.isEmpty(mChannel)) {
+            mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
+        }
+        ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setTitle("首页");
@@ -73,21 +86,14 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
         mHeaderHolder.updateHeader();
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mPubnubPresenter.destroy();
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -123,10 +129,9 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
     public void onSaveEvent(SaveEvent<Robot> event) {
         if (event.ok()) {
             final Robot robot = event.getData();
-
             MPApplication.getsInstance().setRobot(robot);
-            mChannel = robot.getObjectId();// 订阅机器人
-            subscribe();
+            mChannel = robot.getObjectId();                 // 订阅机器人
+            mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
 
             mHeaderHolder.updateHeader();
         }
@@ -136,7 +141,23 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCommandEvent(CommandEvent event) {
         if (event.ok()) {
-            publish(event.getAction());
+            final Command command = event.getCommand();
+            final String message = command.getMessage();
+
+            switch (message) {
+                case Command.ACTION_LEFT:
+                case Command.ACTION_UP:
+                case Command.ACTION_RIGHT:
+                case Command.ACTION_DOWN:
+                case Command.ACTION_STOP:
+                    mPubnubPresenter.publish(getApplicationContext(), command.getMessage());
+                    break;
+                case Command.ACTION_CALL:
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 
@@ -149,16 +170,21 @@ public class MainActivity extends PNActivity implements NavigationView.OnNavigat
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
-                        User user = User.getCurrentUser(User.class);
-                        startActivity(IntentUtils.generateCallIntent(this, mChannel, user.getUserId()));
-                        publish(Command.ACTION_CALL);
+                        startActivity(IntentUtils.generateCallIntent(this, mChannel, mUserId));
+                        mPubnubPresenter.publish(getApplicationContext(), Command.ACTION_CALL);
                     }
                 }).show();
         }
     }
 
+
     @Override
-    public void onMessage(String message) {
-        super.onMessage(message);
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

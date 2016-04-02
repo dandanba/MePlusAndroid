@@ -16,6 +16,7 @@ import com.meplus.client.events.QueryEvent;
 import com.meplus.client.events.SaveEvent;
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.utils.IntentUtils;
+import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.Validator.ValidationListener;
@@ -106,7 +107,15 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
-
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                SnackBarUtils.show(mRoot, message);
+            }
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

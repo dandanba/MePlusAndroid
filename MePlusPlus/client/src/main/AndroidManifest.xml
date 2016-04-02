@@ -24,10 +24,6 @@
     <!-- 基础模块 END -->
     <!-- bar code -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- PubNub Dependencies -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <!-- feedback -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
