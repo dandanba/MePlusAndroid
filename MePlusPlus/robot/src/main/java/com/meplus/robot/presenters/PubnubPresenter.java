@@ -4,10 +4,9 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.jakewharton.rxbinding.internal.Preconditions;
 import com.meplus.punub.Command;
-import com.meplus.punub.PNCallback;
 import com.meplus.punub.Constants;
+import com.meplus.punub.PNCallback;
 import com.meplus.robot.events.CommandEvent;
 import com.meplus.robot.events.Event;
 import com.meplus.robot.utils.JsonUtils;
@@ -26,13 +25,11 @@ import hugo.weaving.DebugLog;
 public class PubnubPresenter {
     private final static String TAG = "PUBNUB";
     private Pubnub mPubnub;
-    private String mUUID;
     private String mChannel;
 
     public void initPubnub(String uuId) {
-        mUUID = uuId;
         mPubnub = new Pubnub(Constants.PN_PUB_KEY, Constants.PN_SUB_KEY);
-        mPubnub.setUUID(mUUID);
+        mPubnub.setUUID(uuId);
     }
 
     public void destroy() {
@@ -57,7 +54,7 @@ public class PubnubPresenter {
                     super.successCallback(channel, message);
                     if (channel.equals(channel)) {
                         Command command = JsonUtils.readValue(message.toString(), Command.class);
-                        if (!mUUID.equals(command.getSender())) {
+                        if (!mPubnub.getUUID().equals(command.getSender())) {
                             Log.i(TAG, "delay :" + (System.currentTimeMillis() - command.getTimeStamp()));
                             final CommandEvent event = new CommandEvent(Event.STATUS_OK);
                             event.setCommand(command);
@@ -81,7 +78,6 @@ public class PubnubPresenter {
     public void unsubscribe() {
         Log.i(TAG, "unsubscribe :" + ",channel :" + mChannel);
         if (TextUtils.isEmpty(mChannel)) {
-            Preconditions.checkArgument(!TextUtils.isEmpty(mChannel), "channel is EMPTY!!!");
             return;
         }
         if (mPubnub != null) {
@@ -97,7 +93,7 @@ public class PubnubPresenter {
         }
         if (message.equals("")) return; // Return if empty
 
-        final Command command = new Command(mUUID, message);
+        final Command command = new Command(mPubnub.getUUID(), message);
         message = JsonUtils.writeValueAsString(command);
         mPubnub.publish(mChannel, message, new PNCallback(context) {
             @Override

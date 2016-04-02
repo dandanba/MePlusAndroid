@@ -18,15 +18,19 @@ import com.meplus.robot.Constants;
 import com.meplus.robot.R;
 import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
+import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.presenters.PubnubPresenter;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.trinea.android.common.util.ToastUtils;
+import hugo.weaving.DebugLog;
 import io.agora.sample.agora.AgoraApplication;
 
 /**
@@ -69,7 +73,7 @@ public class TestsActivity extends BaseActivity {
         final Robot robot = MPApplication.getsInstance().getRobot();
         final String username = String.valueOf(robot.getRobotId()); // agora 中的用户名
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
-        mChannel = robot.getObjectId();                             // pubnub 中的channel
+        mChannel = robot.getUUId();                             // pubnub 中的channel
 
         mAgoraPresenter.initAgora((AgoraApplication) getApplication(), username);
 
@@ -126,21 +130,30 @@ public class TestsActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBluetoothEvent(BluetoothEvent event) {
+        if (event.ok()) {
+            updateBluetoothState(event.isConnected());
+        }
+    }
+
     @OnClick({R.id.up_button, R.id.down_button, R.id.right_button,
-            R.id.left_button, R.id.channel_test_button, R.id.net_test_button, R.id.fab})
+            R.id.left_button, R.id.bluetooth_state, R.id.channel_test_button, R.id.net_test_button, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.up_button:
-                mBTPresenter.sendDirection(Command.ACTION_UP);
+                sendDirection(Command.ACTION_UP);
                 break;
             case R.id.down_button:
-                mBTPresenter.sendDirection(Command.ACTION_DOWN);
+                sendDirection(Command.ACTION_DOWN);
                 break;
             case R.id.right_button:
-                mBTPresenter.sendDirection(Command.ACTION_RIGHT);
+                sendDirection(Command.ACTION_RIGHT);
                 break;
             case R.id.left_button:
-                mBTPresenter.sendDirection(Command.ACTION_LEFT);
+                sendDirection(Command.ACTION_LEFT);
                 break;
             case R.id.channel_test_button:
                 Robot robot = MPApplication.getsInstance().getRobot();
@@ -149,11 +162,25 @@ public class TestsActivity extends BaseActivity {
             case R.id.net_test_button:
                 startActivity(MediaIntents.newOpenWebBrowserIntent(Constants.HOME_URL));
                 break;
+            case R.id.bluetooth_state:
+                if (!mBTPresenter.isConnected()) {
+                    mBTPresenter.connectDeviceList(this);
+                }
+                break;
             case R.id.fab:
                 Snackbar.make(view, "有问题需要反馈给我们吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
                     startActivity(PhoneIntents.newCallNumberIntent(Constants.SERVICE_PHONENUMBER));
                 }).show();
                 break;
+        }
+    }
+
+
+    private void sendDirection(String action) {
+        if (mBTPresenter.isConnected()) {
+            mBTPresenter.sendDirection(action);
+        } else {
+            ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
         }
     }
 

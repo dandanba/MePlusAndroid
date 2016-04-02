@@ -12,6 +12,7 @@ import com.meplus.punub.Command;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -23,6 +24,7 @@ public class CallActivity extends VideoActivity {
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        ButterKnife.bind(this);
     }
 
     @Override

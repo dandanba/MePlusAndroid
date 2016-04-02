@@ -4,10 +4,20 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
+
+
     <TextView
         android:id="@+id/bluetooth_state"
         android:layout_width="wrap_content"
+        android:minWidth="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@drawable/button_blue"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/meWhite"
+        android:textSize="@dimen/meTitleSize" />
 </RelativeLayout>

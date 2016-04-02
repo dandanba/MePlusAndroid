@@ -38,6 +38,7 @@ import io.agora.sample.agora.AgoraApplication;
  * 主页面
  */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.drawer_layout)
@@ -61,9 +62,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // 初始化
         final User user = User.getCurrentUser(User.class);
         final Robot robot = MPApplication.getsInstance().getRobot();
-        mUserId =  user.getUserId();                                  // agora 中的用户名
+        mUserId = user.getUserId();                                  // agora 中的用户名
         final String uuId = user.getUUId();                             // pubnub 中的用户名
-        mChannel = robot == null ? "" : robot.getObjectId();            // pubnub 中的channel
+        mChannel = robot == null ? "" : robot.getUUId();            // pubnub 中的channel
 
         mAgoraPresenter.initAgora((AgoraApplication) getApplication(), String.valueOf(mUserId));
 
@@ -130,7 +131,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (event.ok()) {
             final Robot robot = event.getData();
             MPApplication.getsInstance().setRobot(robot);
-            mChannel = robot.getObjectId();                 // 订阅机器人
+            mChannel = robot.getUUId();                 // 订阅机器人
             mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
 
             mHeaderHolder.updateHeader();

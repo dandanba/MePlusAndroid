@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
+import hugo.weaving.DebugLog;
 
 public class BluetoothPresenter {
     private static final String TAG = BluetoothPresenter.class.getSimpleName();
@@ -152,12 +153,14 @@ public class BluetoothPresenter {
     private int PERCENT = 60;
     private int MAX = 500;
 
+    @DebugLog
     public void sendDefault() {
         // 自主避障功能使能（默认关闭）
         byte CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X10);
         byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X10, 00, 00, 00, 00, CheckSum};
     }
 
+    @DebugLog
     public void sendDirection(String action) {
         final int V = (MAX * PERCENT / 100);
 
@@ -195,7 +198,7 @@ public class BluetoothPresenter {
         send(buffer);
     }
 
-
+    @DebugLog
     private void send(byte[] buffer) {
         bt.send(buffer, false);
     }

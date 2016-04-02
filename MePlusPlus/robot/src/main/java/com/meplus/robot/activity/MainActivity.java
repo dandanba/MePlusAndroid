@@ -83,12 +83,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         final Robot robot = MPApplication.getsInstance().getRobot();
         final String username = String.valueOf(robot.getRobotId()); // agora 中的用户名
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
-        mChannel = robot.getObjectId();                 // pubnub 中的channel
+        mChannel = robot.getUUId();                 // pubnub 中的channel
 
         mAgoraPresenter.initAgora((AgoraApplication) getApplication(), username);
 
         mPubnubPresenter.initPubnub(uuId);
-        mPubnubPresenter.subscribe(this, mChannel);
+        mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
 
 
         ButterKnife.bind(this);

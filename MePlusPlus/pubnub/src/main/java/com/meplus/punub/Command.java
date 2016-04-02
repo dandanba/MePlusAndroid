@@ -17,6 +17,9 @@ public class Command {
     public String message;
     public long timeStamp;
 
+    public Command() {
+    }
+
     public Command(String sender, String message) {
         this.sender = sender;
         this.message = message;
@@ -27,16 +30,24 @@ public class Command {
         return sender;
     }
 
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public long getTimeStamp() {
         return timeStamp;
     }
 
-    @Override
-    public int hashCode() {
-        return (this.sender + this.message + this.timeStamp).hashCode();
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
+
 }
