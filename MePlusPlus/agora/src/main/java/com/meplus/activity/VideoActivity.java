@@ -2,6 +2,7 @@ package com.meplus.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 
 import io.agora.rtc.IRtcEngineEventHandler;
@@ -13,6 +14,9 @@ import io.agora.sample.agora.R;
  * Created by dandanba on 3/30/16.
  */
 public class VideoActivity extends ChannelActivity {
+
+    private static final String TAG = VideoActivity.class.getSimpleName();
+    private int uid;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -47,15 +51,40 @@ public class VideoActivity extends ChannelActivity {
     }
 
     @Override
-    public void onUserOffline(final int uid) {
-        super.onUserOffline(uid);
+    public void onUserOffline(final int uid, final int reason) {
+        super.onUserOffline(uid, reason);
         // 如果有人离线，那么，在 1对1的视频情况下就把当前的视频退出
+//        if (reason == Constants.USER_OFFLINE_QUIT) { // 用户主动
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 doBackPressed();
             }
         });
+//        }
+    }
+
+    @Override
+    public void onNetworkQuality(final int quality) {
+        super.onNetworkQuality(quality);
+        Log.i(TAG, "network quality: " + quality);
+
+    }
+
+
+    @Override
+    public synchronized void onUserJoined(int uid, int elapsed) {
+        super.onUserJoined(uid, elapsed);
+        this.uid = uid;
+    }
+
+    @Override
+    public void timeEscaped(int time) {
+        super.timeEscaped(time);
+        if (time > 10 && uid == 0) { // 30 秒钟无人进入，就自动退出。
+            ToastUtil.showToast(VideoActivity.this, "对方不在线");
+            doBackPressed();
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -41,7 +42,7 @@ import io.agora.rtc.video.VideoCanvas;
  * Created by apple on 15/9/18.
  */
 public class ChannelActivity extends BaseEngineHandlerActivity {
-
+    private static final String TAG = ChannelActivity.class.getSimpleName();
 
     public final static int CALLING_TYPE_VIDEO = 0x100;
     public final static int CALLING_TYPE_VOICE = 0x101;
@@ -605,6 +606,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public synchronized void onUserJoined(final int uid, int elapsed) {
         View existedUser = mRemoteUserContainer.findViewById(Math.abs(uid));
         if (existedUser != null) {
@@ -636,7 +638,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
     }
 
     @Override
-    public void onUserOffline(final int uid) {
+    public void onUserOffline(final int uid, int reason) {
         if (mRemoteUserContainer == null || mLocalView == null) {
             return;
         }
@@ -662,6 +664,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public void onUpdateSessionStats(final IRtcEngineEventHandler.RtcStats stats) {
         runOnUiThread(new Runnable() {
             @Override
@@ -676,6 +679,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public void onUserMuteVideo(final int uid, final boolean muted) {
         if (mRemoteUserContainer == null) {
             return;
@@ -696,6 +700,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         });
     }
 
+    @Override
     public void onUserMuteAudio(final int uid, final boolean muted) {
         runOnUiThread(new Runnable() {
             @Override
@@ -860,7 +865,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         }
     }
 
-    Handler handler = new Handler() {
+    private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -873,9 +878,14 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
                     mDuration.setText(String.format("%02d:%02d", (time % 3600) / 60, (time % 60)));
                 }
                 handler.sendEmptyMessageDelayed(1, 1000);
+                timeEscaped(time);
             }
         }
     };
+
+    public void timeEscaped(int time) {
+        Log.i(TAG, "time escaped: " + time);
+    }
 
     private void setupTime() {
         handler.sendEmptyMessageDelayed(1, 1000);

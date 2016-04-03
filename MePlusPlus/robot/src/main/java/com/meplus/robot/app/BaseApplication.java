@@ -30,6 +30,7 @@ public class BaseApplication extends AgoraApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics(), new Answers());
         if (BuildConfig.DEBUG) {
             mRefWatcher = LeakCanary.install(this);
         } else {
@@ -43,7 +44,6 @@ public class BaseApplication extends AgoraApplication {
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
 
-        Fabric.with(this, new Crashlytics(), new Answers());
         FIR.init(this);
 
         AVObject.registerSubclass(Robot.class);

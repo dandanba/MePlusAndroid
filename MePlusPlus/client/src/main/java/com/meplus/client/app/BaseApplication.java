@@ -6,8 +6,8 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.meplus.client.BuildConfig;
 import com.meplus.avos.Constants;
+import com.meplus.client.BuildConfig;
 import com.meplus.client.api.model.Robot;
 import com.meplus.client.api.model.User;
 import com.squareup.leakcanary.LeakCanary;
@@ -31,6 +31,7 @@ public class BaseApplication extends AgoraApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics(), new Answers());
         if (BuildConfig.DEBUG) {
             mRefWatcher = LeakCanary.install(this);
         } else {
@@ -44,7 +45,7 @@ public class BaseApplication extends AgoraApplication {
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
 
-        Fabric.with(this, new Crashlytics(), new Answers());
+
         FIR.init(this);
 
         AVObject.registerSubclass(Robot.class);

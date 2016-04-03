@@ -57,7 +57,7 @@ public class MessageHandler extends IRtcEngineEventHandler {
     public void onUserOffline(int uid, int reason) {
         BaseEngineHandlerActivity activity = getActivity();
         if (activity != null) {
-            activity.onUserOffline(uid);
+            activity.onUserOffline(uid, reason);
         }
     }
 

@@ -34,8 +34,9 @@ public class FancyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        FIR.init(this);
         Fabric.with(this, new Crashlytics(), new Answers());
+
+        FIR.init(this);
         mRetrofit = RetrofitUtils.getClient();
         mRefWatcher = BuildConfig.DEBUG ? LeakCanary.install(this) : RefWatcher.DISABLED;
         sInstance = this;

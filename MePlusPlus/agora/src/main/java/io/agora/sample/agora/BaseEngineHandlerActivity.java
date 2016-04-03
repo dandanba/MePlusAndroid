@@ -46,7 +46,7 @@ public class BaseEngineHandlerActivity extends BaseActivity {
     public void onUserJoined(int uid, int elapsed) {
     }
 
-    public void onUserOffline(int uid) {
+    public void onUserOffline(int uid, int reason) {
     }
 
     public void onUserMuteAudio(int uid, boolean muted) {
