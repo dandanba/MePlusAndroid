@@ -1,7 +1,7 @@
 package com.meplus.fancy.model;
 
+
 import com.meplus.fancy.model.entity.Book;
-import com.meplus.fancy.model.entity.Response;
 import com.meplus.fancy.model.entity.User;
 
 import java.util.List;

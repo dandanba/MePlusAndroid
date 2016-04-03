@@ -7,24 +7,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
 import com.meplus.client.avos.Robot;
 import com.meplus.client.avos.User;
-import com.meplus.client.events.ErrorEvent;
-import com.meplus.client.events.QueryEvent;
-import com.meplus.client.events.SaveEvent;
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.utils.SnackBarUtils;
+import com.meplus.events.ErrorEvent;
+import com.meplus.events.EventUtils;
+import com.meplus.events.QueryEvent;
+import com.meplus.events.SaveEvent;
 import com.meplus.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.Validator.ValidationListener;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -59,7 +60,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_robot);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
 
         mToolbar.setNavigationIcon(R.drawable.back);
         mToolbar.setTitle("绑定机器人");
@@ -77,7 +78,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+       EventUtils.unregister(this);
     }
 
     @Override

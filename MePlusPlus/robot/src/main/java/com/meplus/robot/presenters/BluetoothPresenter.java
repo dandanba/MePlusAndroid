@@ -22,10 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.meplus.events.BaseEvent;
 import com.meplus.punub.Command;
 import com.meplus.robot.activity.DeviceListActivity;
 import com.meplus.robot.events.BluetoothEvent;
-import com.meplus.robot.events.Event;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -220,7 +220,7 @@ public class BluetoothPresenter {
     }
 
     private void postEvent() {
-        final BluetoothEvent event = new BluetoothEvent(Event.STATUS_OK);
+        final BluetoothEvent event = new BluetoothEvent(BaseEvent.STATUS_OK);
         event.setConnected(isConnected());
         EventBus.getDefault().post(event);
     }

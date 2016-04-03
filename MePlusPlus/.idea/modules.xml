@@ -4,10 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MePlusPlus.iml" filepath="$PROJECT_DIR$/MePlusPlus.iml" />
       <module fileurl="file://$PROJECT_DIR$/agora/agora.iml" filepath="$PROJECT_DIR$/agora/agora.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/avos/avos.iml" filepath="$PROJECT_DIR$/avos/avos.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/events/events.iml" filepath="$PROJECT_DIR$/events/events.iml" />
       <module fileurl="file://$PROJECT_DIR$/fancy/fancy.iml" filepath="$PROJECT_DIR$/fancy/fancy.iml" />
       <module fileurl="file://$PROJECT_DIR$/pubnub/pubnub.iml" filepath="$PROJECT_DIR$/pubnub/pubnub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/res/res.iml" filepath="$PROJECT_DIR$/res/res.iml" />
       <module fileurl="file://$PROJECT_DIR$/robot/robot.iml" filepath="$PROJECT_DIR$/robot/robot.iml" />
       <module fileurl="file://$PROJECT_DIR$/slamtec/slamtec.iml" filepath="$PROJECT_DIR$/slamtec/slamtec.iml" />
     </modules>

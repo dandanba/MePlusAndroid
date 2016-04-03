@@ -6,7 +6,6 @@ import com.meplus.avos.objects.AVOSRobot;
  * Created by dandanba on 3/1/16.
  */
 public class ModelApplication extends BaseApplication {
-
     private AVOSRobot mRobot;
 
     @Override

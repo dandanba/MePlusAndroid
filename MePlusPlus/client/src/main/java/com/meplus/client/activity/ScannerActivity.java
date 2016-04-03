@@ -2,12 +2,13 @@ package com.meplus.client.activity;
 
 import android.os.Bundle;
 
+import com.meplus.activity.BaseActivity;
 import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.fragments.SimpleScannerFragment;
+import com.meplus.events.EventUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -23,14 +24,14 @@ public class ScannerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
         replaceContainer(R.id.frame_layout, SimpleScannerFragment.newInstance());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

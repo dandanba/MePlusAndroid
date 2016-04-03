@@ -13,21 +13,22 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.events.EventUtils;
+import com.meplus.events.SaveEvent;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
+import com.meplus.punub.CommandEvent;
 import com.meplus.robot.R;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
-import com.meplus.robot.events.CommandEvent;
-import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.presenters.PubnubPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
 import com.meplus.utils.IntentUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -72,7 +73,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
 
         setContentView(R.layout.activity_main);
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
 
         mBTPresenter.create(context);
 
@@ -123,7 +124,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @Override

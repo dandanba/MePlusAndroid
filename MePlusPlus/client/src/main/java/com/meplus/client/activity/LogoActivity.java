@@ -5,16 +5,17 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
 import com.meplus.client.avos.User;
-import com.meplus.client.events.ErrorEvent;
-import com.meplus.client.events.QueryEvent;
+import com.meplus.events.ErrorEvent;
+import com.meplus.events.EventUtils;
+import com.meplus.events.QueryEvent;
 import com.meplus.utils.IntentUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -40,7 +41,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
         mShimmerViewContainer.startShimmerAnimation();
         mHandler = new Handler(this);
         mHandler.sendEmptyMessageDelayed(1, 3000);
@@ -49,7 +50,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @DebugLog

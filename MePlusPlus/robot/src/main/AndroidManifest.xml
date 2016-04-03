@@ -5,9 +5,6 @@
 
     <uses-sdk tools:overrideLibrary="com.facebook.shimmer" />
 
-    <!-- fabric -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <!-- bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />

@@ -1,9 +1,11 @@
 package com.meplus.client.events;
 
+import com.meplus.events.BaseEvent;
+
 /**
  * Created by dandanba on 3/3/16.
  */
-public class ScannerEvent extends Event {
+public class ScannerEvent extends BaseEvent {
     private String content;
 
     public String getContent() {

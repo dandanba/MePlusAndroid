@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.marvinlabs.intents.MediaIntents;
 import com.marvinlabs.intents.PhoneIntents;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.events.EventUtils;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
 import com.meplus.robot.Constants;
@@ -21,7 +23,6 @@ import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.presenters.PubnubPresenter;
 import com.meplus.robot.utils.SnackBarUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -77,7 +78,7 @@ public class TestsActivity extends BaseActivity {
 
         mPubnubPresenter.initPubnub(uuId);
         mPubnubPresenter.subscribe(this, mChannel);
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
 
         mToolbar.setNavigationIcon(R.drawable.back);
         mToolbar.setTitle("系统自检");
@@ -107,7 +108,7 @@ public class TestsActivity extends BaseActivity {
         mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @Override

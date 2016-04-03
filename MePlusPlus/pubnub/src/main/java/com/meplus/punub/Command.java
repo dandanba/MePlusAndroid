@@ -19,7 +19,7 @@ public class Command {
     public String message;
     public long timeStamp;
 
-    public Command() {
+    public Command() {// 必须要有无参数构造函数
     }
 
     public Command(String sender, String message) {

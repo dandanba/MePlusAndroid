@@ -28,8 +28,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    // junit
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    // appcompat
+    compile "com.android.support:appcompat-v7:$support_version"
+    // events
+    compile project(':events')
     // avoscloud-sdk 为 LeanCloud基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
     // avoscloud-feedback 为 LeanCloud 用户反馈包
@@ -37,14 +41,13 @@ dependencies {
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     // jackson
-    compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
     // fir
     compile 'im.fir:fir-sdk:latest.integration@aar'
     // trinea
     compile 'cn.trinea.android.common:trinea-android-common:4.2.15'
     // intents android
     compile 'com.marvinlabs:android-intents:1.5.1@aar'
-
 }

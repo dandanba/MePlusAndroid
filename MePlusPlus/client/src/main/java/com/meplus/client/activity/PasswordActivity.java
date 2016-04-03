@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.RequestPasswordResetCallback;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.utils.SnackBarUtils;

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.meplus.events.BaseEvent;
 import com.meplus.punub.Command;
+import com.meplus.punub.CommandEvent;
 import com.meplus.punub.Constants;
 import com.meplus.punub.PNCallback;
-import com.meplus.robot.events.CommandEvent;
-import com.meplus.robot.events.Event;
 import com.meplus.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
@@ -56,7 +56,7 @@ public class PubnubPresenter {
                         Command command = JsonUtils.readValue(message.toString(), Command.class);
                         if (!mPubnub.getUUID().equals(command.getSender())) {
                             Log.i(TAG, "delay :" + (System.currentTimeMillis() - command.getTimeStamp()));
-                            final CommandEvent event = new CommandEvent(Event.STATUS_OK);
+                            final CommandEvent event = new CommandEvent(BaseEvent.STATUS_OK);
                             event.setCommand(command);
                             EventBus.getDefault().post(event);
                         }

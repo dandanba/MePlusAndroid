@@ -5,8 +5,6 @@
 
     <uses-sdk tools:overrideLibrary="com.facebook.shimmer" />
 
-    <!-- fabric -->
-    <uses-permission android:name="android.permission.INTERNET" />
     <!-- bar code -->
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -76,7 +74,6 @@
         <activity
             android:name="com.meplus.avos.activity.FeedbackActivity"
             android:screenOrientation="portrait" />
-
     </application>
 
 </manifest>

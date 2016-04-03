@@ -2,10 +2,10 @@ package com.meplus.robot.avos;
 
 import com.avos.avoscloud.AVException;
 import com.meplus.avos.objects.AVOSRobot;
-import com.meplus.robot.events.ErrorEvent;
-import com.meplus.robot.events.Event;
-import com.meplus.robot.events.QueryEvent;
-import com.meplus.robot.events.SaveEvent;
+import com.meplus.events.BaseEvent;
+import com.meplus.events.ErrorEvent;
+import com.meplus.events.QueryEvent;
+import com.meplus.events.SaveEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,11 +29,11 @@ public class Robot {
                                 list = AVOSRobot.queryRobotByUUID(id);
                             } catch (AVException e) {
                                 // 如果，leancloud上，没有表结构，那么会有异常。
-                                EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, e));
+                                EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, e));
                             }
-                            EventBus.getDefault().post(new QueryEvent<>(Event.STATUS_OK, list));
+                            EventBus.getDefault().post(new QueryEvent<>(BaseEvent.STATUS_OK, list));
                         },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable)));
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, throwable)));
     }
 
     @DebugLog
@@ -45,12 +45,12 @@ public class Robot {
                         robot -> {
                             try {
                                 robot.save();
-                                EventBus.getDefault().post(new SaveEvent<>(Event.STATUS_OK, robot));
+                                EventBus.getDefault().post(new SaveEvent<>(BaseEvent.STATUS_OK, robot));
                             } catch (AVException e) {
-                                EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, e));
+                                EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, e));
                             }
                         },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(Event.STATUS_OK, throwable))
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
                 );
     }
 

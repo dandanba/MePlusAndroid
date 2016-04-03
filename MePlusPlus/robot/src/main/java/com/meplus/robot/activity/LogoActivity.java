@@ -3,18 +3,19 @@ package com.meplus.robot.activity;
 import android.os.Bundle;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.events.BaseEvent;
+import com.meplus.events.ErrorEvent;
+import com.meplus.events.EventUtils;
+import com.meplus.events.QueryEvent;
+import com.meplus.events.SaveEvent;
 import com.meplus.robot.R;
-import com.meplus.robot.avos.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.ErrorEvent;
-import com.meplus.robot.events.Event;
-import com.meplus.robot.events.QueryEvent;
-import com.meplus.robot.events.SaveEvent;
-import com.meplus.utils.IntentUtils;
+import com.meplus.robot.avos.Robot;
 import com.meplus.robot.utils.UUIDUtils;
+import com.meplus.utils.IntentUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -45,7 +46,7 @@ public class LogoActivity extends BaseActivity {
 
         mShimmerViewContainer.startShimmerAnimation();
 
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
         // 查询是否已经注册过
         mUUID = UUIDUtils.getUUID(this);
         Robot.queryByUUId(mUUID);
@@ -54,7 +55,7 @@ public class LogoActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @DebugLog
@@ -69,7 +70,7 @@ public class LogoActivity extends BaseActivity {
                 robot.setUUId(mUUID);
                 Robot.saveRotot(robot);
             } else {
-                onCreateEvent(new SaveEvent<>(Event.STATUS_OK, robotList.get(0)));
+                onCreateEvent(new SaveEvent<>(BaseEvent.STATUS_OK, robotList.get(0)));
             }
         }
     }

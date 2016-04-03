@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.UpdatePasswordCallback;
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.utils.SnackBarUtils;

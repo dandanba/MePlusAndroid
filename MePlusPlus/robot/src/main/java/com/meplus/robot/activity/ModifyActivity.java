@@ -6,17 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.events.EventUtils;
+import com.meplus.events.SaveEvent;
 import com.meplus.robot.R;
-import com.meplus.robot.avos.Robot;
 import com.meplus.robot.app.MPApplication;
-import com.meplus.robot.events.SaveEvent;
+import com.meplus.robot.avos.Robot;
 import com.meplus.robot.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -44,7 +45,7 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify);
-        EventBus.getDefault().register(this);
+
         ButterKnife.bind(this);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
@@ -58,7 +59,7 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
     @Override

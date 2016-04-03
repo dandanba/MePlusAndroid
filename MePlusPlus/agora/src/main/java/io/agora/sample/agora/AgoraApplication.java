@@ -1,10 +1,9 @@
 package io.agora.sample.agora;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+
+import com.meplus.app.BaseApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import io.agora.sample.agora.Model.Record;
 /**
  * Created by apple on 15/9/15.
  */
-public class AgoraApplication extends MultiDexApplication {
+public class AgoraApplication extends BaseApplication {
     private RtcEngine rtcEngine;
     private MessageHandler messageHandler;
 
@@ -73,12 +72,6 @@ public class AgoraApplication extends MultiDexApplication {
         if (rtcEngine != null) {
             rtcEngine.enableNetworkTest();
         }
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
     }
 
     //----------------------------------------------------------------------------------------------

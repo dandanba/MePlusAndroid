@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.utils.ISBNUtils;
+import com.meplus.fragments.BaseFragment;
 
 import org.greenrobot.eventbus.EventBus;
 

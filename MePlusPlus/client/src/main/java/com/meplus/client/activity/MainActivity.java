@@ -11,20 +11,21 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
-import com.meplus.client.events.CommandEvent;
-import com.meplus.client.events.LogoutEvent;
-import com.meplus.client.events.SaveEvent;
 import com.meplus.client.presenters.PubnubPresenter;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.viewholder.NavHeaderViewHolder;
+import com.meplus.events.EventUtils;
+import com.meplus.events.LogoutEvent;
+import com.meplus.events.SaveEvent;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
+import com.meplus.punub.CommandEvent;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -57,7 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        EventBus.getDefault().register(this);
+        EventUtils.register(this);
 
         // 初始化
         final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
@@ -92,7 +93,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onDestroy() {
         super.onDestroy();
         mPubnubPresenter.destroy();
-        EventBus.getDefault().unregister(this);
+        EventUtils.unregister(this);
     }
 
 

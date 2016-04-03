@@ -68,7 +68,6 @@ public class VideoActivity extends ChannelActivity {
     public void onNetworkQuality(final int quality) {
         super.onNetworkQuality(quality);
         Log.i(TAG, "network quality: " + quality);
-
     }
 
 
