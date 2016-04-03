@@ -15,7 +15,7 @@ import java.util.List;
 @AVClassName("User")
 public class AVOSUser extends AVUser {
     public static final Creator CREATOR = AVObjectCreator.instance;
-    // user
+
     private final static String KEY_USER_UUID = "userUUID"; // String
     private final static String KEY_USER_ID = "userIntId"; // Int
     private static final String RELATION_ROBOTS = "robots";

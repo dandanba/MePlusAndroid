@@ -5,10 +5,9 @@ import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.events.BaseEvent;
 import com.meplus.events.ErrorEvent;
+import com.meplus.events.EventUtils;
 import com.meplus.events.QueryEvent;
 import com.meplus.events.SaveEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import hugo.weaving.DebugLog;
 import rx.Observable;
@@ -27,11 +26,11 @@ public class User {
                             try {
                                 user.addRobot(avosRobot);
                             } catch (AVException e) {
-                                EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, e));
+                                EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, e));
                             }
-                            EventBus.getDefault().post(new SaveEvent<>(BaseEvent.STATUS_OK, avosRobot));
+                            EventUtils.postEvent(new SaveEvent<>(BaseEvent.STATUS_OK, avosRobot));
                         },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
+                        throwable -> EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
                 );
     }
 
@@ -42,12 +41,12 @@ public class User {
                 .observeOn(Schedulers.io())
                 .subscribe(user -> {
                             try {
-                                EventBus.getDefault().post(new QueryEvent<>(BaseEvent.STATUS_OK, user.queryRobot()));
+                                EventUtils.postEvent(new QueryEvent<>(BaseEvent.STATUS_OK, user.queryRobot()));
                             } catch (AVException e) {
-                                EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, e));
+                                EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, e));
                             }
                         },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
+                        throwable -> EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
                 );
     }
 

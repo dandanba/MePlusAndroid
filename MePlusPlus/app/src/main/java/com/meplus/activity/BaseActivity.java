@@ -31,7 +31,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     public void replaceContainer(int containerViewId, Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();

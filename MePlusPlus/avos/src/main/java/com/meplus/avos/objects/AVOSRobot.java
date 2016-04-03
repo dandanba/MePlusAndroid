@@ -9,14 +9,13 @@ import java.util.List;
 
 @AVClassName("Robot")
 public class AVOSRobot extends AVObject {
-    // robot
+    public static final Creator CREATOR = AVObjectCreator.instance;
+
     private final static String KEY_ROBOT_UUID = "robotUUID"; // String
     private final static String KEY_ROBOT_ID = "robotId"; // Int
     private final static String KEY_ROBOT_NAME = "robotName"; // String
     private final static String KEY_ROBOT_DESCRIPTION = "robotDescription"; // String
 
-    private static final String TAG = AVOSRobot.class.getSimpleName();
-    public static final Creator CREATOR = AVObjectCreator.instance;
 
     public String getUUId() {
         return getString(KEY_ROBOT_UUID);

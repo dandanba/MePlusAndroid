@@ -7,10 +7,9 @@ import com.meplus.activity.VideoActivity;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.events.BaseEvent;
+import com.meplus.events.EventUtils;
 import com.meplus.punub.Command;
 import com.meplus.punub.CommandEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,7 +55,7 @@ public class CallActivity extends VideoActivity {
         final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
         final String sender = user.getUUId();
         event.setCommand(new Command(sender, message));
-        EventBus.getDefault().post(event);
+        EventUtils.postEvent(event);
     }
 
 

@@ -23,11 +23,10 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.meplus.events.BaseEvent;
+import com.meplus.events.EventUtils;
 import com.meplus.punub.Command;
 import com.meplus.robot.activity.DeviceListActivity;
 import com.meplus.robot.events.BluetoothEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
@@ -222,7 +221,7 @@ public class BluetoothPresenter {
     private void postEvent() {
         final BluetoothEvent event = new BluetoothEvent(BaseEvent.STATUS_OK);
         event.setConnected(isConnected());
-        EventBus.getDefault().post(event);
+        EventUtils.postEvent(event);
     }
 
 }

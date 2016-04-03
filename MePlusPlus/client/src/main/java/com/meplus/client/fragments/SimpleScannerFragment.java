@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 
 import com.meplus.client.events.ScannerEvent;
 import com.meplus.client.utils.ISBNUtils;
+import com.meplus.events.EventUtils;
 import com.meplus.fragments.BaseFragment;
-
-import org.greenrobot.eventbus.EventBus;
 
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
@@ -57,7 +56,7 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
         }
 
         Log.i(TAG, content);
-        EventBus.getDefault().post(new ScannerEvent(content));
+        EventUtils.postEvent(new ScannerEvent(content));
     }
 
     public void resumeScanner() {

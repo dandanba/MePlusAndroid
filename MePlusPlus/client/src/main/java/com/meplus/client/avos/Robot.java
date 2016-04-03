@@ -4,9 +4,8 @@ import com.avos.avoscloud.AVException;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.events.BaseEvent;
 import com.meplus.events.ErrorEvent;
+import com.meplus.events.EventUtils;
 import com.meplus.events.QueryEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -24,12 +23,12 @@ public class Robot {
                 .subscribe(id -> {
                             try {
                                 final List<AVOSRobot> list = AVOSRobot.queryRobotByUUID(id);
-                                EventBus.getDefault().post(new QueryEvent<>(BaseEvent.STATUS_OK, list));
+                                EventUtils.postEvent(new QueryEvent<>(BaseEvent.STATUS_OK, list));
                             } catch (AVException e) {
-                                EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, e));
+                                EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, e));
                             }
                         },
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(BaseEvent.STATUS_OK, throwable)));
+                        throwable -> EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, throwable)));
     }
 
 

@@ -14,6 +14,7 @@ import com.meplus.client.R;
 import com.meplus.client.utils.SnackBarUtils;
 import com.meplus.client.utils.UUIDUtils;
 import com.meplus.events.BaseEvent;
+import com.meplus.events.EventUtils;
 import com.meplus.events.SignUpEvent;
 import com.meplus.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -22,8 +23,6 @@ import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 import java.util.Random;
@@ -119,7 +118,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {
                 if (e == null) {
-                    EventBus.getDefault().post(new SignUpEvent(BaseEvent.STATUS_OK));
+                    EventUtils.postEvent(new SignUpEvent(BaseEvent.STATUS_OK));
                     startActivity(IntentUtils.generateIntent(RegisterActivity.this, MainActivity.class));
                     finish();
                 } else {
