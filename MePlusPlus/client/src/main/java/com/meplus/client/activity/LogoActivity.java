@@ -5,13 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
 import com.meplus.client.app.MPApplication;
+import com.meplus.client.avos.User;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.QueryEvent;
-import com.meplus.client.utils.IntentUtils;
+import com.meplus.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,9 +54,9 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onQueryEvent(QueryEvent<Robot> event) {
+    public void onQueryEvent(QueryEvent<AVOSRobot> event) {
         if (event.ok()) {
-            final List<Robot> robotList = event.getList();
+            final List<AVOSRobot> robotList = event.getList();
             if (!ListUtils.isEmpty(robotList)) {
                 MPApplication.getsInstance().setRobot(robotList.get(0));
             }
@@ -78,12 +79,12 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.what == 1) {
-            final User user = User.getCurrentUser(User.class);
+            final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
             if (user == null) {
                 startActivity(IntentUtils.generateIntent(LogoActivity.this, LoginActivity.class));
                 finish();
             } else {
-                user.queryRobot();
+                User.queryRobot(user);
             }
             return true;
         }

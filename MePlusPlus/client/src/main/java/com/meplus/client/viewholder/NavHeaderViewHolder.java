@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
 import com.meplus.client.app.MPApplication;
 
 import butterknife.Bind;
@@ -28,8 +28,8 @@ public class NavHeaderViewHolder {
     }
 
     public void updateHeader() {
-        final User user = User.getCurrentUser(User.class);
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String uuId = robot == null ? "" : robot.getUUId();
         mTitle.setText(String.format("用户名:%1$s", user.getUsername()));
         mContent.setText(TextUtils.isEmpty(uuId) ? "未绑定多我机器人" : String.format("机器人:%1$s", uuId));

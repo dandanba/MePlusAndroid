@@ -65,20 +65,10 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
-    // intents android
-    compile 'com.marvinlabs:android-intents:1.5.1@aar'
-    // trinea
-    compile 'cn.trinea.android.common:trinea-android-common:4.2.15'
-    // fir
-    compile 'im.fir:fir-sdk:latest.integration@aar'
     // fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    // avoscloud-sdk 为 LeanCloud基础包
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-    //avoscloud-feedback 为 LeanCloud 用户反馈包
-    compile 'cn.leancloud.android:avoscloud-feedback:v3.+@aar'
     // bar code
     compile 'me.dm7.barcodescanner:zbar:1.8.4'
     // event bus

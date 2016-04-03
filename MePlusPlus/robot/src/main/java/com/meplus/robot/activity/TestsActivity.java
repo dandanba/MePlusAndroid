@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import com.marvinlabs.intents.MediaIntents;
 import com.marvinlabs.intents.PhoneIntents;
+import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
 import com.meplus.robot.Constants;
 import com.meplus.robot.R;
-import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
@@ -68,7 +68,7 @@ public class TestsActivity extends BaseActivity {
         mBTPresenter.create(context);
 
         // 初始化
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String username = String.valueOf(robot.getRobotId()); // agora 中的用户名
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
         mChannel = robot.getUUId();                             // pubnub 中的channel
@@ -104,9 +104,7 @@ public class TestsActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mBTPresenter.isConnected()) {
-            mBTPresenter.disconnect();
-        }
+        mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
         EventBus.getDefault().unregister(this);
@@ -137,7 +135,8 @@ public class TestsActivity extends BaseActivity {
     }
 
     @OnClick({R.id.up_button, R.id.down_button, R.id.right_button,
-            R.id.left_button, R.id.bluetooth_state, R.id.channel_test_button, R.id.net_test_button, R.id.echo_test_button, R.id.fab})
+            R.id.left_button, R.id.bluetooth_state, R.id.channel_test_button, R.id.home_test_button,
+            R.id.net_test_button, R.id.echo_test_button, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.up_button:
@@ -152,8 +151,14 @@ public class TestsActivity extends BaseActivity {
             case R.id.left_button:
                 sendDirection(Command.ACTION_LEFT);
                 break;
+
+            case R.id.home_test_button:
+                if (!mBTPresenter.sendGoHome()) {
+                    ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+                }
+                break;
             case R.id.channel_test_button:
-                Robot robot = MPApplication.getsInstance().getRobot();
+                AVOSRobot robot = MPApplication.getsInstance().getRobot();
                 startActivity(com.meplus.activity.IntentUtils.generateVideoIntent(this, mChannel, robot.getRobotId()));
                 break;
             case R.id.echo_test_button:
@@ -163,9 +168,7 @@ public class TestsActivity extends BaseActivity {
                 startActivity(MediaIntents.newOpenWebBrowserIntent(Constants.HOME_URL));
                 break;
             case R.id.bluetooth_state:
-                if (!mBTPresenter.isConnected()) {
-                    mBTPresenter.connectDeviceList(this);
-                }
+                mBTPresenter.connectDeviceList(this);
                 break;
             case R.id.fab:
                 SnackBarUtils.make(view, "有问题需要反馈给我们吗？")
@@ -177,9 +180,7 @@ public class TestsActivity extends BaseActivity {
 
 
     private void sendDirection(String action) {
-        if (mBTPresenter.isConnected()) {
-            mBTPresenter.sendDirection(action);
-        } else {
+        if (!mBTPresenter.sendDirection(action)) {
             ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
         }
     }

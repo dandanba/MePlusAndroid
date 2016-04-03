@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.meplus.robot.app.MPApplication;
 import com.squareup.leakcanary.RefWatcher;
-//import com.squareup.leakcanary.RefWatcher;
 
 public class BaseActivity extends AppCompatActivity {
 

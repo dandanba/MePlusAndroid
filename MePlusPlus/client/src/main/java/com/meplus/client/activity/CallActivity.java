@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.meplus.activity.VideoActivity;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.User;
 import com.meplus.client.events.CommandEvent;
 import com.meplus.client.events.Event;
 import com.meplus.punub.Command;
@@ -53,7 +53,7 @@ public class CallActivity extends VideoActivity {
 
     private void postEvent(String message) {
         final CommandEvent event = new CommandEvent(Event.STATUS_OK);
-        final User user = User.getCurrentUser(User.class);
+        final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
         final String sender = user.getUUId();
         event.setCommand(new Command(sender, message));
         EventBus.getDefault().post(event);

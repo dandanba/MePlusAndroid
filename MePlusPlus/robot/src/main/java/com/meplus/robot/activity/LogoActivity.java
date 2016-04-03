@@ -3,14 +3,15 @@ package com.meplus.robot.activity;
 import android.os.Bundle;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.robot.R;
-import com.meplus.robot.api.model.Robot;
+import com.meplus.robot.avos.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.ErrorEvent;
 import com.meplus.robot.events.Event;
 import com.meplus.robot.events.QueryEvent;
 import com.meplus.robot.events.SaveEvent;
-import com.meplus.robot.utils.IntentUtils;
+import com.meplus.utils.IntentUtils;
 import com.meplus.robot.utils.UUIDUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,6 +35,8 @@ public class LogoActivity extends BaseActivity {
     @butterknife.Bind(R.id.shimmer_view_container)
     ShimmerFrameLayout mShimmerViewContainer;
 
+    private String mUUID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,9 @@ public class LogoActivity extends BaseActivity {
         mShimmerViewContainer.startShimmerAnimation();
 
         EventBus.getDefault().register(this);
-        Robot.queryByUUId(UUIDUtils.getUUID(this));
+        // 查询是否已经注册过
+        mUUID = UUIDUtils.getUUID(this);
+        Robot.queryByUUId(mUUID);
     }
 
     @Override
@@ -54,15 +59,15 @@ public class LogoActivity extends BaseActivity {
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onQueryEvent(QueryEvent<Robot> event) {
+    public void onQueryEvent(QueryEvent<AVOSRobot> event) {
         if (event.ok()) {
-            final List<Robot> robotList = event.getList();
-            if (ListUtils.isEmpty(robotList)) {
-                final Robot robot = new Robot();
+            final List<AVOSRobot> robotList = event.getList();
+            if (ListUtils.isEmpty(robotList)) { // 没有注册过
+                final AVOSRobot robot = new AVOSRobot();
                 final int robotId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
                 robot.setRobotId(robotId);
-                robot.setUUId(UUIDUtils.getUUID(this));
-                robot.saveRotot();
+                robot.setUUId(mUUID);
+                Robot.saveRotot(robot);
             } else {
                 onCreateEvent(new SaveEvent<>(Event.STATUS_OK, robotList.get(0)));
             }
@@ -71,7 +76,7 @@ public class LogoActivity extends BaseActivity {
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCreateEvent(SaveEvent<Robot> event) {
+    public void onCreateEvent(SaveEvent<AVOSRobot> event) {
         if (event.ok()) {
             MPApplication.getsInstance().setRobot(event.getData());
             startActivity(IntentUtils.generateIntent(this, MainActivity.class));
@@ -84,6 +89,7 @@ public class LogoActivity extends BaseActivity {
     public void onErrorEvent(ErrorEvent event) {
         if (event.ok()) {
             ToastUtils.show(this, event.getThrowable().getMessage());
+            finish();
         }
     }
 

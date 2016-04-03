@@ -3,7 +3,6 @@ package com.meplus.robot.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,19 +13,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
 import com.meplus.robot.R;
-import com.meplus.robot.api.model.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.events.CommandEvent;
 import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.presenters.PubnubPresenter;
-import com.meplus.robot.utils.IntentUtils;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
+import com.meplus.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,13 +44,10 @@ import io.agora.sample.agora.AgoraApplication;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.fab)
-    FloatingActionButton mFab;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @Bind(R.id.nav_view)
     NavigationView mNavigationView;
-
     @Bind(R.id.bluetooth_state)
     TextView mBluetoothState;
     private NavHeaderViewHolder mHeaderHolder;
@@ -59,6 +55,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BluetoothPresenter mBTPresenter;
     private PubnubPresenter mPubnubPresenter = new PubnubPresenter();
     private AgoraPresenter mAgoraPresenter = new AgoraPresenter();
+
     private String mChannel;
 
     @Override
@@ -80,7 +77,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mBTPresenter.create(context);
 
         // 初始化
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String username = String.valueOf(robot.getRobotId()); // agora 中的用户名
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
         mChannel = robot.getUUId();                 // pubnub 中的channel
@@ -123,9 +120,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mBTPresenter.isConnected()) {
-            mBTPresenter.disconnect();
-        }
+        mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
         EventBus.getDefault().unregister(this);
@@ -139,9 +134,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSaveEvent(SaveEvent<Robot> event) {
+    public void onSaveEvent(SaveEvent<AVOSRobot> event) {
         if (event.ok()) {
-            final Robot robot = event.getData();
+            final AVOSRobot robot = event.getData();
             MPApplication.getsInstance().setRobot(robot);
             mHeaderHolder.updateView(robot);
         }
@@ -171,16 +166,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 case Command.ACTION_RIGHT:
                 case Command.ACTION_DOWN:
                 case Command.ACTION_STOP:
-                    if (mBTPresenter.isConnected()) {
-                        mBTPresenter.sendDirection(message);
-                    } else {
+                    if (!mBTPresenter.sendDirection(message)) {
                         ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
                     }
                     break;
                 case Command.ACTION_CALL:
                     if (!MPApplication.getsInstance().getIsInChannel()) { // 如果正在通电话那么就不能在进入了
-                        Robot robot = MPApplication.getsInstance().getRobot();
+                        AVOSRobot robot = MPApplication.getsInstance().getRobot();
                         startActivity(com.meplus.activity.IntentUtils.generateVideoIntent(this, mChannel, robot.getRobotId()));
+                    }
+                    break;
+                case Command.ACTION_HOME:
+                    if (!mBTPresenter.sendGoHome()) {
+                        ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
                     }
                     break;
                 default:
@@ -220,15 +218,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    @OnClick({R.id.fab, R.id.bluetooth_state})
+    @OnClick({R.id.fab, R.id.bluetooth_state, R.id.home_button})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab: // 展示二维码的图片
                 showQRDialog();
                 break;
             case R.id.bluetooth_state:
-                if (!mBTPresenter.isConnected()) {
-                    mBTPresenter.connectDeviceList(this);
+                mBTPresenter.connectDeviceList(this);
+                break;
+            case R.id.home_button:
+                if (!mBTPresenter.sendGoHome()) {
+                    ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
                 }
                 break;
         }

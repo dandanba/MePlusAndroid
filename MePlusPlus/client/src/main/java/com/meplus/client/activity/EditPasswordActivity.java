@@ -9,8 +9,8 @@ import android.widget.LinearLayout;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.UpdatePasswordCallback;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.User;
 import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -101,7 +101,7 @@ public class EditPasswordActivity extends BaseActivity implements Validator.Vali
     private void doResetPassword() {
         final String oldPassword = mOldPasswordEdit.getText().toString();
         final String newPassword = mNewPasswordEdit.getText().toString();
-        final User user = User.getCurrentUser(User.class);
+        final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
         user.updatePasswordInBackground(oldPassword, newPassword, new UpdatePasswordCallback() {
             public void done(AVException e) {
                 if (e == null) {

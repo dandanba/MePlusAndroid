@@ -36,13 +36,11 @@ import hugo.weaving.DebugLog;
 
 public class BluetoothPresenter {
     private static final String TAG = BluetoothPresenter.class.getSimpleName();
+
+    private final int PERCENT = 60;
+    private final int MAX = 500;
+
     BluetoothSPP bt;
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    boolean connected = false;
 
     public BluetoothPresenter(Context context) {
         bt = new BluetoothSPP(context);
@@ -51,7 +49,6 @@ public class BluetoothPresenter {
     public boolean isBluetoothAvailable() {
         return bt.isBluetoothAvailable();
     }
-
 
     public boolean isBluetoothEnabled() {
         return bt.isBluetoothEnabled();
@@ -64,25 +61,21 @@ public class BluetoothPresenter {
     public void create(Context context) {
         bt.setBluetoothConnectionListener(new BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
-                connected = true;
                 postEvent();
                 Toast.makeText(context, "Connected to " + name + "\n" + address, Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceDisconnected() {
-                connected = false;
                 postEvent();
                 Toast.makeText(context, "Connection lost", Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceConnectionFailed() {
-                connected = false;
                 postEvent();
                 Toast.makeText(context, "Unable to connect", Toast.LENGTH_SHORT).show();
             }
         });
-        bt.setOnDataReceivedListener((data, message) -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
-
+        bt.setOnDataReceivedListener((data, message) -> receivedData(data, message));
     }
 
     /**
@@ -144,24 +137,34 @@ public class BluetoothPresenter {
         }
     }
 
-    private void postEvent() {
-        final BluetoothEvent event = new BluetoothEvent(Event.STATUS_OK);
-        event.setConnected(connected);
-        EventBus.getDefault().post(event);
-    }
-
-    private int PERCENT = 60;
-    private int MAX = 500;
 
     @DebugLog
-    public void sendDefault() {
+    public boolean sendDefault() {
+        if (!isConnected()) {
+            return false;
+        }
         // 自主避障功能使能（默认关闭）
         byte CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X10);
         byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X10, 00, 00, 00, 00, CheckSum};
+        sendData(buffer);
+        return true;
+    }
+
+    public boolean sendGoHome() {
+        if (!isConnected()) {
+            return false;
+        }
+        byte CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X14 + 0X01 + 0X00 + 0X00 + 0X00);
+        byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X14, 0X01, 0X00, 0X00, 0X00, CheckSum};
+        sendData(buffer);
+        return true;
     }
 
     @DebugLog
-    public void sendDirection(String action) {
+    public boolean sendDirection(String action) {
+        if (!isConnected()) {
+            return false;
+        }
         final int V = (MAX * PERCENT / 100);
 
         int V1 = 0;
@@ -185,6 +188,8 @@ public class BluetoothPresenter {
             V1 = V;
             V2 = -V;
         } else if (action.equals(Command.ACTION_STOP)) {
+            V1 = 0;
+            V2 = 0;
         }
 
         V1H = (byte) (V1 >> 8);
@@ -195,13 +200,29 @@ public class BluetoothPresenter {
         CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X11 + V1H + V1L + V2H + V2L);
         byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X11, V1H, V1L, V2H, V2L, CheckSum};
 
-        send(buffer);
+        sendData(buffer);
+        return true;
+    }
+
+
+    @DebugLog
+    public void receivedData(byte[] data, String message) {
     }
 
     @DebugLog
-    private void send(byte[] buffer) {
+    private void sendData(byte[] buffer) {
         bt.send(buffer, false);
     }
 
+
+    private boolean isConnected() {
+        return bt.getServiceState() == BluetoothState.STATE_CONNECTED;
+    }
+
+    private void postEvent() {
+        final BluetoothEvent event = new BluetoothEvent(Event.STATUS_OK);
+        event.setConnected(isConnected());
+        EventBus.getDefault().post(event);
+    }
 
 }

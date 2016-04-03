@@ -1,11 +1,12 @@
-package com.meplus.client.utils;
+package com.meplus.utils;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
 import com.marvinlabs.intents.MediaIntents;
-import com.meplus.client.Constants;
-import com.meplus.client.api.model.FirVersion;
+import com.meplus.avos.Constants;
+import com.meplus.fir.FirVersion;
 
 import cn.trinea.android.common.util.PackageUtils;
 import cn.trinea.android.common.util.ToastUtils;
@@ -24,10 +25,14 @@ public class FIRUtils {
         Log.i("fir", "check from fir.im success! " + "\n" + json);
         final FirVersion version = JsonUtils.readValue(json, FirVersion.class);
         final int versionCode = PackageUtils.getAppVersionCode(context);
-        if (versionCode < version.version) {
-            context.startActivity(MediaIntents.newOpenWebBrowserIntent(version.update_url));
+        if (versionCode < version.getVersion()) {
+            context.startActivity(MediaIntents.newOpenWebBrowserIntent(version.getUpdate_url()));
         } else {
             ToastUtils.show(context, "已经是最新版本！");
         }
+    }
+
+    public static void init(Application application) {
+        FIR.init(application);
     }
 }

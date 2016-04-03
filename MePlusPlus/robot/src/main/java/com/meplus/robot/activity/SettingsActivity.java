@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.meplus.robot.R;
-import com.meplus.robot.utils.FIRUtils;
-import com.meplus.robot.utils.IntentUtils;
+import com.meplus.utils.FIRUtils;
+import com.meplus.utils.IntentUtils;
 import com.meplus.robot.utils.SnackBarUtils;
 
 import butterknife.Bind;

@@ -1,4 +1,4 @@
-package com.meplus.robot.utils;
+package com.meplus.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,4 +12,5 @@ public class IntentUtils extends com.marvinlabs.intents.IntentUtils {
     public static Intent generateIntent(Context context, Class<?> cls) {
         return new Intent(context, cls);
     }
+
 }

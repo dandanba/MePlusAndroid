@@ -7,14 +7,14 @@ import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SignUpCallback;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
-import com.meplus.client.api.model.User;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.SignUpEvent;
-import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.utils.SnackBarUtils;
 import com.meplus.client.utils.UUIDUtils;
+import com.meplus.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -108,7 +108,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         final String password = mPasswordEdit.getText().toString();
         final String email = mEmailEdit.getText().toString();
         final int userId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
-        User user = new User();
+        AVOSUser user = new AVOSUser();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);

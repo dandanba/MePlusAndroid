@@ -13,6 +13,8 @@ public class Command {
     public final static String ACTION_RIGHT = "right";
     public final static String ACTION_STOP = "stop";
 
+    public final static String ACTION_HOME = "home";
+
     public String sender;
     public String message;
     public long timeStamp;

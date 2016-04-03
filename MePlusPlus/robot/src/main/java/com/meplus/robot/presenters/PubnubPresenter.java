@@ -9,7 +9,7 @@ import com.meplus.punub.Constants;
 import com.meplus.punub.PNCallback;
 import com.meplus.robot.events.CommandEvent;
 import com.meplus.robot.events.Event;
-import com.meplus.robot.utils.JsonUtils;
+import com.meplus.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
 

@@ -6,10 +6,10 @@ import android.util.Log;
 
 import com.meplus.client.events.CommandEvent;
 import com.meplus.client.events.Event;
-import com.meplus.client.utils.JsonUtils;
 import com.meplus.punub.Command;
 import com.meplus.punub.Constants;
 import com.meplus.punub.PNCallback;
+import com.meplus.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
 

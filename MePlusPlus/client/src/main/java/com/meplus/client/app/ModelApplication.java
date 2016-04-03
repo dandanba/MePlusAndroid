@@ -1,7 +1,7 @@
 package com.meplus.client.app;
 
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 
 import hugo.weaving.DebugLog;
 
@@ -10,7 +10,7 @@ import hugo.weaving.DebugLog;
  */
 public class ModelApplication extends BaseApplication {
 
-    private Robot mRobot;
+    private AVOSRobot mRobot;
 
     @Override
     public void onCreate() {
@@ -18,17 +18,17 @@ public class ModelApplication extends BaseApplication {
     }
 
     @DebugLog
-    public Robot getRobot() {
+    public AVOSRobot getRobot() {
         return mRobot;
     }
 
     @DebugLog
-    public void setRobot(Robot robot) {
+    public void setRobot(AVOSRobot robot) {
         mRobot = robot;
     }
 
     public void logOut() {
-        User.logOut();
+        AVOSUser.logOut();
         setRobot(null);
     }
 }

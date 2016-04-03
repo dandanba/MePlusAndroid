@@ -20,4 +20,21 @@
         android:singleLine="true"
         android:textColor="@color/meWhite"
         android:textSize="@dimen/meTitleSize" />
+
+
+    <TextView
+        android:id="@+id/home_button"
+        android:layout_width="wrap_content"
+        android:minWidth="100dp"
+        android:text="自动回充电桩"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@drawable/button_blue"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@color/meWhite"
+        android:textSize="@dimen/meTitleSize" />
 </RelativeLayout>

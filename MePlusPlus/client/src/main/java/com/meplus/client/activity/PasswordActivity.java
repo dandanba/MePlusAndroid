@@ -7,8 +7,8 @@ import android.widget.EditText;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.RequestPasswordResetCallback;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.User;
 import com.meplus.client.utils.SnackBarUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -76,7 +76,7 @@ public class PasswordActivity extends BaseActivity implements Validator.Validati
 
     private void doResetPassword() {
         final String email = mEmailEdit.getText().toString();
-        User.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+        AVOSUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
             public void done(AVException e) {
                 if (e == null) {
                     // 已发送一份重置密码的指令到用户的邮箱

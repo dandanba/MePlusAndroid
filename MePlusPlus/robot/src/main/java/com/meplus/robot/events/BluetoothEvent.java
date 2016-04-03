@@ -17,4 +17,5 @@ public class BluetoothEvent extends Event {
     public void setConnected(boolean state) {
         this.mConnected = state;
     }
+
 }

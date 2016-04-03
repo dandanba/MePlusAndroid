@@ -12,9 +12,9 @@ import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.Event;
 import com.meplus.client.events.LogoutEvent;
-import com.meplus.client.utils.FIRUtils;
-import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.utils.SnackBarUtils;
+import com.meplus.utils.FIRUtils;
+import com.meplus.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

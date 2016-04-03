@@ -11,9 +11,9 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
 import com.meplus.client.app.MPApplication;
 import com.meplus.client.events.CommandEvent;
 import com.meplus.client.events.LogoutEvent;
@@ -60,8 +60,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         EventBus.getDefault().register(this);
 
         // 初始化
-        final User user = User.getCurrentUser(User.class);
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         mUserId = user.getUserId();                                  // agora 中的用户名
         final String uuId = user.getUUId();                             // pubnub 中的用户名
         mChannel = robot == null ? "" : robot.getUUId();            // pubnub 中的channel
@@ -127,9 +127,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSaveEvent(SaveEvent<Robot> event) {
+    public void onSaveEvent(SaveEvent<AVOSRobot> event) {
         if (event.ok()) {
-            final Robot robot = event.getData();
+            final AVOSRobot robot = event.getData();
             MPApplication.getsInstance().setRobot(robot);
             mChannel = robot.getUUId();                 // 订阅机器人
             mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                final Robot robot = MPApplication.getsInstance().getRobot();
+                final AVOSRobot robot = MPApplication.getsInstance().getRobot();
                 Snackbar.make(view, robot == null ? "绑定多我机器人吗？" : "唤醒多我机器人吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));

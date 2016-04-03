@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.robot.R;
 import com.meplus.robot.activity.ModifyActivity;
-import com.meplus.robot.api.model.Robot;
-import com.meplus.robot.utils.IntentUtils;
+import com.meplus.utils.IntentUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +29,7 @@ public class NavHeaderViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void updateView(Robot robot) {
+    public void updateView(AVOSRobot robot) {
         final String name = robot.getRobotName();
         final String description = robot.getRobotDescription();
         mTitle.setText(String.format("机器人:%1$s", TextUtils.isEmpty(name) ? "" : robot.getRobotName()));

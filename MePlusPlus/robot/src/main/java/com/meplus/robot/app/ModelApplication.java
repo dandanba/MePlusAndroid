@@ -1,24 +1,24 @@
 package com.meplus.robot.app;
 
-import com.meplus.robot.api.model.Robot;
+import com.meplus.avos.objects.AVOSRobot;
 
 /**
  * Created by dandanba on 3/1/16.
  */
 public class ModelApplication extends BaseApplication {
 
-    private Robot mRobot;
+    private AVOSRobot mRobot;
 
     @Override
     public void onCreate() {
         super.onCreate();
     }
 
-    public void setRobot(Robot robot) {
+    public void setRobot(AVOSRobot robot) {
         mRobot = robot;
     }
 
-    public Robot getRobot() {
+    public AVOSRobot getRobot() {
         return mRobot;
     }
 }

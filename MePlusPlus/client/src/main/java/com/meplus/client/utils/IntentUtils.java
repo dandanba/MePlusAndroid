@@ -6,14 +6,9 @@ import android.content.Intent;
 import com.meplus.client.activity.CallActivity;
 
 /**
- * Created by dandanba on 3/1/16.
+ * Created by dandanba on 4/3/16.
  */
-public class IntentUtils extends com.marvinlabs.intents.IntentUtils {
-    private static final String TAG = IntentUtils.class.getSimpleName();
-
-    public static Intent generateIntent(Context context, Class<?> cls) {
-        return new Intent(context, cls);
-    }
+public class IntentUtils extends com.meplus.utils.IntentUtils {
 
     public static Intent generateCallIntent(Context context, String channel, int userId) {
         Intent intent = new Intent(context, CallActivity.class);
@@ -22,5 +17,4 @@ public class IntentUtils extends com.marvinlabs.intents.IntentUtils {
         intent.putExtra(CallActivity.EXTRA_CHANNEL, channel);
         return intent;
     }
-
 }

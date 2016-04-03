@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.robot.R;
-import com.meplus.robot.api.model.Robot;
+import com.meplus.robot.avos.Robot;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.SaveEvent;
 import com.meplus.robot.utils.SnackBarUtils;
@@ -47,7 +48,7 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         ButterKnife.bind(this);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String robotName = robot.getRobotName();
         final String robotDescription = robot.getRobotDescription();
         mNameEdit.setText(TextUtils.isEmpty(robotName) ? "" : robotName);
@@ -97,10 +98,10 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
     }
 
     private void doModify() {
-        final Robot robot = MPApplication.getsInstance().getRobot();
+        final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         robot.setRobotName(mNameEdit.getText().toString());
         robot.setRobotDescription(mDescriptionEdit.getText().toString());
-        robot.saveRotot();
+        Robot.saveRotot(robot);
     }
 
 }

@@ -8,15 +8,16 @@ import android.widget.EditText;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
 import com.meplus.client.app.MPApplication;
+import com.meplus.client.avos.User;
 import com.meplus.client.events.ErrorEvent;
 import com.meplus.client.events.QueryEvent;
 import com.meplus.client.events.SignUpEvent;
-import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.utils.SnackBarUtils;
+import com.meplus.utils.IntentUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -68,9 +69,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onQueryEvent(QueryEvent<Robot> event) {
+    public void onQueryEvent(QueryEvent<AVOSRobot> event) {
         if (event.ok()) {
-            final List<Robot> robotList = event.getList();
+            final List<AVOSRobot> robotList = event.getList();
             if (!ListUtils.isEmpty(robotList)) {
                 MPApplication.getsInstance().setRobot(robotList.get(0));
             }
@@ -134,12 +135,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         final String username = mPhoneEdit.getText().toString();
         final String password = mPasswordEdit.getText().toString();
 
-        User.logInInBackground(username, password, new LogInCallback<AVUser>() {
+        AVOSUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
             @Override
             public void done(AVUser avUser, AVException e) {
                 if (e == null) {
-                    final User user = User.getCurrentUser(User.class);
-                    user.queryRobot();
+                    final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
+                    User.queryRobot(user);
                 } else {
                     SnackBarUtils.show(mRoot, e.toString());
                 }

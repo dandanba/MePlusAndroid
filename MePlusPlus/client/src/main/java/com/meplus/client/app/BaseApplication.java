@@ -1,19 +1,17 @@
 package com.meplus.client.app;
 
-import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.AVObject;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.meplus.avos.Constants;
+import com.meplus.avos.objects.AVOSRobot;
+import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.BuildConfig;
-import com.meplus.client.api.model.Robot;
-import com.meplus.client.api.model.User;
+import com.meplus.utils.AVOSUtils;
+import com.meplus.utils.FIRUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
-import im.fir.sdk.FIR;
 import io.agora.sample.agora.AgoraApplication;
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
@@ -46,15 +44,11 @@ public class BaseApplication extends AgoraApplication {
                 .build();
 
 
-        FIR.init(this);
+        FIRUtils.init(this);
 
-        AVObject.registerSubclass(Robot.class);
-        AVObject.registerSubclass(User.class);
+        AVOSUser.registerSubclass();
+        AVOSRobot.registerSubclass();
 
-        AVOSCloud.initialize(this, Constants.AVOS_APP_ID, Constants.AVOS_APP_KEY); // 初始化参数依次为 this, AppId, AppKey
-        // AVOSCloud.useAVCloudUS(); // 启用北美节点
-        // AVAnalytics.enableCrashReport(this.getApplicationContext(), true);  // 启用崩溃错误统计
-        AVOSCloud.setLastModifyEnabled(true);
-        AVOSCloud.setDebugLogEnabled(true);
+        AVOSUtils.init(this);
     }
 }
