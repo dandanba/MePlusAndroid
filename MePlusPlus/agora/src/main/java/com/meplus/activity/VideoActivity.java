@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.sample.agora.AgoraApplication;
@@ -81,7 +82,7 @@ public class VideoActivity extends ChannelActivity {
     public void timeEscaped(int time) {
         super.timeEscaped(time);
         if (time > 10 && uid == 0) { // 30 秒钟无人进入，就自动退出。
-            ToastUtil.showToast(VideoActivity.this, "对方不在线");
+            Toast.makeText(VideoActivity.this, "对方不在线", Toast.LENGTH_SHORT).show();
             doBackPressed();
         }
     }
