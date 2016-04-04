@@ -1,15 +1,20 @@
 <resources>
     <string name="app_name">MePlusRobot</string>
+
+    <string name="me_ok">确定</string>
+
     <string name="me_phone_number">手机号</string>
     <string name="me_modify">修改</string>
-    <string name="me_nav_history">通话记录</string>
-    <string name="me_nav_home">首页</string>
-    <string name="me_nav_settings">设置</string>
     <string name="me_robot_name">机器人名字</string>
-    <string name="me_slogan">make people more simple</string>
-    <string name="drawer_open">drawer open</string>
-    <string name="drawer_close">drawer close</string>
-    <string name="me_ok">确定</string>
     <string name="me_bind_tip">请认真填写机器人ID或通过扫描的方式</string>
     <string name="me_robot_description">写点什么内容...</string>
+
+
+    <string name="bt_unsupport">蓝牙模块硬件不支持！</string>
+    <string name="bt_unconnected">蓝牙还未连接，请点击连接蓝牙按钮！</string>
+    <string name="feedback">有问题需要反馈给我们吗？</string>
+    <string name="bt_connect">蓝牙已连接</string>
+    <string name="bt_unconnect">蓝牙未连接</string>
+    <string name="stop_echo_test">停止声音测试</string>
+    <string name="start_echo_test">开始声音测试</string>
 </resources>

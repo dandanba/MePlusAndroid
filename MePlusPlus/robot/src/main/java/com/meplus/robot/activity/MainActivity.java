@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // bluetooth
         mBTPresenter = new BluetoothPresenter(context);
         if (!mBTPresenter.isBluetoothAvailable()) { // 蓝牙模块硬件支持
-            ToastUtils.show(context, "蓝牙模块硬件不支持！");
+            ToastUtils.show(context, getString(R.string.bt_unsupport));
             finish();
             return;
         }
@@ -168,7 +168,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 case Command.ACTION_DOWN:
                 case Command.ACTION_STOP:
                     if (!mBTPresenter.sendDirection(message)) {
-                        ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+                        ToastUtils.show(this, getString(R.string.bt_unconnected));
                     }
                     break;
                 case Command.ACTION_CALL:
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     break;
                 case Command.ACTION_HOME:
                     if (!mBTPresenter.sendGoHome()) {
-                        ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+                        ToastUtils.show(this, getString(R.string.bt_unconnected));
                     }
                     break;
                 default:
@@ -230,7 +230,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.home_button:
                 if (!mBTPresenter.sendGoHome()) {
-                    ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+                    ToastUtils.show(this, getString(R.string.bt_unconnected));
                 }
                 break;
         }
@@ -250,7 +250,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void updateBluetoothState(boolean state) {
-        mBluetoothState.setText(state ? "蓝牙已连接" : "蓝牙未连接");
+        mBluetoothState.setText(state ? getString(R.string.bt_connect) : getString(R.string.bt_unconnect));
     }
 
 }

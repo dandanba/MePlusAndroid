@@ -57,7 +57,7 @@ public class TestsActivity extends BaseActivity {
         // bluetooth
         mBTPresenter = new BluetoothPresenter(context);
         if (!mBTPresenter.isBluetoothAvailable()) { // 蓝牙模块硬件不支持
-            ToastUtils.show(context, "蓝牙模块硬件不支持！");
+            ToastUtils.show(context, getString(R.string.bt_unsupport));
             finish();
             return;
         }
@@ -155,7 +155,7 @@ public class TestsActivity extends BaseActivity {
 
             case R.id.home_test_button:
                 if (!mBTPresenter.sendGoHome()) {
-                    ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+                    ToastUtils.show(this, getString(R.string.bt_unconnected));
                 }
                 break;
             case R.id.channel_test_button:
@@ -172,8 +172,8 @@ public class TestsActivity extends BaseActivity {
                 mBTPresenter.connectDeviceList(this);
                 break;
             case R.id.fab:
-                SnackBarUtils.make(view, "有问题需要反馈给我们吗？")
-                        .setAction("确定", v -> startActivity(PhoneIntents.newCallNumberIntent(Constants.SERVICE_PHONENUMBER)))
+                SnackBarUtils.make(view, getString(R.string.feedback))
+                        .setAction(getString(R.string.me_ok), v -> startActivity(PhoneIntents.newCallNumberIntent(Constants.SERVICE_PHONENUMBER)))
                         .show();
                 break;
         }
@@ -182,7 +182,7 @@ public class TestsActivity extends BaseActivity {
 
     private void sendDirection(String action) {
         if (!mBTPresenter.sendDirection(action)) {
-            ToastUtils.show(this, "蓝牙还未连接，请点击连接蓝牙按钮！");
+            ToastUtils.show(this, getString(R.string.bt_unconnected));
         }
     }
 
@@ -197,11 +197,11 @@ public class TestsActivity extends BaseActivity {
     }
 
     private void updateEchoTestButton(boolean isStarted) {
-        mTestEchoButton.setText(isStarted ? "停止声音测试" : "开始声音测试");
+        mTestEchoButton.setText(isStarted ? getString(R.string.stop_echo_test) : getString(R.string.start_echo_test));
         mTestEchoButton.setTag(isStarted);
     }
 
     private void updateBluetoothState(boolean state) {
-        mBluetoothState.setText(state ? "蓝牙已连接" : "蓝牙未连接");
+        mBluetoothState.setText(state ? getString(R.string.bt_connect) : getString(R.string.bt_unconnect));
     }
 }

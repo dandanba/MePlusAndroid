@@ -83,7 +83,7 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onModifyEvent(SaveEvent<Robot> event) {
+    public void onModifyEvent(SaveEvent<AVOSRobot> event) {
         if (event.ok()) {
             finish();
         }

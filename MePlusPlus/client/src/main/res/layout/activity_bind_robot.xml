@@ -38,7 +38,7 @@
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/password_selected"
             android:drawablePadding="10dp"
-            android:hint="@string/me_robot_name"
+            android:hint="@string/me_robot_id"
             android:singleLine="true"
             android:textColor="@color/meTextColor"
             android:textColorHint="@color/meTextColor" />
