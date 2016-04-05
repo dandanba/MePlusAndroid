@@ -13,6 +13,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0.0"
+
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -42,9 +43,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
+    // jars
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // agora
     compile project(':agora')

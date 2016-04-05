@@ -12,7 +12,6 @@ import com.meplus.activity.BaseActivity;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
 import com.meplus.client.utils.SnackBarUtils;
-import com.meplus.events.BaseEvent;
 import com.meplus.events.EventUtils;
 import com.meplus.events.LogoutEvent;
 import com.meplus.utils.FIRUtils;
@@ -93,7 +92,7 @@ public class SettingsActivity extends BaseActivity {
             case R.id.logout_button:
                 Snackbar.make(view, "是否退出当前账户吗？", Snackbar.LENGTH_LONG).setAction("确定", v -> {
                     MPApplication.getsInstance().logOut();
-                    EventUtils.postEvent(new LogoutEvent(BaseEvent.STATUS_OK));
+                    EventUtils.postEvent(new LogoutEvent());
                     finish();
                 }).show();
                 break;

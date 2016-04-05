@@ -4,14 +4,15 @@ import java.util.List;
 
 /**
  * Created by dandanba on 3/11/16.
+ * 查询
  */
 public class QueryEvent<T> extends BaseEvent {
-    public QueryEvent(String status) {
-        super(status);
+    public QueryEvent() {
+        super();
     }
 
-    public QueryEvent(String status, List<T> list) {
-        this(status);
+    public QueryEvent(List<T> list) {
+        this();
         setList(list);
     }
 

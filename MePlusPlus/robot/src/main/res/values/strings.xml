@@ -9,7 +9,6 @@
     <string name="me_bind_tip">请认真填写机器人ID或通过扫描的方式</string>
     <string name="me_robot_description">写点什么内容...</string>
 
-
     <string name="bt_unsupport">蓝牙模块硬件不支持！</string>
     <string name="bt_unconnected">蓝牙还未连接，请点击连接蓝牙按钮！</string>
     <string name="feedback">有问题需要反馈给我们吗？</string>

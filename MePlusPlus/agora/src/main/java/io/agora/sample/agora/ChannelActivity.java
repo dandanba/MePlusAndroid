@@ -28,11 +28,12 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.meplus.utils.UIDUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -121,7 +122,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         super.onCreate(savedInstance);
         setContentView(getContentView());
 
-        userId = getIntent().getIntExtra(EXTRA_USER_ID, new Random().nextInt(Math.abs((int) System.currentTimeMillis())));
+        userId = getIntent().getIntExtra(EXTRA_USER_ID, UIDUtil.getUid());
         callingType = getIntent().getIntExtra(EXTRA_TYPE, CALLING_TYPE_VIDEO);
         channel = getIntent().getStringExtra(EXTRA_CHANNEL);
         // keep screen on - turned on

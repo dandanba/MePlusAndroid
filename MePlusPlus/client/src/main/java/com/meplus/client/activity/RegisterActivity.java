@@ -13,10 +13,10 @@ import com.meplus.client.BuildConfig;
 import com.meplus.client.R;
 import com.meplus.client.utils.SnackBarUtils;
 import com.meplus.client.utils.UUIDUtils;
-import com.meplus.events.BaseEvent;
 import com.meplus.events.EventUtils;
 import com.meplus.events.SignUpEvent;
 import com.meplus.utils.IntentUtils;
+import com.meplus.utils.UIDUtil;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -25,7 +25,6 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -107,7 +106,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         final String username = mPhoneEdit.getText().toString();
         final String password = mPasswordEdit.getText().toString();
         final String email = mEmailEdit.getText().toString();
-        final int userId = new Random().nextInt(Math.abs((int) System.currentTimeMillis()));
+        final int userId = UIDUtil.getUid();
         AVOSUser user = new AVOSUser();
         user.setUsername(username);
         user.setEmail(email);
@@ -118,7 +117,7 @@ public class RegisterActivity extends BaseActivity implements Validator.Validati
         user.signUpInBackground(new SignUpCallback() {
             public void done(AVException e) {
                 if (e == null) {
-                    EventUtils.postEvent(new SignUpEvent(BaseEvent.STATUS_OK));
+                    EventUtils.postEvent(new SignUpEvent());
                     startActivity(IntentUtils.generateIntent(RegisterActivity.this, MainActivity.class));
                     finish();
                 } else {

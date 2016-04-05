@@ -22,7 +22,7 @@ public class BaseApplication extends AgoraApplication {
         FIRUtils.init(this);
 
         AVOSRobot.registerSubclass();
-        AVOSUtils.init(this);
+        AVOSUtils.initialize(this);
     }
 
 }

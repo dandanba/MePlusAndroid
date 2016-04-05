@@ -2,14 +2,15 @@ package com.meplus.events;
 
 /**
  * Created by dandanba on 3/11/16.
+ * 错误
  */
 public class ErrorEvent extends BaseEvent {
-    public ErrorEvent(String status) {
-        super(status);
+    public ErrorEvent() {
+        super();
     }
 
-    public ErrorEvent(String status, Throwable throwable) {
-        this(status);
+    public ErrorEvent(Throwable throwable) {
+        this();
         setThrowable(throwable);
     }
 

@@ -16,7 +16,7 @@ import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
-import com.meplus.client.presenters.PubnubPresenter;
+import com.meplus.punub.PubnubPresenter;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.viewholder.NavHeaderViewHolder;
 import com.meplus.events.EventUtils;
@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @Bind(R.id.nav_view)
+
     NavigationView mNavigationView;
     private NavHeaderViewHolder mHeaderHolder;
 
@@ -88,14 +89,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mHeaderHolder.updateHeader();
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         mPubnubPresenter.destroy();
         EventUtils.unregister(this);
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -159,7 +158,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 default:
                     break;
             }
-
         }
     }
 

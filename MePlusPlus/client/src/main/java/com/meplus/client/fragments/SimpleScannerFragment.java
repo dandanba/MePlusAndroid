@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.meplus.client.events.ScannerEvent;
-import com.meplus.client.utils.ISBNUtils;
 import com.meplus.events.EventUtils;
 import com.meplus.fragments.BaseFragment;
 
-import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -48,12 +46,7 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
     @Override
     public void handleResult(Result rawResult) {
         final String content;
-        final BarcodeFormat format = rawResult.getBarcodeFormat();
-        if (format.equals(BarcodeFormat.ISBN10)) {
-            content = ISBNUtils.getISBN13(rawResult.getContents());
-        } else {
-            content = rawResult.getContents();
-        }
+        content = rawResult.getContents();
 
         Log.i(TAG, content);
         EventUtils.postEvent(new ScannerEvent(content));

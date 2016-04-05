@@ -2,7 +2,6 @@ package com.meplus.robot.avos;
 
 import com.avos.avoscloud.AVException;
 import com.meplus.avos.objects.AVOSRobot;
-import com.meplus.events.BaseEvent;
 import com.meplus.events.ErrorEvent;
 import com.meplus.events.EventUtils;
 import com.meplus.events.QueryEvent;
@@ -23,16 +22,14 @@ public class Robot {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe(id -> {
-                            List<AVOSRobot> list = null;
-                            try {
-                                list = AVOSRobot.queryRobotByUUID(id);
+                            try {   // 如果，leancloud上，没有表结构，那么会有异常。
+                                List<AVOSRobot> list = AVOSRobot.queryRobotByUUID(id);
+                                EventUtils.postEvent(new QueryEvent<>(list));
                             } catch (AVException e) {
-                                // 如果，leancloud上，没有表结构，那么会有异常。
-                                EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, e));
+                                EventUtils.postEvent(new ErrorEvent(e));
                             }
-                            EventUtils.postEvent(new QueryEvent<>(BaseEvent.STATUS_OK, list));
                         },
-                        throwable -> EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, throwable)));
+                        throwable -> EventUtils.postEvent(new ErrorEvent(throwable)));
     }
 
     @DebugLog
@@ -44,12 +41,12 @@ public class Robot {
                         robot -> {
                             try {
                                 robot.save();
-                                EventUtils.postEvent(new SaveEvent<>(BaseEvent.STATUS_OK, robot));
+                                EventUtils.postEvent(new SaveEvent<>(robot));
                             } catch (AVException e) {
-                                EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, e));
+                                EventUtils.postEvent(new ErrorEvent(e));
                             }
                         },
-                        throwable -> EventUtils.postEvent(new ErrorEvent(BaseEvent.STATUS_OK, throwable))
+                        throwable -> EventUtils.postEvent(new ErrorEvent(throwable))
                 );
     }
 

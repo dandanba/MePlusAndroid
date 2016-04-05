@@ -47,8 +47,10 @@ public class ModifyActivity extends BaseActivity implements Validator.Validation
         setContentView(R.layout.activity_modify);
 
         ButterKnife.bind(this);
+
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+
         final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String robotName = robot.getRobotName();
         final String robotDescription = robot.getRobotDescription();

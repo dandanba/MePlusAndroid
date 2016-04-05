@@ -13,11 +13,11 @@ import io.agora.sample.agora.R;
 
 /**
  * Created by dandanba on 3/30/16.
+ * 视频通话页面
  */
 public class VideoActivity extends ChannelActivity {
-
     private static final String TAG = VideoActivity.class.getSimpleName();
-    private int uid;
+    private int mUid;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -39,10 +39,9 @@ public class VideoActivity extends ChannelActivity {
 
     @Override
     public void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats) {
-        // 回调不在UI主线程
         runOnUiThread(new Runnable() {
             @Override
-            public void run() {
+            public void run() {  // 回调不在UI主线程
                 // @see ChannelActivity onLeaveChannel
                 ((AgoraApplication) getApplication()).setIsInChannel(false);
                 ((AgoraApplication) getApplication()).setChannelTime(0);
@@ -55,14 +54,14 @@ public class VideoActivity extends ChannelActivity {
     public void onUserOffline(final int uid, final int reason) {
         super.onUserOffline(uid, reason);
         // 如果有人离线，那么，在 1对1的视频情况下就把当前的视频退出
-//        if (reason == Constants.USER_OFFLINE_QUIT) { // 用户主动
+        // if (reason == Constants.USER_OFFLINE_QUIT) { // 用户主动
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 doBackPressed();
             }
         });
-//        }
+        //  }
     }
 
     @Override
@@ -75,13 +74,13 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public synchronized void onUserJoined(int uid, int elapsed) {
         super.onUserJoined(uid, elapsed);
-        this.uid = uid;
+        this.mUid = uid;
     }
 
     @Override
     public void timeEscaped(int time) {
         super.timeEscaped(time);
-        if (time > 10 && uid == 0) { // 30 秒钟无人进入，就自动退出。
+        if (time > 10 && mUid == 0) { // 30 秒钟无人进入，就自动退出。
             Toast.makeText(VideoActivity.this, "对方不在线", Toast.LENGTH_SHORT).show();
             doBackPressed();
         }

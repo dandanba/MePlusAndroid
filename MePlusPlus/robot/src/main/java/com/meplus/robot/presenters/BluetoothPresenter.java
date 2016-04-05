@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.meplus.events.BaseEvent;
 import com.meplus.events.EventUtils;
 import com.meplus.punub.Command;
 import com.meplus.robot.activity.DeviceListActivity;
@@ -38,8 +37,7 @@ public class BluetoothPresenter {
 
     private final int PERCENT = 60;
     private final int MAX = 500;
-
-    BluetoothSPP bt;
+    private BluetoothSPP bt;
 
     public BluetoothPresenter(Context context) {
         bt = new BluetoothSPP(context);
@@ -219,7 +217,7 @@ public class BluetoothPresenter {
     }
 
     private void postEvent() {
-        final BluetoothEvent event = new BluetoothEvent(BaseEvent.STATUS_OK);
+        final BluetoothEvent event = new BluetoothEvent();
         event.setConnected(isConnected());
         EventUtils.postEvent(event);
     }

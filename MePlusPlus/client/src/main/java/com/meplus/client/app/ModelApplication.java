@@ -9,7 +9,6 @@ import hugo.weaving.DebugLog;
  * Created by dandanba on 3/1/16.
  */
 public class ModelApplication extends BaseApplication {
-
     private AVOSRobot mRobot;
 
     @Override

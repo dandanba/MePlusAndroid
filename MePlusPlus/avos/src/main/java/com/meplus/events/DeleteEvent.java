@@ -5,12 +5,12 @@ package com.meplus.events;
  * 删除
  */
 public class DeleteEvent<T> extends BaseEvent {
-    public DeleteEvent(String status) {
-        super(status);
+    public DeleteEvent() {
+        super();
     }
 
-    public DeleteEvent(String status, T data) {
-        this(status);
+    public DeleteEvent(T data) {
+        this();
         setData(data);
     }
 

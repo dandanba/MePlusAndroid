@@ -9,8 +9,8 @@ import com.meplus.events.BaseEvent;
 public class CommandEvent extends BaseEvent {
     private Command mCommand;
 
-    public CommandEvent(String status) {
-        super(status);
+    public CommandEvent() {
+        super();
     }
 
     public Command getCommand() {

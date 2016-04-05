@@ -24,7 +24,7 @@ import com.meplus.robot.R;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
-import com.meplus.robot.presenters.PubnubPresenter;
+import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
 import com.meplus.utils.IntentUtils;

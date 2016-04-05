@@ -24,6 +24,7 @@ public class BaseApplication extends AgoraApplication {
         AVOSUser.registerSubclass();
         AVOSRobot.registerSubclass();
 
-        AVOSUtils.init(this);
+        AVOSUtils.initialize(this);
     }
+
 }

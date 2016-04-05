@@ -5,12 +5,12 @@ package com.meplus.events;
  * 增加和修改
  */
 public class SaveEvent<T> extends BaseEvent {
-    public SaveEvent(String status) {
-        super(status);
+    public SaveEvent() {
+        super();
     }
 
-    public SaveEvent(String status, T data) {
-        this(status);
+    public SaveEvent(T data) {
+        this();
         setData(data);
     }
 

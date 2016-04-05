@@ -42,13 +42,12 @@ import hugo.weaving.DebugLog;
  * 绑定机器人
  */
 public class BindRobotActivity extends BaseActivity implements ValidationListener {
-
     private static final String TAG = BindRobotActivity.class.getSimpleName();
+
     @Bind(R.id.root)
     LinearLayout mRoot;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-
     @NotEmpty
     @Bind(R.id.bind_edit)
     EditText mBindEdit;
@@ -71,6 +70,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+
         final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         mBindEdit.setText(robot == null ? "" : robot.getUUId());
     }

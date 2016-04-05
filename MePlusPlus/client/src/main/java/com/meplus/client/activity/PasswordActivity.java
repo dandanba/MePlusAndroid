@@ -29,7 +29,6 @@ import cn.trinea.android.common.util.ToastUtils;
 public class PasswordActivity extends BaseActivity implements Validator.ValidationListener {
     @Bind(R.id.root)
     ViewGroup mRoot;
-
     @Email
     @NotEmpty
     @Bind(R.id.email_edit)

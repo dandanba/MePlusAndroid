@@ -50,6 +50,7 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mHandler.removeMessages(1);
         EventUtils.unregister(this);
     }
 
@@ -66,7 +67,6 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
         }
     }
 
-
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onErrorEvent(ErrorEvent event) {
@@ -75,7 +75,6 @@ public class LogoActivity extends BaseActivity implements Handler.Callback {
             ToastUtils.show(this, event.getThrowable().getMessage());
         }
     }
-
 
     @Override
     public boolean handleMessage(Message msg) {

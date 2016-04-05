@@ -5,6 +5,22 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="1.8" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/agora" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/avos" />
+            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/events" />
+            <option value="$PROJECT_DIR$/fancy" />
+            <option value="$PROJECT_DIR$/pubnub" />
+            <option value="$PROJECT_DIR$/res" />
+            <option value="$PROJECT_DIR$/robot" />
+            <option value="$PROJECT_DIR$/slamtec" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

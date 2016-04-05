@@ -20,7 +20,7 @@ import com.meplus.robot.R;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
-import com.meplus.robot.presenters.PubnubPresenter;
+import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.utils.SnackBarUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -62,7 +62,6 @@ public class TestsActivity extends BaseActivity {
             return;
         }
 
-
         setContentView(R.layout.activity_tests);
         ButterKnife.bind(this);
 
@@ -74,17 +73,19 @@ public class TestsActivity extends BaseActivity {
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
         mChannel = robot.getUUId();                             // pubnub 中的channel
 
+        EventUtils.register(this);
+
         mAgoraPresenter.initAgora((AgoraApplication) getApplication(), username);
 
         mPubnubPresenter.initPubnub(uuId);
         mPubnubPresenter.subscribe(this, mChannel);
-        EventUtils.register(this);
 
         mToolbar.setNavigationIcon(R.drawable.back);
         mToolbar.setTitle("系统自检");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
         updateEchoTestButton(false);
         updateBluetoothState(false);
     }

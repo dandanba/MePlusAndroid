@@ -18,8 +18,7 @@ public class BaseEvent {
         this.status = status;
     }
 
-    public BaseEvent(String status) {
-        this.status = status;
+    public BaseEvent() {
     }
 
     public boolean ok() {

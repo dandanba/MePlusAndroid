@@ -16,7 +16,6 @@ public class AVOSRobot extends AVObject {
     private final static String KEY_ROBOT_NAME = "robotName"; // String
     private final static String KEY_ROBOT_DESCRIPTION = "robotDescription"; // String
 
-
     public String getUUId() {
         return getString(KEY_ROBOT_UUID);
     }
@@ -54,9 +53,9 @@ public class AVOSRobot extends AVObject {
     }
 
     public static List<AVOSRobot> queryRobotByUUID(String uuid) throws AVException {
-        AVQuery<AVOSRobot> query = AVOSRobot.getQuery(AVOSRobot.class);
+        final AVQuery<AVOSRobot> query = AVOSRobot.getQuery(AVOSRobot.class);
         query.whereEqualTo(KEY_ROBOT_UUID, uuid);
-        List<AVOSRobot> list = query.find();
+        final List<AVOSRobot> list = query.find();
         return list;
     }
 }

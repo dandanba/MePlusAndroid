@@ -8,6 +8,7 @@ import io.agora.sample.agora.R;
 
 /**
  * Created by dandanba on 4/2/16.
+ * 声网的对外的接口提供给
  */
 public class AgoraPresenter {
 
@@ -30,6 +31,4 @@ public class AgoraPresenter {
         final RtcEngine rtcEngine = application.getRtcEngine();
         rtcEngine.stopEchoTest();
     }
-
-
 }

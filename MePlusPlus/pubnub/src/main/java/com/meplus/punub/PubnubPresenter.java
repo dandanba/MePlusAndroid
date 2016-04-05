@@ -1,20 +1,14 @@
-package com.meplus.client.presenters;
+package com.meplus.punub;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.meplus.events.BaseEvent;
 import com.meplus.events.EventUtils;
-import com.meplus.punub.Command;
-import com.meplus.punub.CommandEvent;
-import com.meplus.punub.Constants;
-import com.meplus.punub.PNCallback;
-import com.meplus.utils.JsonUtils;
+import com.meplus.punub.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
 import com.pubnub.api.PubnubException;
 
-import hugo.weaving.DebugLog;
 
 /**
  * PNPresenter
@@ -26,7 +20,6 @@ public class PubnubPresenter {
     private Pubnub mPubnub;
     private String mChannel;
 
-    @DebugLog
     public void initPubnub(String uuId) {
         mPubnub = new Pubnub(Constants.PN_PUB_KEY, Constants.PN_SUB_KEY);
         mPubnub.setUUID(uuId);
@@ -40,7 +33,6 @@ public class PubnubPresenter {
         }
     }
 
-    @DebugLog
     public void subscribe(Context context, String channel) {
         Log.i(TAG, "subscribe :" + "channel :" + channel);
         if (TextUtils.isEmpty(channel)) {
@@ -56,7 +48,7 @@ public class PubnubPresenter {
                         Command command = JsonUtils.readValue(message.toString(), Command.class);
                         if (!mPubnub.getUUID().equals(command.getSender())) {
                             Log.i(TAG, "delay :" + (System.currentTimeMillis() - command.getTimeStamp()));
-                            final CommandEvent event = new CommandEvent(BaseEvent.STATUS_OK);
+                            final CommandEvent event = new CommandEvent();
                             event.setCommand(command);
                             EventUtils.postEvent(event);
                         }
@@ -74,7 +66,6 @@ public class PubnubPresenter {
         }
     }
 
-    @DebugLog
     public void unsubscribe() {
         Log.i(TAG, "unsubscribe :" + ",channel :" + mChannel);
         if (TextUtils.isEmpty(mChannel)) {
@@ -85,7 +76,6 @@ public class PubnubPresenter {
         }
     }
 
-    @DebugLog
     public void publish(Context context, String message) {
         Log.i(TAG, "publish :" + ",message :" + message);
         if (TextUtils.isEmpty(mChannel)) {

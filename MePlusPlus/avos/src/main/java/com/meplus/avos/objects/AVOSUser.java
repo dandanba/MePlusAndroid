@@ -46,10 +46,11 @@ public class AVOSUser extends AVUser {
         save();
     }
 
-    public List<AVOSRobot> queryRobot() throws AVException {
+    public List<AVOSRobot> queryRobot(int limit) throws AVException {
         final AVRelation<AVOSRobot> relation = getRelation(AVOSUser.RELATION_ROBOTS);
         final AVQuery<AVOSRobot> query = relation.getQuery();
-        query.setLimit(1);
-        return query.find();
+        query.setLimit(limit);
+        final List<AVOSRobot> list = query.find();
+        return list;
     }
 }
