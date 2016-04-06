@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,12 +17,12 @@ import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.events.EventUtils;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
+import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.Constants;
 import com.meplus.robot.R;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
-import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.utils.SnackBarUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -29,6 +31,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import cn.trinea.android.common.util.ToastUtils;
 import hugo.weaving.DebugLog;
 import io.agora.sample.agora.AgoraApplication;
@@ -136,24 +139,10 @@ public class TestsActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.up_button, R.id.down_button, R.id.right_button,
-            R.id.left_button, R.id.bluetooth_state, R.id.channel_test_button, R.id.home_test_button,
+    @OnClick({R.id.bluetooth_state, R.id.channel_test_button, R.id.home_test_button,
             R.id.net_test_button, R.id.echo_test_button, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.up_button:
-                sendDirection(Command.ACTION_UP);
-                break;
-            case R.id.down_button:
-                sendDirection(Command.ACTION_DOWN);
-                break;
-            case R.id.right_button:
-                sendDirection(Command.ACTION_RIGHT);
-                break;
-            case R.id.left_button:
-                sendDirection(Command.ACTION_LEFT);
-                break;
-
             case R.id.home_test_button:
                 if (!mBTPresenter.sendGoHome()) {
                     ToastUtils.show(this, getString(R.string.bt_unconnected));
@@ -181,10 +170,49 @@ public class TestsActivity extends BaseActivity {
     }
 
 
-    private void sendDirection(String action) {
-        if (!mBTPresenter.sendDirection(action)) {
-            ToastUtils.show(this, getString(R.string.bt_unconnected));
+    @OnTouch({R.id.left_button, R.id.up_button, R.id.right_button, R.id.down_button})
+    public boolean onTouch(View view, MotionEvent event) {
+        final int action = event.getAction();
+        final int id = view.getId();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                return sendDirection(id);
+            case MotionEvent.ACTION_UP:
+                return sendDirection(MotionEvent.ACTION_UP);
         }
+        return false;
+    }
+
+    private boolean sendDirection(int id) {
+        String message = "";
+        switch (id) {
+            case MotionEvent.ACTION_UP:
+                message = Command.ACTION_STOP;
+                break;
+            case R.id.left_button:
+                message = Command.ACTION_LEFT;
+                break;
+            case R.id.up_button:
+                message = Command.ACTION_UP;
+                break;
+            case R.id.right_button:
+                message = Command.ACTION_RIGHT;
+                break;
+            case R.id.down_button:
+                message = Command.ACTION_DOWN;
+                break;
+        }
+        return sendDirection(message);
+    }
+
+    private boolean sendDirection(String action) {
+        if (!TextUtils.isEmpty(action)) {
+            if (!mBTPresenter.sendDirection(action)) {
+                ToastUtils.show(this, getString(R.string.bt_unconnected));
+            }
+            return true;
+        }
+        return false;
     }
 
     private void toggleEchoTest() {
