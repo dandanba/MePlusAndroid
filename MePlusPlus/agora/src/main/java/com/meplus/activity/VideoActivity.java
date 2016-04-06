@@ -3,6 +3,7 @@ package com.meplus.activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -89,6 +90,10 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-    }
+    } 
 
+    @Override
+    public int getUserViewSize() {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120, getResources().getDisplayMetrics());
+    }
 }

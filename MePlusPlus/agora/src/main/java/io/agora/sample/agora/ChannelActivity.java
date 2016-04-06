@@ -31,9 +31,7 @@ import android.widget.TextView;
 import com.meplus.utils.UIDUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -83,7 +81,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
 //    private ImageView mStarFour;
 //    private ImageView mStarFive;
 
-    private List<ImageView> stars = new ArrayList<>();
+//    private List<ImageView> stars = new ArrayList<>();
 
     private RelativeLayout mFloatContainer;
     private LinearLayout mStatsContainer;
@@ -127,7 +125,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
         channel = getIntent().getStringExtra(EXTRA_CHANNEL);
         // keep screen on - turned on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mRemoteUserViewWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
+        mRemoteUserViewWidth = getUserViewSize();
         setupRtcEngine();
         initViews();
         setupChannel();
@@ -840,7 +838,7 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
 
     //show or hide remote user container
     private void setRemoteUserViewVisibility(boolean isVisible) {
-        findViewById(R.id.user_remote_views).getLayoutParams().height = isVisible ? (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics()) : 0;
+        findViewById(R.id.user_remote_views).getLayoutParams().height = isVisible ? getUserViewSize() : 0;
     }
 
     private void updateRemoteUserViews(int callingType) {
@@ -1035,5 +1033,9 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
 
     public int getContentView() {
         return R.layout.agora_activity_channel;
+    }
+
+    public int getUserViewSize() {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics());
     }
 }
