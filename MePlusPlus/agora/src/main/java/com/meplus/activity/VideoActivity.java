@@ -88,12 +88,13 @@ public class VideoActivity extends ChannelActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        // super.onBackPressed();
-    } 
-
-    @Override
     public int getUserViewSize() {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120, getResources().getDisplayMetrics());
     }
+
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+    }
+
 }
