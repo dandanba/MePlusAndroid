@@ -41,5 +41,5 @@ dependencies {
     // appcompat
     compile "com.android.support:appcompat-v7:$support_version"
     // app
-    compile project(':app')
+    compile project(':base')
 }

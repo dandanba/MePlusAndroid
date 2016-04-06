@@ -603,6 +603,8 @@ public class ChannelActivity extends BaseEngineHandlerActivity {
                 TextView appNotification = (TextView) findViewById(R.id.app_notification);
                 appNotification.setText("");
                 setRemoteUserViewVisibility(true);
+                // added by wanggeng 用户接入后自动切换
+                onSwitchRemoteUsers(remoteVideoUser);
             }
         });
     }
