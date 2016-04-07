@@ -40,7 +40,8 @@ public class User {
                 .observeOn(Schedulers.io())
                 .subscribe(user -> {
                             try {
-                                List<AVOSRobot> list = user.queryRobot(1);
+                                final String robotUUId = avosUser.getRobotUUId();
+                                final List<AVOSRobot> list = user.queryRobotByUUID(robotUUId);
                                 EventUtils.postEvent(new QueryEvent<>(list));
                             } catch (AVException e) {
                                 EventUtils.postEvent(new ErrorEvent(e));

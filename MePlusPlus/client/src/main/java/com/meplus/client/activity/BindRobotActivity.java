@@ -78,7 +78,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
     @Override
     public void onDestroy() {
         super.onDestroy();
-       EventUtils.unregister(this);
+        EventUtils.unregister(this);
     }
 
     @Override
@@ -137,7 +137,8 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
             final List<AVOSRobot> robotList = event.getList();
             if (!ListUtils.isEmpty(robotList)) {
                 final AVOSUser user = AVOSUser.getCurrentUser(AVOSUser.class);
-                User.addRobot(user, robotList.get(0));
+                final AVOSRobot robot = robotList.get(0);
+                User.addRobot(user, robot);
             } else {
                 ToastUtils.show(this, "机器人ID有误！");
             }
@@ -146,7 +147,7 @@ public class BindRobotActivity extends BaseActivity implements ValidationListene
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSaveEvent(SaveEvent<Robot> event) {
+    public void onSaveEvent(SaveEvent<AVOSRobot> event) {
         if (event.ok()) {
             finish();
         }
