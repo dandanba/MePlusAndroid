@@ -59,6 +59,8 @@ dependencies {
     compile project(':events')
     // res
     compile project(':res')
+    // speech
+    compile project(':speech')
     // junit
     testCompile 'junit:junit:4.12'
     // v7

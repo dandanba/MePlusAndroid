@@ -1,1 +1,1 @@
-include ':client', ':robot', ':agora', ':slamtec', ':fancy', ':avos', ':pubnub', ':events', ':base', ':res'
+include ':client', ':robot', ':agora', ':slamtec', ':fancy', ':avos', ':pubnub', ':events', ':base', ':res', ':speech'
