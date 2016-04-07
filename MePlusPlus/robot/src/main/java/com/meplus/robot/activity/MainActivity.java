@@ -27,6 +27,8 @@ import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
+import com.meplus.speech.TtsPresenter;
+import com.meplus.speech.UnderstandPersenter;
 import com.meplus.utils.IntentUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -56,6 +58,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BluetoothPresenter mBTPresenter;
     private PubnubPresenter mPubnubPresenter = new PubnubPresenter();
     private AgoraPresenter mAgoraPresenter = new AgoraPresenter();
+    private UnderstandPersenter mUnderstandPersenter = new UnderstandPersenter();
+    private TtsPresenter mTtsPresenter = new TtsPresenter();
 
     private String mChannel;
 
@@ -87,6 +91,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         mPubnubPresenter.initPubnub(uuId);
         mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
+
+
+        mUnderstandPersenter.create(this);
+        mTtsPresenter.create(this);
 
 
         ButterKnife.bind(this);
@@ -124,6 +132,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
+        mUnderstandPersenter.destroy();
+        mTtsPresenter.destroy();
         EventUtils.unregister(this);
     }
 

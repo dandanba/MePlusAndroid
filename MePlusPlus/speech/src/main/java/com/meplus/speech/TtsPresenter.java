@@ -16,9 +16,7 @@ import com.iflytek.cloud.SynthesizerListener;
 public class TtsPresenter {
     private static String TAG = TtsPresenter.class.getSimpleName();
 
-    /**
-     * 初始化监听。
-     */
+    // 初始化监听。
     private final InitListener mTtsInitListener = new InitListener() {
         @Override
         public void onInit(int code) {
@@ -33,9 +31,7 @@ public class TtsPresenter {
         }
     };
 
-    /**
-     * 合成回调监听。
-     */
+    // 合成回调监听。
     private final SynthesizerListener mTtsListener = new SynthesizerListener() {
 
         @Override
@@ -54,8 +50,7 @@ public class TtsPresenter {
         }
 
         @Override
-        public void onBufferProgress(int percent, int beginPos, int endPos,
-                                     String info) {
+        public void onBufferProgress(int percent, int beginPos, int endPos, String info) {
             // 合成进度
             mPercentForBuffering = percent;
             showTip(String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
@@ -99,8 +94,8 @@ public class TtsPresenter {
     private Toast mToast;
 
     public void create(Context context) {
-        // 初始化合成对象
-        mTts = SpeechSynthesizer.createSynthesizer(context, mTtsInitListener);
+        mTts = SpeechSynthesizer.createSynthesizer(context, mTtsInitListener); // 初始化合成对象
+        setParam();   // 设置参数
     }
 
     public void destroy() {
@@ -113,8 +108,6 @@ public class TtsPresenter {
     // 收到onCompleted 回调时，合成结束、生成合成音频
     // 合成的音频格式：只支持pcm格式
     public void startSpeaking(String text) {
-        // 设置参数
-        setParam();
         int code = mTts.startSpeaking(text, mTtsListener);
 //			/**
 //			 * 只保存音频不进行播放接口,调用此接口请注释startSpeaking接口
@@ -132,7 +125,6 @@ public class TtsPresenter {
         }
     }
 
-
     // 取消合成
     public void stopSpeaking() {
         mTts.stopSpeaking();
@@ -146,20 +138,8 @@ public class TtsPresenter {
     // 继续播放
     public void resumeSpeaking() {
         mTts.resumeSpeaking();
-
     }
 
-    private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
-    }
-
-    /**
-     * 参数设置
-     *
-     * @param
-     * @return
-     */
     private void setParam() {
         // 清空参数
         mTts.setParameter(SpeechConstant.PARAMS, null);
@@ -194,4 +174,8 @@ public class TtsPresenter {
         mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/tts.wav");
     }
 
+    private void showTip(final String str) {
+        mToast.setText(str);
+        mToast.show();
+    }
 }

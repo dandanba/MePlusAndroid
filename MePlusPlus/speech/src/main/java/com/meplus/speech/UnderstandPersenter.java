@@ -18,13 +18,10 @@ import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.meplus.events.EventUtils;
 
-public class UnderstanderPersenter {
-    private static String TAG = UnderstanderPersenter.class.getSimpleName();
+public class UnderstandPersenter {
+    private static String TAG = UnderstandPersenter.class.getSimpleName();
 
-
-    /**
-     * 初始化监听器（语音到语义）。
-     */
+    //初始化监听器（语音到语义）。
     private final InitListener mSpeechUdrInitListener = new InitListener() {
 
         @Override
@@ -36,9 +33,7 @@ public class UnderstanderPersenter {
         }
     };
 
-    /**
-     * 初始化监听器（文本到语义）。
-     */
+    // 初始化监听器（文本到语义）。
     private final InitListener mTextUdrInitListener = new InitListener() {
 
         @Override
@@ -73,9 +68,7 @@ public class UnderstanderPersenter {
         }
     };
 
-    /**
-     * 语义理解回调。
-     */
+    // 语义理解回调。
     private final SpeechUnderstanderListener mSpeechUnderstanderListener = new SpeechUnderstanderListener() {
 
         @Override
@@ -126,12 +119,10 @@ public class UnderstanderPersenter {
         }
     };
 
-    // 语义理解对象（语音到语义）。
-    private SpeechUnderstander mSpeechUnderstander;
-    // 语义理解对象（文本到语义）。
-    private TextUnderstander mTextUnderstander;
+    private SpeechUnderstander mSpeechUnderstander;  // 语义理解对象（语音到语义）。
+    private TextUnderstander mTextUnderstander; // 语义理解对象（文本到语义）。
+    private int ret = 0;// 函数调用返回值
     private Toast mToast;
-    int ret = 0;// 函数调用返回值
 
     public void create(Context cnotext) {
         /**
@@ -142,16 +133,23 @@ public class UnderstanderPersenter {
         // 初始化对象
         mSpeechUnderstander = SpeechUnderstander.createUnderstander(cnotext, mSpeechUdrInitListener);
         mTextUnderstander = TextUnderstander.createTextUnderstander(cnotext, mTextUdrInitListener);
+        // 设置参数
+        setParam(Constants.LANG);
 
         mToast = Toast.makeText(cnotext, "", Toast.LENGTH_SHORT);
     }
 
+    public void destroy() {
+        // 退出时释放连接
+        mSpeechUnderstander.cancel();
+        mSpeechUnderstander.destroy();
+        if (mTextUnderstander.isUnderstanding())
+            mTextUnderstander.cancel();
+        mTextUnderstander.destroy();
+    }
 
     // 开始语音理解
     public void startUnderstanding() {
-        // 设置参数
-        setParam(Constants.LANG);
-
         if (mSpeechUnderstander.isUnderstanding()) {// 开始前检查状态
             mSpeechUnderstander.stopUnderstanding();
             showTip("停止录音");
@@ -165,10 +163,20 @@ public class UnderstanderPersenter {
         }
     }
 
+    public void cancelUnderstanding() {
+        mSpeechUnderstander.cancel();
+        showTip("取消语义理解");
+    }
+
+    // 停止语音理解
+    public void stopUnderstanding() {
+        mSpeechUnderstander.stopUnderstanding();
+        showTip("停止语义理解");
+    }
+
     // 开始文本理解
     public void understandText(String text) {
         showTip(text);
-
         if (mTextUnderstander.isUnderstanding()) {
             mTextUnderstander.cancel();
             showTip("取消");
@@ -181,38 +189,7 @@ public class UnderstanderPersenter {
 
     }
 
-    public void cancelUnderstanding() {
-        mSpeechUnderstander.cancel();
-        showTip("取消语义理解");
-    }
-
-    // 停止语音理解
-    public void stopUnderstanding() {
-        mSpeechUnderstander.stopUnderstanding();
-        showTip("停止语义理解");
-    }
-
-
-    protected void onDestroy() {
-        // 退出时释放连接
-        mSpeechUnderstander.cancel();
-        mSpeechUnderstander.destroy();
-        if (mTextUnderstander.isUnderstanding())
-            mTextUnderstander.cancel();
-        mTextUnderstander.destroy();
-    }
-
-    private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
-    }
-
-    /**
-     * 参数设置
-     *
-     * @return
-     */
-    public void setParam(String lang) {
+    private void setParam(String lang) {
         if (lang.equals("en_us")) {
             // 设置语言
             mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "en_us");
@@ -235,6 +212,11 @@ public class UnderstanderPersenter {
         // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
         mSpeechUnderstander.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mSpeechUnderstander.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/sud.wav");
+    }
+
+    private void showTip(final String str) {
+        mToast.setText(str);
+        mToast.show();
     }
 
 }
