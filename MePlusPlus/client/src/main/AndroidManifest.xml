@@ -18,6 +18,7 @@
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
             android:value="f16c6cd760c3fc803e8376bb14b8475a" />
+
         <activity
             android:name=".activity.LogoActivity"
             android:screenOrientation="portrait"
@@ -57,16 +58,16 @@
         <activity
             android:name=".activity.ScannerActivity"
             android:screenOrientation="portrait" />
-        <!-- agora -->
-        <activity
-            android:name="com.meplus.activity.VideoActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.meplus.activity.RecordActivity"
             android:screenOrientation="portrait" />
+        <!-- agora -->
+        <activity
+            android:name="com.meplus.activity.VideoActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name="com.meplus.client.activity.CallActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
         <!-- feedback -->
         <activity
             android:name="com.meplus.avos.activity.FeedbackActivity"

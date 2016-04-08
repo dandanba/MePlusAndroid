@@ -308,7 +308,6 @@
                 android:id="@+id/channel_float_container"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:layout_above="@id/user_remote_views"
                 android:background="@drawable/ic_room_bg_talk_time">
 
                 <LinearLayout

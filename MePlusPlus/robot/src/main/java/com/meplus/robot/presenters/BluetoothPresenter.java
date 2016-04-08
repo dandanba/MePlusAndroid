@@ -34,28 +34,35 @@ import hugo.weaving.DebugLog;
 
 public class BluetoothPresenter {
     private static final String TAG = BluetoothPresenter.class.getSimpleName();
-
+    private final static boolean enable = true;
     private final int PERCENT = 60;
     private final int MAX = 500;
     private BluetoothSPP bt;
 
     public BluetoothPresenter(Context context) {
+        if (!enable) return;
         bt = new BluetoothSPP(context);
     }
 
     public boolean isBluetoothAvailable() {
+
+        if (!enable) return true;
         return bt.isBluetoothAvailable();
     }
 
     public boolean isBluetoothEnabled() {
+
+        if (!enable) return true;
         return bt.isBluetoothEnabled();
     }
 
     public boolean isServiceAvailable() {
+        if (!enable) return true;
         return bt.isServiceAvailable();
     }
 
     public void create(Context context) {
+        if (!enable) return;
         bt.setBluetoothConnectionListener(new BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
                 postEvent();
@@ -81,6 +88,8 @@ public class BluetoothPresenter {
      * @param activity
      */
     public void enableBluetooth(Activity activity) {
+        if (!enable) return;
+
         Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         activity.startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
     }
@@ -89,6 +98,8 @@ public class BluetoothPresenter {
      * 启动蓝牙的服务
      */
     public void startBluetoothService() {
+        if (!enable) return;
+
         bt.setupService();
         bt.startService(BluetoothState.DEVICE_OTHER);
     }
@@ -99,6 +110,8 @@ public class BluetoothPresenter {
      * @param activity
      */
     public void connectDeviceList(Activity activity) {
+        if (!enable) return;
+
         Intent intent = new Intent(activity, DeviceListActivity.class);
         activity.startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
     }
@@ -107,6 +120,8 @@ public class BluetoothPresenter {
      * 断开连接
      */
     public void disconnect() {
+        if (!enable) return;
+
         if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
             bt.disconnect();
         }
@@ -116,10 +131,14 @@ public class BluetoothPresenter {
      *
      */
     public void stopBluetoothService() {
+        if (!enable) return;
+
         bt.stopService();
     }
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        if (!enable) return;
+
         if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if (resultCode == Activity.RESULT_OK)
                 bt.connect(data);
@@ -137,6 +156,8 @@ public class BluetoothPresenter {
 
     @DebugLog
     public boolean sendDefault() {
+        if (!enable) return true;
+
         if (!isConnected()) {
             return false;
         }
@@ -148,6 +169,8 @@ public class BluetoothPresenter {
     }
 
     public boolean sendGoHome() {
+        if (!enable) return true;
+
         if (!isConnected()) {
             return false;
         }
@@ -159,6 +182,8 @@ public class BluetoothPresenter {
 
     @DebugLog
     public boolean sendDirection(String action) {
+        if (!enable) return true;
+
         if (!isConnected()) {
             return false;
         }
@@ -204,19 +229,26 @@ public class BluetoothPresenter {
 
     @DebugLog
     public void receivedData(byte[] data, String message) {
+        if (!enable) return;
     }
 
     @DebugLog
     private void sendData(byte[] buffer) {
+        if (!enable) return;
+
         bt.send(buffer, false);
     }
 
 
     private boolean isConnected() {
+        if (!enable) return true;
+
         return bt.getServiceState() == BluetoothState.STATE_CONNECTED;
     }
 
     private void postEvent() {
+        if (!enable) return;
+
         final BluetoothEvent event = new BluetoothEvent();
         event.setConnected(isConnected());
         EventUtils.postEvent(event);

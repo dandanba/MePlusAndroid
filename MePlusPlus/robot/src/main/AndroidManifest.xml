@@ -33,6 +33,7 @@
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
             android:value="3193935cc8df0170d8e975183cbec4b0" />
+
         <activity
             android:name=".activity.LogoActivity"
             android:screenOrientation="landscape"
@@ -40,6 +41,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
