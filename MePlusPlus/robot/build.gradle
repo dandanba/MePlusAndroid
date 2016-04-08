@@ -2,7 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
 
+buildscript {
+    ext.kotlin_version = '1.0.1-2'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -30,6 +44,13 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     packagingOptions {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
@@ -45,6 +66,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
@@ -59,15 +81,10 @@ dependencies {
     compile project(':events')
     // res
     compile project(':res')
-    // speech
-    compile project(':speech')
     // junit
     testCompile 'junit:junit:4.12'
     // v7
     compile "com.android.support:appcompat-v7:$support_version"
-    // glide
-    compile "com.android.support:support-v4:$support_version"
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     // retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     // jackson
@@ -99,4 +116,7 @@ dependencies {
     // leakcanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"// or 1.4-beta1
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"// or 1.4-beta1
+    // kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
 }

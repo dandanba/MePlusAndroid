@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/res/res.iml" filepath="$PROJECT_DIR$/res/res.iml" />
       <module fileurl="file://$PROJECT_DIR$/robot/robot.iml" filepath="$PROJECT_DIR$/robot/robot.iml" />
       <module fileurl="file://$PROJECT_DIR$/slamtec/slamtec.iml" filepath="$PROJECT_DIR$/slamtec/slamtec.iml" />
-      <module fileurl="file://$PROJECT_DIR$/speech/speech.iml" filepath="$PROJECT_DIR$/speech/speech.iml" />
     </modules>
   </component>
 </project>
