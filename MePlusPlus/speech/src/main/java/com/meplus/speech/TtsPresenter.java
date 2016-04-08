@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -12,6 +11,7 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
+import com.meplus.events.EventUtils;
 
 public class TtsPresenter {
     private static String TAG = TtsPresenter.class.getSimpleName();
@@ -20,13 +20,10 @@ public class TtsPresenter {
     private final InitListener mTtsInitListener = new InitListener() {
         @Override
         public void onInit(int code) {
-            Log.d(TAG, "InitListener init() code = " + code);
+            Log.d(TAG, "ttsInitListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败,错误码：" + code);
-            } else {
-                // 初始化成功，之后可以调用startSpeaking方法
-                // 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，
-                // 正确的做法是将onCreate中的startSpeaking调用移至这里
+                Log.d(TAG, "onInit：" + code);
+                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
             }
         }
     };
@@ -36,39 +33,40 @@ public class TtsPresenter {
 
         @Override
         public void onSpeakBegin() {
-            showTip("开始播放");
+            Log.d(TAG, "onSpeakBegin");
         }
 
         @Override
         public void onSpeakPaused() {
-            showTip("暂停播放");
+            Log.d(TAG, "onSpeakPaused");
         }
 
         @Override
         public void onSpeakResumed() {
-            showTip("继续播放");
+            Log.d(TAG, "onSpeakResumed");
         }
 
         @Override
         public void onBufferProgress(int percent, int beginPos, int endPos, String info) {
             // 合成进度
             mPercentForBuffering = percent;
-            showTip(String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
+            Log.d(TAG, String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
         }
 
         @Override
         public void onSpeakProgress(int percent, int beginPos, int endPos) {
             // 播放进度
             mPercentForPlaying = percent;
-            showTip(String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
+            Log.d(TAG, String.format("缓冲进度为%d%%，播放进度为%d%%", mPercentForBuffering, mPercentForPlaying));
         }
 
         @Override
         public void onCompleted(SpeechError error) {
             if (error == null) {
-                showTip("播放完成");
+                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_SPEECH)));
             } else if (error != null) {
-                showTip(error.getPlainDescription(true));
+                Log.d(TAG, "startUnderstanding error: " + error.getErrorDescription());
+                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
             }
         }
 
@@ -80,6 +78,7 @@ public class TtsPresenter {
             //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
             //		Log.d(TAG, "session id =" + sid);
             //	}
+            Log.d(TAG, "onEvent: " + eventType);
         }
     };
 
@@ -91,7 +90,6 @@ public class TtsPresenter {
     private int mPercentForPlaying = 0;
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
-    private Toast mToast;
 
     public void create(Context context) {
         mTts = SpeechSynthesizer.createSynthesizer(context, mTtsInitListener); // 初始化合成对象
@@ -116,12 +114,8 @@ public class TtsPresenter {
 //			String path = Environment.getExternalStorageDirectory()+"/tts.pcm";
 //			int code = mTts.synthesizeToUri(text, path, mTtsListener);
         if (code != ErrorCode.SUCCESS) {
-            if (code == ErrorCode.ERROR_COMPONENT_NOT_INSTALLED) {
-                //未安装则跳转到提示安装页面
-                showTip("未安装!");
-            } else {
-                showTip("语音合成失败,错误码: " + code);
-            }
+            Log.d(TAG, "onInit：" + code);
+            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
         }
     }
 
@@ -172,10 +166,5 @@ public class TtsPresenter {
         // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
         mTts.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/tts.wav");
-    }
-
-    private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
     }
 }

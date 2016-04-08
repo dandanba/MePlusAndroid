@@ -37,4 +37,33 @@
         android:singleLine="true"
         android:textColor="@color/meWhite"
         android:textSize="@dimen/meTitleSize" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/face_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/hello_world" />
+
+        <TextView
+            android:id="@+id/voice_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="20dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="3"
+            android:text="asdjfka;lsdjfkl;asdjf;klasdjfk;lasdjf;lasldfjsadf"
+            android:textColor="#ffffff"
+            android:textSize="33sp" />
+    </LinearLayout>
+
 </RelativeLayout>

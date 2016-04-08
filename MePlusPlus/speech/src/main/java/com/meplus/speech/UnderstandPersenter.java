@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -13,10 +12,10 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechUnderstander;
 import com.iflytek.cloud.SpeechUnderstanderListener;
-import com.iflytek.cloud.TextUnderstander;
-import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.meplus.events.EventUtils;
+import com.meplus.speech.model.Answer;
+import com.meplus.speech.model.Result;
 
 public class UnderstandPersenter {
     private static String TAG = UnderstandPersenter.class.getSimpleName();
@@ -28,43 +27,9 @@ public class UnderstandPersenter {
         public void onInit(int code) {
             Log.d(TAG, "speechUnderstanderListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败,错误码：" + code);
+                Log.d(TAG, "onInit：" + code);
+                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
             }
-        }
-    };
-
-    // 初始化监听器（文本到语义）。
-    private final InitListener mTextUdrInitListener = new InitListener() {
-
-        @Override
-        public void onInit(int code) {
-            Log.d(TAG, "textUnderstanderListener init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败,错误码：" + code);
-            }
-        }
-    };
-
-    private final TextUnderstanderListener mTextUnderstanderListener = new TextUnderstanderListener() {
-
-        @Override
-        public void onResult(final UnderstanderResult result) {
-            if (null != result) {
-                // 显示
-                String text = result.getResultString();
-                if (!TextUtils.isEmpty(text)) {
-                    EventUtils.postEvent(new UnderstandEvent(new Understand(text)));
-                }
-            } else {
-                Log.d(TAG, "understander result:null");
-                showTip("识别结果不正确。");
-            }
-        }
-
-        @Override
-        public void onError(SpeechError error) {
-            // 文本语义不能使用回调错误码14002，请确认您下载sdk时是否勾选语义场景和私有语义的发布
-            showTip("onError Code：" + error.getErrorCode());
         }
     };
 
@@ -73,40 +38,47 @@ public class UnderstandPersenter {
 
         @Override
         public void onResult(final UnderstanderResult result) {
-            if (null != result) {
-                Log.d(TAG, result.getResultString());
+            final String text = null == result ? "" : result.getResultString();
+            Log.d(TAG, "onResult: " + text);
 
-                // 显示
-                String text = result.getResultString();
-                if (!TextUtils.isEmpty(text)) {
-                    EventUtils.postEvent(new UnderstandEvent(new Understand(text)));
-                }
+            final Result r;
+            final Answer answer;
+            if (!TextUtils.isEmpty(text)// text 有效
+                    && (r = JsonUtils.readValue(text, Result.class)) != null// result 有效
+                    && (answer = r.getAnswer()) != null) { // answer 有效
+                final Understand understand = new Understand(Understand.ACTION_SPEECH_UNDERSTAND);
+                understand.setMessage(answer.getText());
+                EventUtils.postEvent(new UnderstandEvent(understand));
             } else {
-                showTip("识别结果不正确。");
+                startUnderstanding();
             }
+
         }
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-            showTip("当前正在说话，音量大小：" + volume);
-            Log.d(TAG, data.length + "");
+            Log.d(TAG, "onVolumeChanged: " + volume);
         }
 
         @Override
         public void onEndOfSpeech() {
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-            showTip("结束说话");
+            Log.d(TAG, "onEndOfSpeech");
+            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_UNDERSTAND)));
         }
 
         @Override
         public void onBeginOfSpeech() {
             // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
-            showTip("开始说话");
+            Log.d(TAG, "onBeginOfSpeech");
+            // 开始听
+            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_LISTEN)));
         }
 
         @Override
         public void onError(SpeechError error) {
-            showTip(error.getPlainDescription(true));
+            Log.d(TAG, "onError: " + error == null ? "null" : error.getPlainDescription(true));
+            startUnderstanding();
         }
 
         @Override
@@ -116,13 +88,11 @@ public class UnderstandPersenter {
             //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
             //		Log.d(TAG, "session id =" + sid);
             //	}
+            Log.d(TAG, "onEvent: " + eventType);
         }
     };
 
     private SpeechUnderstander mSpeechUnderstander;  // 语义理解对象（语音到语义）。
-    private TextUnderstander mTextUnderstander; // 语义理解对象（文本到语义）。
-    private int ret = 0;// 函数调用返回值
-    private Toast mToast;
 
     public void create(Context cnotext) {
         /**
@@ -132,61 +102,40 @@ public class UnderstandPersenter {
          */
         // 初始化对象
         mSpeechUnderstander = SpeechUnderstander.createUnderstander(cnotext, mSpeechUdrInitListener);
-        mTextUnderstander = TextUnderstander.createTextUnderstander(cnotext, mTextUdrInitListener);
         // 设置参数
         setParam(Constants.LANG);
-
-        mToast = Toast.makeText(cnotext, "", Toast.LENGTH_SHORT);
     }
 
     public void destroy() {
         // 退出时释放连接
-        mSpeechUnderstander.cancel();
+        cancelUnderstanding();
         mSpeechUnderstander.destroy();
-        if (mTextUnderstander.isUnderstanding())
-            mTextUnderstander.cancel();
-        mTextUnderstander.destroy();
     }
 
     // 开始语音理解
     public void startUnderstanding() {
         if (mSpeechUnderstander.isUnderstanding()) {// 开始前检查状态
             mSpeechUnderstander.stopUnderstanding();
-            showTip("停止录音");
-        } else {
-            ret = mSpeechUnderstander.startUnderstanding(mSpeechUnderstanderListener);
-            if (ret != 0) {
-                showTip("语义理解失败,错误码:" + ret);
-            } else {
-                showTip("请开始说话…");
-            }
+            Log.d(TAG, "stopUnderstanding");
         }
+        int ret = mSpeechUnderstander.startUnderstanding(mSpeechUnderstanderListener);
+        if (ret != 0) {
+            Log.d(TAG, "startUnderstanding error: " + ret);
+            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+        }
+
     }
 
+    // 取消语义理解
     public void cancelUnderstanding() {
         mSpeechUnderstander.cancel();
-        showTip("取消语义理解");
+        Log.d(TAG, "cancelUnderstanding");
     }
 
     // 停止语音理解
     public void stopUnderstanding() {
         mSpeechUnderstander.stopUnderstanding();
-        showTip("停止语义理解");
-    }
-
-    // 开始文本理解
-    public void understandText(String text) {
-        showTip(text);
-        if (mTextUnderstander.isUnderstanding()) {
-            mTextUnderstander.cancel();
-            showTip("取消");
-        } else {
-            ret = mTextUnderstander.understandText(text, mTextUnderstanderListener);
-            if (ret != 0) {
-                showTip("语义理解失败,错误码:" + ret);
-            }
-        }
-
+        Log.d(TAG, "stopUnderstanding");
     }
 
     private void setParam(String lang) {
@@ -197,7 +146,7 @@ public class UnderstandPersenter {
             // 设置语言
             mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
             // 设置语言区域
-            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, lang);
+            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, "mandarin");
         }
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS, "4000");
@@ -212,11 +161,6 @@ public class UnderstandPersenter {
         // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
         mSpeechUnderstander.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mSpeechUnderstander.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/sud.wav");
-    }
-
-    private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
     }
 
 }

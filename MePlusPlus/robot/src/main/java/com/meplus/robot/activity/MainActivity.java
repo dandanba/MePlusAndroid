@@ -2,6 +2,7 @@ package com.meplus.robot.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -20,14 +22,16 @@ import com.meplus.events.SaveEvent;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
 import com.meplus.punub.CommandEvent;
+import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.R;
 import com.meplus.robot.app.MPApplication;
 import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
-import com.meplus.punub.PubnubPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
 import com.meplus.speech.TtsPresenter;
+import com.meplus.speech.Understand;
+import com.meplus.speech.UnderstandEvent;
 import com.meplus.speech.UnderstandPersenter;
 import com.meplus.utils.IntentUtils;
 
@@ -53,6 +57,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView mNavigationView;
     @Bind(R.id.bluetooth_state)
     TextView mBluetoothState;
+    @Bind(R.id.face_image)
+    ImageView mFaceImage;
+    @Bind(R.id.voice_text)
+    TextView mVoiceText;
+
     private NavHeaderViewHolder mHeaderHolder;
 
     private BluetoothPresenter mBTPresenter;
@@ -62,6 +71,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private TtsPresenter mTtsPresenter = new TtsPresenter();
 
     private String mChannel;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +95,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         final AVOSRobot robot = MPApplication.getsInstance().getRobot();
         final String username = String.valueOf(robot.getRobotId()); // agora 中的用户名
         final String uuId = robot.getUUId();                        // pubnub 中的用户名
-        mChannel = robot.getUUId();                 // pubnub 中的channel
+        mChannel = robot.getUUId();                                 // pubnub 中的channel
 
         mAgoraPresenter.initAgora((AgoraApplication) getApplication(), username);
 
@@ -112,6 +122,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mHeaderHolder.updateView(robot);
 
         updateBluetoothState(false);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mUnderstandPersenter.startUnderstanding(); // 程序启动
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mUnderstandPersenter.stopUnderstanding();
+        mTtsPresenter.stopSpeaking();
     }
 
     @Override
@@ -141,6 +165,38 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mBTPresenter.onActivityResult(this, requestCode, resultCode, data);
+    }
+
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUnderstandEvent(UnderstandEvent event) {
+        if (event.ok()) {
+            final Understand understand = event.getUnderstand();
+            final String action = understand.getAction();
+            if (action.equals(Understand.ACTION_ERROR)) { // 包含tts和understand的错误!
+                ToastUtils.show(this, "error");
+            } else if (action.equals(Understand.ACTION_SPEECH_UNDERSTAND)) {// 理解后的内容
+                final String message = understand.getMessage();
+                mVoiceText.setText(message);
+                mTtsPresenter.startSpeaking(message);
+            } else if (action.equals(Understand.ACTION_UNDERSTAND)) { // 开始理解
+                mFaceImage.setImageResource(R.drawable.think_anim);
+                AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
+                animationDrawable.start();
+            } else if (action.equals(Understand.ACTION_LISTEN)) { // 开始听
+                mFaceImage.setImageResource(R.drawable.listener_anim);
+                AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
+                if (!animationDrawable.isRunning()) {
+                    animationDrawable.start();
+                }
+            } else if (action.equals(Understand.ACTION_SPEECH)) { // 说完了
+                mVoiceText.setText("");
+                mFaceImage.setImageResource(R.drawable.hello_world);
+
+                mUnderstandPersenter.startUnderstanding();
+            }
+        }
     }
 
     @DebugLog
