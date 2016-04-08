@@ -34,8 +34,6 @@ android {
         main {
             jniLibs.srcDirs = ['libs']
         }
-    }
-    sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
@@ -56,4 +54,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
     compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
     compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    // kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
