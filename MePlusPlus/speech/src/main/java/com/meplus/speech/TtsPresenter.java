@@ -106,6 +106,7 @@ public class TtsPresenter {
     // 收到onCompleted 回调时，合成结束、生成合成音频
     // 合成的音频格式：只支持pcm格式
     public void startSpeaking(String text) {
+        Log.d(TAG, "startSpeaking: " + text);
         int code = mTts.startSpeaking(text, mTtsListener);
 //			/**
 //			 * 只保存音频不进行播放接口,调用此接口请注释startSpeaking接口

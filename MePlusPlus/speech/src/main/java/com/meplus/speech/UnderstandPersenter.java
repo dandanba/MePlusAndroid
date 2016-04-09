@@ -22,7 +22,6 @@ public class UnderstandPersenter {
 
     //初始化监听器（语音到语义）。
     private final InitListener mSpeechUdrInitListener = new InitListener() {
-
         @Override
         public void onInit(int code) {
             Log.d(TAG, "speechUnderstanderListener init() code = " + code);
@@ -138,7 +137,7 @@ public class UnderstandPersenter {
         Log.d(TAG, "stopUnderstanding");
     }
 
-    private void setParam(String lang) {
+    public void setParam(String lang) {
         if (lang.equals("en_us")) {
             // 设置语言
             mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "en_us");
@@ -146,7 +145,7 @@ public class UnderstandPersenter {
             // 设置语言
             mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
             // 设置语言区域
-            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, "mandarin");
+            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, lang);
         }
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS, "4000");
@@ -162,5 +161,4 @@ public class UnderstandPersenter {
         mSpeechUnderstander.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mSpeechUnderstander.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/sud.wav");
     }
-
 }

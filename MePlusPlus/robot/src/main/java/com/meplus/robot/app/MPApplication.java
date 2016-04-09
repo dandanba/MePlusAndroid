@@ -15,9 +15,9 @@ public class MPApplication extends ModelApplication {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         // speech
         SpeechUtil.createUtility(this);
+        super.onCreate();
         sInstance = this;
     }
 

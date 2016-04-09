@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iflytek.cloud.SpeechUtility;
 import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.events.EventUtils;
@@ -29,6 +30,7 @@ import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
+import com.meplus.speech.ApkInstaller;
 import com.meplus.speech.TtsPresenter;
 import com.meplus.speech.Understand;
 import com.meplus.speech.UnderstandEvent;
@@ -69,7 +71,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private AgoraPresenter mAgoraPresenter = new AgoraPresenter();
     private UnderstandPersenter mUnderstandPersenter = new UnderstandPersenter();
     private TtsPresenter mTtsPresenter = new TtsPresenter();
-
+    // 语记安装助手类
+    ApkInstaller mInstaller ;
     private String mChannel;
 
 
@@ -102,6 +105,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mPubnubPresenter.initPubnub(uuId);
         mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
 
+
+        mInstaller = new ApkInstaller(this);
+        if (!SpeechUtility.getUtility().checkServiceInstalled()) {
+            mInstaller.install();
+        }
 
         mUnderstandPersenter.create(this);
         mTtsPresenter.create(this);

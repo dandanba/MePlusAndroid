@@ -2,21 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'kotlin-android'
 
-buildscript {
-    ext.kotlin_version = '1.0.1-2'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
-repositories {
-    mavenCentral()
-}
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -42,13 +28,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-        main.java.srcDirs += 'src/main/kotlin'
     }
 
     packagingOptions {
@@ -86,6 +65,8 @@ dependencies {
     compile project(':events')
     // res
     compile project(':res')
+    // speech
+    compile project(':speech')
     // junit
     testCompile 'junit:junit:4.12'
     // v7
@@ -121,7 +102,5 @@ dependencies {
     // leakcanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"// or 1.4-beta1
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"// or 1.4-beta1
-    // kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 }

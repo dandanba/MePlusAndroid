@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/res" />
             <option value="$PROJECT_DIR$/robot" />
             <option value="$PROJECT_DIR$/slamtec" />
+            <option value="$PROJECT_DIR$/speech" />
           </set>
         </option>
       </GradleProjectSettings>

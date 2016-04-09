@@ -5,7 +5,7 @@ package com.meplus.speech;
  */
 public class Constants {
     // lang
-    public final static String LANG = "zh_cn";// "en_us"
+    public final static String LANG = "mandarin";// "en_us"
     // 默认发音人
     public final static String VOICER = "nannan";
     // app_id
