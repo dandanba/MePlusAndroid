@@ -7,6 +7,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.sample.agora.AgoraApplication;
 import io.agora.sample.agora.ChannelActivity;
@@ -18,7 +21,8 @@ import io.agora.sample.agora.R;
  */
 public class VideoActivity extends ChannelActivity {
     private static final String TAG = VideoActivity.class.getSimpleName();
-    private int mUid;
+    private final List<Integer> mUids = new ArrayList<>();
+
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -54,15 +58,17 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public void onUserOffline(final int uid, final int reason) {
         super.onUserOffline(uid, reason);
-        // 如果有人离线，那么，在 1对1的视频情况下就把当前的视频退出
-        // if (reason == Constants.USER_OFFLINE_QUIT) { // 用户主动
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                doBackPressed();
+        if (mUids.contains(uid)) {
+            mUids.remove(uid);
+            if (mUids.isEmpty()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        doBackPressed();
+                    }
+                });
             }
-        });
-        //  }
+        }
     }
 
     @Override
@@ -75,13 +81,16 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public synchronized void onUserJoined(int uid, int elapsed) {
         super.onUserJoined(uid, elapsed);
-        this.mUid = uid;
+        if (!mUids.contains(uid)) {
+            mUids.add(uid);
+        }
+
     }
 
     @Override
     public void timeEscaped(int time) {
         super.timeEscaped(time);
-        if (time > 10 && mUid == 0) { // 30 秒钟无人进入，就自动退出。
+        if (time > 10 && mUids.isEmpty()) { // 30 秒钟无人进入，就自动退出。
             Toast.makeText(VideoActivity.this, "对方不在线", Toast.LENGTH_SHORT).show();
             doBackPressed();
         }
@@ -96,7 +105,5 @@ public class VideoActivity extends ChannelActivity {
     public void onBackPressed() {
         // super.onBackPressed();
     }
-
-    //测试提交
 
 }
