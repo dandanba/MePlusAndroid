@@ -97,4 +97,6 @@ public class VideoActivity extends ChannelActivity {
         // super.onBackPressed();
     }
 
+    //测试提交
+
 }
