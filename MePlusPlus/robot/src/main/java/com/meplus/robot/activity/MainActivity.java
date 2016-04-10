@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (action.equals(Speech.ACTION_UNDERSTAND_END)) {// 理解后的内容
                 final String question = speech.getQuestion();
                 final String answer = speech.getAnswer();
-                startSpeek(question, TextUtils.isEmpty(answer) ? "啊，我真的不知道啊。" : answer);
+                startSpeek(question, TextUtils.isEmpty(answer) ? "我真的不知道啊。" : answer);
             } else if (action.equals(Speech.ACTION_UNDERSTAND_BEGINE)) { // 开始理解
                 mFaceImage.setImageResource(R.drawable.thinking_anim); // thinking
                 AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
