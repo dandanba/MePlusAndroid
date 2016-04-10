@@ -12,6 +12,16 @@ public class BluetoothEvent extends BaseEvent {
 
     private boolean mConnected;
 
+    public byte getSOC() {
+        return mSOC;
+    }
+
+    public void setSOC(byte soc) {
+        mSOC = soc;
+    }
+
+    private byte mSOC;
+
     public boolean isConnected() {
         return mConnected;
     }

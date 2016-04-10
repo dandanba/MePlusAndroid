@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.marvinlabs.intents.MediaIntents;
@@ -46,6 +47,8 @@ public class TestsActivity extends BaseActivity {
     TextView mBluetoothState;
     @Bind(R.id.echo_test_button)
     TextView mTestEchoButton;
+    @Bind(R.id.bms_state)
+    ImageButton mBMSState;
 
     private BluetoothPresenter mBTPresenter;
     private PubnubPresenter mPubnubPresenter = new PubnubPresenter();
@@ -91,6 +94,8 @@ public class TestsActivity extends BaseActivity {
 
         updateEchoTestButton(false);
         updateBluetoothState(false);
+        updateSOC(0);
+
     }
 
 
@@ -135,15 +140,24 @@ public class TestsActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBluetoothEvent(BluetoothEvent event) {
         if (event.ok()) {
+
+            final int soc = event.getSOC();
+            if (soc > 0) {// 发送电量的数据
+                updateSOC(soc);
+            } else { // 只发送连接的数据
+                mBTPresenter.sendDefault();// 自主避障功能使能（默认关闭）
+            }
+
+
             updateBluetoothState(event.isConnected());
         }
     }
 
-    @OnClick({R.id.bluetooth_state, R.id.channel_test_button, R.id.home_test_button,
+    @OnClick({R.id.bluetooth_state, R.id.channel_test_button, R.id.bms_state,
             R.id.net_test_button, R.id.echo_test_button, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.home_test_button:
+            case R.id.bms_state:
                 if (!mBTPresenter.sendGoHome()) {
                     ToastUtils.show(this, getString(R.string.bt_unconnected));
                 }
@@ -182,6 +196,14 @@ public class TestsActivity extends BaseActivity {
         }
         return false;
     }
+
+    private void updateSOC(int soc) {
+        int index = soc / 10 + 1;
+        index = index > 10 ? 10 : index;
+        String resName = String.format("battery%1$d", index * 10);
+        mBMSState.setImageResource(getResources().getIdentifier(resName, "drawable", getPackageName()));
+    }
+
 
     private boolean sendDirection(int id) {
         String message = "";

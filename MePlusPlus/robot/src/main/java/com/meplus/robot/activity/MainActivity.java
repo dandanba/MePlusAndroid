@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     TextView mAnswerText;
     @Bind(R.id.question_text)
     TextView mQuestText;
+    @Bind(R.id.bms_state)
+    ImageButton mBMSState;
 
     private NavHeaderViewHolder mHeaderHolder;
 
@@ -135,8 +138,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         updateBluetoothState(false);
         toggleSpeech(mOpenSpeech);
+        updateSOC(0);
     }
-
 
     @Override
     public void onResume() {
@@ -266,8 +269,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onBluetoothEvent(BluetoothEvent event) {
         if (event.ok()) {
             if (event.isConnected()) {
-                // 自主避障功能使能（默认关闭）
-                mBTPresenter.sendDefault();
+                final int soc = event.getSOC();
+                if (soc > 0) {// 发送电量的数据
+                    updateSOC(soc);
+                } else { // 只发送连接的数据
+                    mBTPresenter.sendDefault();// 自主避障功能使能（默认关闭）
+                }
             }
             updateBluetoothState(event.isConnected());
         }
@@ -331,19 +338,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));
                 break;
-            case R.id.nav_bettery:
-                Snackbar.make(mToolbar, "距离充电桩在1米才能使用", Snackbar.LENGTH_LONG).setAction("确定", v -> {
-                    if (!mBTPresenter.sendGoHome()) {
-                        ToastUtils.show(this, getString(R.string.bt_unconnected));
-                    }
-                }).show();
-                break;
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @OnClick({R.id.fab, R.id.bluetooth_state, R.id.speech_state})
+    @OnClick({R.id.fab, R.id.bluetooth_state, R.id.bms_state, R.id.speech_state})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.speech_state:
@@ -354,6 +354,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.bluetooth_state:
                 mBTPresenter.connectDeviceList(this);
+                break;
+            case R.id.bms_state:
+                goHome();
                 break;
         }
     }
@@ -369,6 +372,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         final QRViewHolder viewHolder = new QRViewHolder(view);
         final String code = MPApplication.getsInstance().getRobot().getUUId();
         viewHolder.update(code);
+    }
+
+    private void goHome() {
+        Snackbar.make(mToolbar, "距离充电桩在1米才能使用", Snackbar.LENGTH_LONG).setAction("确定", v -> {
+            if (!mBTPresenter.sendGoHome()) {
+                ToastUtils.show(this, getString(R.string.bt_unconnected));
+            }
+        }).show();
+    }
+
+    private void updateSOC(int soc) {
+        int index = soc / 10 + 1;
+        index = index > 10 ? 10 : index;
+        String resName = String.format("battery%1$d", index * 10);
+        mBMSState.setImageResource(getResources().getIdentifier(resName, "drawable", getPackageName()));
     }
 
     private void updateBluetoothState(boolean state) {

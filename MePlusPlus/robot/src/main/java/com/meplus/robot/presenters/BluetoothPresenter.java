@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.meplus.events.EventUtils;
@@ -65,17 +66,17 @@ public class BluetoothPresenter {
         if (!enable) return;
         bt.setBluetoothConnectionListener(new BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
-                postEvent();
+                postConnectedEvent();
                 Toast.makeText(context, "Connected to " + name + "\n" + address, Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceDisconnected() {
-                postEvent();
+                postConnectedEvent();
                 Toast.makeText(context, "Connection lost", Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceConnectionFailed() {
-                postEvent();
+                postConnectedEvent();
                 Toast.makeText(context, "Unable to connect", Toast.LENGTH_SHORT).show();
             }
         });
@@ -230,6 +231,30 @@ public class BluetoothPresenter {
     @DebugLog
     public void receivedData(byte[] data, String message) {
         if (!enable) return;
+
+        if (data != null && data.length >= 0x0A) {
+
+            final byte Head1 = data[0];
+            final byte Head2 = data[1];
+            final byte Length = data[2];
+
+            if (Head1 == 0x88 && Head2 == 0xBB && Length == 0x0A) {
+                final byte BMS_Status = data[3];
+                final byte BMS_Error = data[4];
+                final byte SOC = data[5]; //
+                final byte Voltage_H = data[6];
+                final byte Voltage_L = data[7];
+                final byte Current_H = data[8];
+                final byte Current_L = data[9];
+                final String info = String.format("%1$x,%2$x,%3$x,%4$x,%5$x,%6$x,%7$x,%8$x,%9$x,%10$x", Head1, Head2, Length, BMS_Status, BMS_Error, SOC, Voltage_H, Voltage_L, Current_H, Current_L);
+                Log.i(TAG, info);
+                final BluetoothEvent event = new BluetoothEvent();
+                event.setConnected(isConnected());
+                event.setSOC(SOC);
+                EventUtils.postEvent(event);
+            }
+        }
+
     }
 
     @DebugLog
@@ -246,7 +271,7 @@ public class BluetoothPresenter {
         return bt.getServiceState() == BluetoothState.STATE_CONNECTED;
     }
 
-    private void postEvent() {
+    private void postConnectedEvent() {
         if (!enable) return;
 
         final BluetoothEvent event = new BluetoothEvent();
