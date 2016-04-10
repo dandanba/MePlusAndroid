@@ -40,7 +40,7 @@ import hugo.weaving.DebugLog;
 /**
  * 登录 username: meplus password:meplus
  */
-public class LoginActivity extends BaseActivity implements Validator.ValidationListener {
+public class LoginActivity extends BaseActivity {
     @Bind(R.id.root)
     ViewGroup mRoot;
     @NotEmpty
@@ -51,6 +51,26 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     EditText mPasswordEdit;
     private Validator mValidator;
 
+    private Validator.ValidationListener mListener = new Validator.ValidationListener() {
+        @Override
+        public void onValidationSucceeded() {
+            doLogin();
+        }
+
+        @Override
+        public void onValidationFailed(List<ValidationError> errors) {
+            for (ValidationError error : errors) {
+                View view = error.getView();
+                String message = error.getCollatedErrorMessage(LoginActivity.this);
+                if (view instanceof EditText) {
+                    ((EditText) view).setError(message);
+                } else {
+                    SnackBarUtils.show(mRoot, message);
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +79,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
         EventUtils.register(this);
 
         mValidator = new Validator(this);
-        mValidator.setValidationListener(this);
+        mValidator.setValidationListener(mListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        mValidator = null;
         EventUtils.unregister(this);
     }
 
@@ -80,7 +102,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             finish();
         }
     }
-
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -104,24 +125,6 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
             case R.id.register_button:
                 startActivity(IntentUtils.generateIntent(LoginActivity.this, RegisterActivity.class));
                 break;
-        }
-    }
-
-    @Override
-    public void onValidationSucceeded() {
-        doLogin();
-    }
-
-    @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
-            View view = error.getView();
-            String message = error.getCollatedErrorMessage(this);
-            if (view instanceof EditText) {
-                ((EditText) view).setError(message);
-            } else {
-                SnackBarUtils.show(mRoot, message);
-            }
         }
     }
 
