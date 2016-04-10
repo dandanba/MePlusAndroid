@@ -27,7 +27,9 @@ public class UnderstandPersenter {
             Log.d(TAG, "speechUnderstanderListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
                 Log.d(TAG, "onInit：" + code);
-                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+                final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_ERROR);
+                speech.setError(String.valueOf(code));
+                EventUtils.postEvent(new SpeechEvent(speech));
             }
         }
     };
@@ -36,48 +38,54 @@ public class UnderstandPersenter {
     private final SpeechUnderstanderListener mSpeechUnderstanderListener = new SpeechUnderstanderListener() {
 
         @Override
-        public void onResult(final UnderstanderResult result) {
-            final String text = null == result ? "" : result.getResultString();
+        public void onResult(final UnderstanderResult understanderResult) {
+            final String text = null == understanderResult ? "" : understanderResult.getResultString();
             Log.d(TAG, "onResult: " + text);
-
-            final Result r;
-            final Answer answer;
-            if (!TextUtils.isEmpty(text)// text 有效
-                    && (r = JsonUtils.readValue(text, Result.class)) != null// result 有效
-                    && (answer = r.getAnswer()) != null) { // answer 有效
-                final Understand understand = new Understand(Understand.ACTION_SPEECH_UNDERSTAND);
-                understand.setMessage(answer.getText());
-                EventUtils.postEvent(new UnderstandEvent(understand));
-            } else {
-                startUnderstanding();
+            Result result = null;
+            if (!TextUtils.isEmpty(text)) {// text 有效
+                result = JsonUtils.readValue(text, Result.class);
             }
 
+            final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_END);
+            if (result == null) {
+                speech.setQuestion(text);
+            } else {// result 有效
+                final Answer answer = result.getAnswer();
+                speech.setQuestion(result.getText());
+                speech.setAnswer(answer == null ? "" : answer.getText());
+            }
+
+            EventUtils.postEvent(new SpeechEvent(speech));
         }
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
             Log.d(TAG, "onVolumeChanged: " + volume);
+            if (volume > 10) {
+                final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_BEGINE);
+                EventUtils.postEvent(new SpeechEvent(speech));
+            }
         }
 
         @Override
         public void onEndOfSpeech() {
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
             Log.d(TAG, "onEndOfSpeech");
-            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_UNDERSTAND)));
         }
 
         @Override
         public void onBeginOfSpeech() {
             // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
             Log.d(TAG, "onBeginOfSpeech");
-            // 开始听
-            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_LISTEN)));
         }
 
         @Override
         public void onError(SpeechError error) {
-            Log.d(TAG, "onError: " + error == null ? "null" : error.getPlainDescription(true));
-            startUnderstanding();
+            final String plainDescription = error == null ? "null" : error.getPlainDescription(true);
+            Log.d(TAG, "onError: " + plainDescription);
+            final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_ERROR);
+            speech.setError(plainDescription);
+            EventUtils.postEvent(new SpeechEvent(speech));
         }
 
         @Override
@@ -117,24 +125,29 @@ public class UnderstandPersenter {
             mSpeechUnderstander.stopUnderstanding();
             Log.d(TAG, "stopUnderstanding");
         }
-        int ret = mSpeechUnderstander.startUnderstanding(mSpeechUnderstanderListener);
-        if (ret != 0) {
-            Log.d(TAG, "startUnderstanding error: " + ret);
-            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+        int code = mSpeechUnderstander.startUnderstanding(mSpeechUnderstanderListener);
+        if (code != 0) {
+            Log.d(TAG, "startUnderstanding error: " + code);
+            final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_ERROR);
+            speech.setError(String.valueOf(code));
+            EventUtils.postEvent(new SpeechEvent(speech));
         }
+    }
 
+    public boolean isUnderstanding() {
+        return mSpeechUnderstander.isUnderstanding();
     }
 
     // 取消语义理解
     public void cancelUnderstanding() {
-        mSpeechUnderstander.cancel();
         Log.d(TAG, "cancelUnderstanding");
+        mSpeechUnderstander.cancel();
     }
 
     // 停止语音理解
     public void stopUnderstanding() {
-        mSpeechUnderstander.stopUnderstanding();
         Log.d(TAG, "stopUnderstanding");
+        mSpeechUnderstander.stopUnderstanding();
     }
 
     public void setParam(String lang) {
@@ -149,13 +162,10 @@ public class UnderstandPersenter {
         }
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS, "4000");
-
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
         mSpeechUnderstander.setParameter(SpeechConstant.VAD_EOS, "1000");
-
         // 设置标点符号，默认：1（有标点）
         mSpeechUnderstander.setParameter(SpeechConstant.ASR_PTT, "1");
-
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
         // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
         mSpeechUnderstander.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");

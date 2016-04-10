@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.iflytek.cloud.SpeechUtility;
 import com.meplus.activity.BaseActivity;
 import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.events.EventUtils;
@@ -30,10 +32,9 @@ import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
-import com.meplus.speech.ApkInstaller;
+import com.meplus.speech.Speech;
+import com.meplus.speech.SpeechEvent;
 import com.meplus.speech.TtsPresenter;
-import com.meplus.speech.Understand;
-import com.meplus.speech.UnderstandEvent;
 import com.meplus.speech.UnderstandPersenter;
 import com.meplus.utils.IntentUtils;
 
@@ -50,7 +51,12 @@ import io.agora.sample.agora.AgoraApplication;
 /**
  * 主页面
  */
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, Handler.Callback {
+    private static final int START_SPEEKING = 1;
+    private static final int START_UNDERSTANDING = 2;
+    private static final long START_SPEEKING_DELAY = 100;
+    private static final long START_UNDERSTANDING_DELAY = 2000;
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.drawer_layout)
@@ -59,10 +65,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView mNavigationView;
     @Bind(R.id.bluetooth_state)
     TextView mBluetoothState;
+    @Bind(R.id.speech_state)
+    TextView mSpeechhState;
     @Bind(R.id.face_image)
     ImageView mFaceImage;
-    @Bind(R.id.voice_text)
-    TextView mVoiceText;
+    @Bind(R.id.answer_text)
+    TextView mAnswerText;
+    @Bind(R.id.question_text)
+    TextView mQuestText;
 
     private NavHeaderViewHolder mHeaderHolder;
 
@@ -71,10 +81,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private AgoraPresenter mAgoraPresenter = new AgoraPresenter();
     private UnderstandPersenter mUnderstandPersenter = new UnderstandPersenter();
     private TtsPresenter mTtsPresenter = new TtsPresenter();
-    // 语记安装助手类
-    ApkInstaller mInstaller ;
     private String mChannel;
-
+    private boolean mOpenSpeech = false;
+    private Handler mSpeechHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,15 +114,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mPubnubPresenter.initPubnub(uuId);
         mPubnubPresenter.subscribe(getApplicationContext(), mChannel);
 
-
-        mInstaller = new ApkInstaller(this);
-        if (!SpeechUtility.getUtility().checkServiceInstalled()) {
-            mInstaller.install();
-        }
+        mSpeechHandler = new Handler(this);
 
         mUnderstandPersenter.create(this);
         mTtsPresenter.create(this);
-
 
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -130,20 +134,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mHeaderHolder.updateView(robot);
 
         updateBluetoothState(false);
+        toggleSpeech(mOpenSpeech);
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        mUnderstandPersenter.startUnderstanding(); // 程序启动
+        if (mOpenSpeech) {
+            toggleSpeech(true);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mUnderstandPersenter.stopUnderstanding();
-        mTtsPresenter.stopSpeaking();
+        if (mOpenSpeech) {
+            toggleSpeech(false);
+        }
     }
 
     @Override
@@ -161,6 +169,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mSpeechHandler.removeCallbacksAndMessages(null);
+
         mBTPresenter.disconnect();
         mBTPresenter.stopBluetoothService();
         mPubnubPresenter.destroy();
@@ -175,36 +185,70 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mBTPresenter.onActivityResult(this, requestCode, resultCode, data);
     }
 
+    @Override
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case START_SPEEKING:
+                if (mOpenSpeech) {
+                    final String answer = msg.getData().getString("answer");
+                    mTtsPresenter.startSpeaking(answer);
+                }
+                return true;
+            case START_UNDERSTANDING:
+                if (mOpenSpeech) {
+                    toggleSpeech(true);
+                }
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUnderstandEvent(UnderstandEvent event) {
+    public void onUnderstandEvent(SpeechEvent event) {
         if (event.ok()) {
-            final Understand understand = event.getUnderstand();
-            final String action = understand.getAction();
-            if (action.equals(Understand.ACTION_ERROR)) { // 包含tts和understand的错误!
-                ToastUtils.show(this, "error");
-            } else if (action.equals(Understand.ACTION_SPEECH_UNDERSTAND)) {// 理解后的内容
-                final String message = understand.getMessage();
-                mVoiceText.setText(message);
-                mTtsPresenter.startSpeaking(message);
-            } else if (action.equals(Understand.ACTION_UNDERSTAND)) { // 开始理解
-                mFaceImage.setImageResource(R.drawable.think_anim);
+            final Speech speech = event.getUnderstand();
+            final String action = speech.getAction();
+            if (action.equals(Speech.ACTION_SPEECH_ERROR)) { // tts错误
+                ToastUtils.show(this, speech.getError());
+            } else if (action.equals(Speech.ACTION_UNDERSTAND_ERROR)) { // understand的错误
+                startUnderstand();
+            } else if (action.equals(Speech.ACTION_UNDERSTAND_END)) {// 理解后的内容
+                final String answer = speech.getAnswer();
+                final String question = speech.getQuestion();
+
+                startSpeek(question, answer);
+            } else if (action.equals(Speech.ACTION_UNDERSTAND_BEGINE)) { // 开始理解
+                mFaceImage.setImageResource(R.drawable.thinking_anim); // thinking
                 AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
                 animationDrawable.start();
-            } else if (action.equals(Understand.ACTION_LISTEN)) { // 开始听
-                mFaceImage.setImageResource(R.drawable.listener_anim);
+            } else if (action.equals(Speech.ACTION_SPEECH_BEGIN)) { // 开始听
+                mFaceImage.setImageResource(R.drawable.listening_anim); // listening
                 AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
                 if (!animationDrawable.isRunning()) {
                     animationDrawable.start();
                 }
-            } else if (action.equals(Understand.ACTION_SPEECH)) { // 说完了
-                mVoiceText.setText("");
-                mFaceImage.setImageResource(R.drawable.hello_world);
-
-                mUnderstandPersenter.startUnderstanding();
+            } else if (action.equals(Speech.ACTION_SPEECH_END)) { // 说完了
+                startUnderstand();
             }
         }
+    }
+
+    private void startSpeek(String question, String answer) {
+        mQuestText.setText(question);
+        mAnswerText.setText(answer);
+
+        final Message msg = mSpeechHandler.obtainMessage();
+        msg.what = START_SPEEKING;
+        Bundle data = msg.getData();
+        data = data == null ? new Bundle() : data;
+        data.putString("question", question);
+        data.putString("answer", answer);
+        msg.setData(data);
+
+        mSpeechHandler.sendMessageDelayed(msg, START_SPEEKING_DELAY);
     }
 
     @DebugLog
@@ -287,25 +331,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_settings:
                 startActivity(IntentUtils.generateIntent(this, SettingsActivity.class));
                 break;
+            case R.id.nav_bettery:
+                Snackbar.make(mToolbar, "距离充电桩在1米才能使用", Snackbar.LENGTH_LONG).setAction("确定", v -> {
+                    if (!mBTPresenter.sendGoHome()) {
+                        ToastUtils.show(this, getString(R.string.bt_unconnected));
+                    }
+                }).show();
+                break;
         }
-
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @OnClick({R.id.fab, R.id.bluetooth_state, R.id.home_button})
+    @OnClick({R.id.fab, R.id.bluetooth_state, R.id.speech_state})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.speech_state:
+                toggleSpeech(!mOpenSpeech);
+                break;
             case R.id.fab: // 展示二维码的图片
                 showQRDialog();
                 break;
             case R.id.bluetooth_state:
                 mBTPresenter.connectDeviceList(this);
-                break;
-            case R.id.home_button:
-                if (!mBTPresenter.sendGoHome()) {
-                    ToastUtils.show(this, getString(R.string.bt_unconnected));
-                }
                 break;
         }
     }
@@ -325,6 +373,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void updateBluetoothState(boolean state) {
         mBluetoothState.setText(state ? getString(R.string.bt_connect) : getString(R.string.bt_unconnect));
+    }
+
+    private void startUnderstand() {
+        mQuestText.setText("");
+        mAnswerText.setText("");
+        mFaceImage.setImageResource(R.drawable.hello_world);
+
+        final Message msg = mSpeechHandler.obtainMessage();
+        msg.what = START_UNDERSTANDING;
+        mSpeechHandler.sendMessageDelayed(msg, START_UNDERSTANDING_DELAY);
+    }
+
+    private void updateSpeechState() {
+        mSpeechhState.setText(mOpenSpeech ? getString(R.string.open_understanding) : getString(R.string.close_understanding));
+        if (!mOpenSpeech) {
+            mQuestText.setText("");
+            mAnswerText.setText("");
+            mFaceImage.setImageResource(R.drawable.hello_world);
+        }
+    }
+
+    private void toggleSpeech(boolean openOrClose) {
+        mOpenSpeech = openOrClose;
+        if (openOrClose) {
+            mUnderstandPersenter.startUnderstanding();
+        } else {
+            mUnderstandPersenter.stopUnderstanding();
+            mTtsPresenter.stopSpeaking();
+        }
+        updateSpeechState();
     }
 
 }

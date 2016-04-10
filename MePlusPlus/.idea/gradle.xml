@@ -22,6 +22,22 @@
             <option value="$PROJECT_DIR$/speech" />
           </set>
         </option>
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/agora" />
+            <option value="$PROJECT_DIR$/avos" />
+            <option value="$PROJECT_DIR$/base" />
+            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/events" />
+            <option value="$PROJECT_DIR$/fancy" />
+            <option value="$PROJECT_DIR$/pubnub" />
+            <option value="$PROJECT_DIR$/res" />
+            <option value="$PROJECT_DIR$/robot" />
+            <option value="$PROJECT_DIR$/slamtec" />
+            <option value="$PROJECT_DIR$/speech" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

@@ -23,7 +23,9 @@ public class TtsPresenter {
             Log.d(TAG, "ttsInitListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
                 Log.d(TAG, "onInit：" + code);
-                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+                final Speech speech = new Speech(Speech.ACTION_SPEECH_ERROR);
+                speech.setError(String.valueOf(code));
+                EventUtils.postEvent(new SpeechEvent(speech));
             }
         }
     };
@@ -34,6 +36,8 @@ public class TtsPresenter {
         @Override
         public void onSpeakBegin() {
             Log.d(TAG, "onSpeakBegin");
+            final Speech speech = new Speech(Speech.ACTION_SPEECH_BEGIN);
+            EventUtils.postEvent(new SpeechEvent(speech));
         }
 
         @Override
@@ -63,10 +67,12 @@ public class TtsPresenter {
         @Override
         public void onCompleted(SpeechError error) {
             if (error == null) {
-                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_SPEECH)));
+                EventUtils.postEvent(new SpeechEvent(new Speech(Speech.ACTION_SPEECH_END)));
             } else if (error != null) {
-                Log.d(TAG, "startUnderstanding error: " + error.getErrorDescription());
-                EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+                Log.d(TAG, "onCompleted error: " + error.getErrorDescription());
+                final Speech speech = new Speech(Speech.ACTION_SPEECH_ERROR);
+                speech.setError(error.getPlainDescription(true));
+                EventUtils.postEvent(new SpeechEvent(speech));
             }
         }
 
@@ -115,8 +121,10 @@ public class TtsPresenter {
 //			String path = Environment.getExternalStorageDirectory()+"/tts.pcm";
 //			int code = mTts.synthesizeToUri(text, path, mTtsListener);
         if (code != ErrorCode.SUCCESS) {
-            Log.d(TAG, "onInit：" + code);
-            EventUtils.postEvent(new UnderstandEvent(new Understand(Understand.ACTION_ERROR)));
+            Log.d(TAG, "startSpeaking error: " + code);
+            final Speech speech = new Speech(Speech.ACTION_SPEECH_ERROR);
+            speech.setError(String.valueOf(code));
+            EventUtils.postEvent(new SpeechEvent(speech));
         }
     }
 
