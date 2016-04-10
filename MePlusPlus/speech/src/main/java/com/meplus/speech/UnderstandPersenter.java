@@ -17,6 +17,8 @@ import com.meplus.events.EventUtils;
 import com.meplus.speech.model.Answer;
 import com.meplus.speech.model.Result;
 
+import java.util.List;
+
 public class UnderstandPersenter {
     private static String TAG = UnderstandPersenter.class.getSimpleName();
 
@@ -51,8 +53,12 @@ public class UnderstandPersenter {
                 speech.setQuestion(text);
             } else {// result 有效
                 final Answer answer = result.getAnswer();
+                final List<Result> moreResults = result.getMoreResults();
+                final boolean hasMoreAnswer = moreResults != null && moreResults.size() > 0;
+                final Answer moreAnswer = hasMoreAnswer ? moreResults.get(0).getAnswer() : null;
+                final String moreText = moreAnswer == null ? "" : moreAnswer.getText();
                 speech.setQuestion(result.getText());
-                speech.setAnswer(answer == null ? "" : answer.getText());
+                speech.setAnswer(answer == null ? moreText : answer.getText());
             }
 
             EventUtils.postEvent(new SpeechEvent(speech));

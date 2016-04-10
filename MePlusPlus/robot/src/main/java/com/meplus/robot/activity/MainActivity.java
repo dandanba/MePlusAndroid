@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int START_SPEEKING = 1;
     private static final int START_UNDERSTANDING = 2;
     private static final long START_SPEEKING_DELAY = 100;
-    private static final long START_UNDERSTANDING_DELAY = 2000;
+    private static final long START_UNDERSTANDING_DELAY = 100;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
