@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -92,7 +93,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // keep screen on - turned on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         final Context context = getApplicationContext();
         // bluetooth
         mBTPresenter = new BluetoothPresenter(context);
@@ -173,6 +175,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // keep screen on - turned off
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mSpeechHandler.removeCallbacksAndMessages(null);
 
         mBTPresenter.disconnect();
