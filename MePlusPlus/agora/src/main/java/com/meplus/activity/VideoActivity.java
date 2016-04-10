@@ -21,7 +21,7 @@ import io.agora.sample.agora.R;
  */
 public class VideoActivity extends ChannelActivity {
     private static final String TAG = VideoActivity.class.getSimpleName();
-    private final List<Integer> mUids = new ArrayList<>();
+    private final List<String> mUids = new ArrayList<>();
 
 
     @Override
@@ -58,8 +58,9 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public void onUserOffline(final int uid, final int reason) {
         super.onUserOffline(uid, reason);
-        if (mUids.contains(uid)) {
-            mUids.remove(uid);
+        final String strUid = String.valueOf(uid);
+        if (mUids.contains(strUid)) {
+            mUids.remove(strUid);
             if (mUids.isEmpty()) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -81,8 +82,9 @@ public class VideoActivity extends ChannelActivity {
     @Override
     public synchronized void onUserJoined(int uid, int elapsed) {
         super.onUserJoined(uid, elapsed);
-        if (!mUids.contains(uid)) {
-            mUids.add(uid);
+        final String strUid = String.valueOf(uid);
+        if (!mUids.contains(strUid)) {
+            mUids.add(strUid);
         }
 
     }
