@@ -13,6 +13,7 @@ data class Result(
         @JsonProperty("service") var service: String? = null, //openQA, music
         @JsonProperty("moreResults") var moreResults: List<Result>  ? = null,
         @JsonProperty("webPage") var webPage: WebPage  ? = null,
-        @JsonProperty("data") var data: List<Music>  ? = null
+        @JsonProperty("semantic") var semantic: Semantic  ? = null,
+        @JsonProperty("data") var data: Data  ? = null
 
 )
