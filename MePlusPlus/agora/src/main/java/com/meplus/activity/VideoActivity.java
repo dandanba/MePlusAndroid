@@ -76,6 +76,10 @@ public class VideoActivity extends ChannelActivity {
     public void onNetworkQuality(final int quality) {
         super.onNetworkQuality(quality);
         Log.i(TAG, "network quality: " + quality);
+//        if (quality == 6) {
+//            Toast.makeText(VideoActivity.this, "信号太差，稍后再试！", Toast.LENGTH_SHORT).show();
+//            doBackPressed();
+//        }
     }
 
 
