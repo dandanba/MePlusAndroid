@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -219,10 +220,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (action.equals(Speech.ACTION_UNDERSTAND_ERROR)) { // understand的错误
                 startUnderstand();
             } else if (action.equals(Speech.ACTION_UNDERSTAND_END)) {// 理解后的内容
-                final String answer = speech.getAnswer();
                 final String question = speech.getQuestion();
-
-                startSpeek(question, answer);
+                final String answer = speech.getAnswer();
+                startSpeek(question, TextUtils.isEmpty(answer) ? "啊，我真的不知道啊。" : answer);
             } else if (action.equals(Speech.ACTION_UNDERSTAND_BEGINE)) { // 开始理解
                 mFaceImage.setImageResource(R.drawable.thinking_anim); // thinking
                 AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();

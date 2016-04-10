@@ -62,7 +62,7 @@
             android:src="@drawable/listener01" />
 
         <TextView
-            android:id="@+id/answer_text"
+            android:id="@+id/question_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -71,10 +71,11 @@
             android:gravity="center"
             android:lines="1"
             android:textColor="#ffffff"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
+
 
         <TextView
-            android:id="@+id/question_text"
+            android:id="@+id/answer_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -83,7 +84,8 @@
             android:gravity="center"
             android:lines="5"
             android:textColor="#ffffff"
-            android:textSize="17sp" />
+            android:textSize="15sp" />
+
     </LinearLayout>
 
 </RelativeLayout>
