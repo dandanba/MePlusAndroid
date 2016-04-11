@@ -16,6 +16,7 @@ import com.meplus.avos.objects.AVOSRobot;
 import com.meplus.avos.objects.AVOSUser;
 import com.meplus.client.R;
 import com.meplus.client.app.MPApplication;
+import com.meplus.punub.ErrorEvent;
 import com.meplus.punub.PubnubPresenter;
 import com.meplus.client.utils.IntentUtils;
 import com.meplus.client.viewholder.NavHeaderViewHolder;
@@ -25,6 +26,7 @@ import com.meplus.events.SaveEvent;
 import com.meplus.presenters.AgoraPresenter;
 import com.meplus.punub.Command;
 import com.meplus.punub.CommandEvent;
+import com.meplus.punub.StateEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -32,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ToastUtils;
 import hugo.weaving.DebugLog;
 import io.agora.sample.agora.AgoraApplication;
 
@@ -161,6 +164,39 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onStateEvent(StateEvent event) {
+        if (event.ok()) {
+            final Command command = event.getCommand();
+            final String message = command.getMessage();
+
+            switch (message) {
+                case Command.ACTION_LEFT:
+                case Command.ACTION_UP:
+                case Command.ACTION_RIGHT:
+                case Command.ACTION_DOWN:
+                case Command.ACTION_STOP:
+                    // TODO
+                    break;
+                case Command.ACTION_CALL:
+                    startActivity(IntentUtils.generateCallIntent(this, mChannel, mUserId));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(ErrorEvent event) {
+        if (event.ok()) {
+            final String errorString = event.getErrorString();
+            ToastUtils.show(this, errorString);
+        }
+    }
+
     @OnClick(R.id.fab)
     public void onClick(View view) {
         switch (view.getId()) {
@@ -170,7 +206,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     if (robot == null) {
                         startActivity(IntentUtils.generateIntent(this, BindRobotActivity.class));
                     } else {
-                        startActivity(IntentUtils.generateCallIntent(this, mChannel, mUserId));
                         mPubnubPresenter.publish(getApplicationContext(), Command.ACTION_CALL);
                     }
                 }).show();

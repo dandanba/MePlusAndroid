@@ -31,7 +31,7 @@ public class PNCallback extends Callback {
 
     @Override
     public void errorCallback(String channel, PubnubError error) {
-        final String message = "errorCallback: " + error.getErrorString();
+        final String message = "errorCallback: " + error.errorCode + " " + error.getErrorString();
         log(message);
     }
 

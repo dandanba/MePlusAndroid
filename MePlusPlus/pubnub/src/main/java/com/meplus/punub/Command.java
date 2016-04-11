@@ -51,5 +51,4 @@ public class Command {
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
-
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.meplus.events.EventUtils;
 import com.meplus.punub.utils.JsonUtils;
 import com.pubnub.api.Pubnub;
+import com.pubnub.api.PubnubError;
 import com.pubnub.api.PubnubException;
 
 
@@ -87,7 +88,20 @@ public class PubnubPresenter {
         message = JsonUtils.writeValueAsString(command);
         mPubnub.publish(mChannel, message, new PNCallback(context) {
             @Override
-            public void successCallback(String channel, Object message) {
+            public void successCallback(String channel, Object response) {
+                super.successCallback(channel, response);
+                final StateEvent event = new StateEvent();
+                event.setCommand(command);
+                EventUtils.postEvent(event);
+            }
+
+            @Override
+            public void errorCallback(String channel, PubnubError error) {
+                super.errorCallback(channel, error);
+                final ErrorEvent event = new ErrorEvent();
+                event.setCommand(command);
+                event.setErrorString(error.getErrorString());
+                EventUtils.postEvent(event);
             }
         });
     }
