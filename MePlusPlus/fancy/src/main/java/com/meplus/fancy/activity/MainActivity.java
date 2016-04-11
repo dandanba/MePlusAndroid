@@ -1,7 +1,6 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.meplus.fancy.R;
@@ -15,6 +14,7 @@ import java.util.TreeMap;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.trinea.android.common.util.ToastUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.button1:
                 final TreeMap<String, String> args = new TreeMap<>();
-                final String Data = "samplestring1";
+                final String Data = "samplestring1";//"{\"babyId\":\"0\",\"check\":\"1F5A0FD81A3F49B8BC77C4620A688AF2\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
                 final String LibraryId = "samplestring2";
                 args.put("Data", Data);
                 args.put("LibraryId", LibraryId);
@@ -56,8 +56,8 @@ public class MainActivity extends BaseActivity {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                response -> Log.i(TAG, response.toString()),
-                                throwable -> Log.i(TAG, throwable.toString()),
+                                response -> ToastUtils.show(this, response.toString()),
+                                throwable -> ToastUtils.show(this, throwable.toString()),
                                 () -> {
                                 }
                         );

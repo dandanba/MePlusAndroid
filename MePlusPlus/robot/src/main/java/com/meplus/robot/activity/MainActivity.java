@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private String mChannel;
     private boolean mOpenSpeech = false;
     private Handler mSpeechHandler = new Handler();
+    private boolean mBluetoothSupport = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // bluetooth
         mBTPresenter = new BluetoothPresenter(context);
         if (!mBTPresenter.isBluetoothAvailable()) { // 蓝牙模块硬件支持
+            mBluetoothSupport = false;
             ToastUtils.show(context, getString(R.string.bt_unsupport));
             finish();
             return;
@@ -175,6 +177,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onDestroy();
         // keep screen on - turned off
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        if (!mBluetoothSupport) {
+            return;
+        }
         mSpeechHandler.removeCallbacksAndMessages(null);
 
         mBTPresenter.disconnect();
