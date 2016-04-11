@@ -23,6 +23,7 @@ public class VideoActivity extends ChannelActivity {
     private static final String TAG = VideoActivity.class.getSimpleName();
     private final List<String> mUids = new ArrayList<>();
 
+    private final boolean 新版本有问题 = true;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -61,7 +62,7 @@ public class VideoActivity extends ChannelActivity {
         final String strUid = String.valueOf(uid);
         if (mUids.contains(strUid)) {
             mUids.remove(strUid);
-            if (mUids.isEmpty()) {
+            if (新版本有问题 || mUids.isEmpty()) { // TODO 验证1.2.1版本是否有问题
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -90,7 +91,6 @@ public class VideoActivity extends ChannelActivity {
         if (!mUids.contains(strUid)) {
             mUids.add(strUid);
         }
-
     }
 
     @Override
