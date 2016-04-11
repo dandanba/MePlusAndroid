@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * Created by dandanba on 3/30/16.
  */
-data class Data(
-        @JsonProperty("result") var result: List<Common> ? = null
+data class Datetime(
+        @JsonProperty("date") var date: String,
+        @JsonProperty("type") var type: String
 )

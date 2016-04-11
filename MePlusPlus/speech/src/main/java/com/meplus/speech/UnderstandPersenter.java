@@ -49,16 +49,30 @@ public class UnderstandPersenter {
             }
 
             final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_END);
+            String answerText;
+            String questionText;
             if (result == null) {
-                speech.setQuestion(text);
+                questionText = TextUtils.isEmpty(text) ? "null" : text;
+                answerText = Constants.我真的不知道啊;
             } else {// result 有效
+                questionText = result.getText();
+
                 final Answer answer = result.getAnswer();
                 final List<Result> moreResults = result.getMoreResults();
-                final boolean hasMoreAnswer = moreResults != null && moreResults.size() > 0;
-                final Answer moreAnswer = hasMoreAnswer ? moreResults.get(0).getAnswer() : null;
+                final Answer moreAnswer = moreResults != null && moreResults.size() > 0 ? moreResults.get(0).getAnswer() : null;
                 final String moreText = moreAnswer == null ? "" : moreAnswer.getText();
-                speech.setQuestion(result.getText());
-                speech.setAnswer(answer == null ? moreText : answer.getText());
+                String service = TextUtils.isEmpty(service = result.getService()) ? "" : Constants.I_DO_NOT_KNOW + service;
+
+                answerText = answer == null ? moreText : answer.getText(); // moreResults
+                answerText = TextUtils.isEmpty(answerText) ? service : answerText; // service
+                answerText = TextUtils.isEmpty(answerText) ? Constants.我真的不知道啊 : answerText;
+            }
+            speech.setQuestion(questionText);
+            speech.setAnswer(answerText);
+
+            // 处理特别的语音指令
+            if (questionText.equals(Constants.别说了)) { // 特别的指令
+                speech.setAction(Speech.ACTION_STOP);
             }
 
             EventUtils.postEvent(new SpeechEvent(speech));

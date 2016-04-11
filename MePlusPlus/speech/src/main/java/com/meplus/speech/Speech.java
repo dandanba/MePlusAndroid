@@ -12,6 +12,8 @@ public class Speech {
     public static final String ACTION_UNDERSTAND_END = "understand_end";            // understand end
     public static final String ACTION_UNDERSTAND_ERROR = "understand_error";        // understand error
 
+    public static final String ACTION_STOP = "stop";        // stop
+
     private String question;
     private String answer;
     private String action;

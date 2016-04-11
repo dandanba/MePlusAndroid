@@ -12,7 +12,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,6 +34,7 @@ import com.meplus.robot.events.BluetoothEvent;
 import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
+import com.meplus.speech.Constants;
 import com.meplus.speech.Speech;
 import com.meplus.speech.SpeechEvent;
 import com.meplus.speech.TtsPresenter;
@@ -140,24 +140,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mHeaderHolder.updateView(robot);
 
         updateBluetoothState(false);
-        toggleSpeech(mOpenSpeech);
         updateSOC(0);
+        toggleSpeech(mOpenSpeech);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (mOpenSpeech) {
-            toggleSpeech(true);
+            startUnderstand();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mOpenSpeech) {
-            toggleSpeech(false);
-        }
+        toggleSpeech(false);
     }
 
     @Override
@@ -204,7 +202,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 return true;
             case START_UNDERSTANDING:
                 if (mOpenSpeech) {
-                    toggleSpeech(true);
+                    mUnderstandPersenter.startUnderstanding();
                 }
                 return true;
             default:
@@ -226,7 +224,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (action.equals(Speech.ACTION_UNDERSTAND_END)) {// 理解后的内容
                 final String question = speech.getQuestion();
                 final String answer = speech.getAnswer();
-                startSpeek(question, TextUtils.isEmpty(answer) ? "我真的不知道啊。" : answer);
+                startSpeek(question, answer); // 此处的answer一定不为null
             } else if (action.equals(Speech.ACTION_UNDERSTAND_BEGINE)) { // 开始理解
                 mFaceImage.setImageResource(R.drawable.thinking_anim); // thinking
                 AnimationDrawable animationDrawable = (AnimationDrawable) mFaceImage.getDrawable();
@@ -239,6 +237,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }
             } else if (action.equals(Speech.ACTION_SPEECH_END)) { // 说完了
                 startUnderstand();
+            } else if (action.equals(Speech.ACTION_STOP)) { // 别说了
+                toggleSpeech(false);
             }
         }
     }
@@ -407,6 +407,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mSpeechHandler.sendMessageDelayed(msg, START_UNDERSTANDING_DELAY);
     }
 
+    private void stopUnderstand() {
+        mUnderstandPersenter.stopUnderstanding();
+        mTtsPresenter.stopSpeaking();
+    }
+
     private void updateSpeechState() {
         mSpeechhState.setText(mOpenSpeech ? getString(R.string.open_understanding) : getString(R.string.close_understanding));
         if (!mOpenSpeech) {
@@ -419,10 +424,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void toggleSpeech(boolean openOrClose) {
         mOpenSpeech = openOrClose;
         if (openOrClose) {
-            mUnderstandPersenter.startUnderstanding();
+            startSpeek("", Constants.嘿_我是多我);
         } else {
-            mUnderstandPersenter.stopUnderstanding();
-            mTtsPresenter.stopSpeaking();
+            stopUnderstand();
         }
         updateSpeechState();
     }

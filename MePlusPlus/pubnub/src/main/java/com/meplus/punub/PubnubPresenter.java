@@ -79,10 +79,8 @@ public class PubnubPresenter {
 
     public void publish(Context context, String message) {
         Log.i(TAG, "publish :" + ",message :" + message);
-        if (TextUtils.isEmpty(mChannel)) {
-            return;
-        }
-        if (message.equals("")) return; // Return if empty
+        if (TextUtils.isEmpty(mChannel)) return; // Return if empty
+        if (TextUtils.isEmpty(message)) return; // Return if empty
 
         final Command command = new Command(mPubnub.getUUID(), message);
         message = JsonUtils.writeValueAsString(command);
