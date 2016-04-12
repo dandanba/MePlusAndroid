@@ -35,6 +35,7 @@ import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
 import com.meplus.speech.Constants;
+import com.meplus.speech.LanEvent;
 import com.meplus.speech.Speech;
 import com.meplus.speech.SpeechEvent;
 import com.meplus.speech.TtsPresenter;
@@ -221,7 +222,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUnderstandEvent(SpeechEvent event) {
         if (event.ok()) {
-            final Speech speech = event.getUnderstand();
+            final Speech speech = event.getSpeech();
             final String action = speech.getAction();
             if (action.equals(Speech.ACTION_SPEECH_ERROR)) { // tts错误
                 ToastUtils.show(this, speech.getError());
@@ -246,6 +247,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else if (action.equals(Speech.ACTION_STOP)) { // 别说了
                 toggleSpeech(false);
             }
+        }
+    }
+
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLanEvent(LanEvent event) {
+        if (event.ok()) {
+            mUnderstandPersenter.setParam();
+            mTtsPresenter.setParam();
         }
     }
 
@@ -430,7 +441,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void toggleSpeech(boolean openOrClose) {
         mOpenSpeech = openOrClose;
         if (openOrClose) {
-            startSpeek("", Constants.嘿_我是多我);
+            startSpeek(Constants.getHelloMeplus(), Constants.getHelloMeplus());
         } else {
             stopUnderstand();
         }

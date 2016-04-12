@@ -53,7 +53,7 @@ public class UnderstandPersenter {
             String questionText;
             if (result == null) {
                 questionText = TextUtils.isEmpty(text) ? "null" : text;
-                answerText = Constants.我真的不知道啊;
+                answerText = Constants.getNoAnswer();// 我真的不知道啊;
             } else {// result 有效
                 questionText = result.getText();
 
@@ -65,13 +65,13 @@ public class UnderstandPersenter {
 
                 answerText = answer == null ? moreText : answer.getText(); // moreResults
                 answerText = TextUtils.isEmpty(answerText) ? service : answerText; // service
-                answerText = TextUtils.isEmpty(answerText) ? Constants.我真的不知道啊 : answerText;
+                answerText = TextUtils.isEmpty(answerText) ? Constants.getNoAnswer() : answerText;
             }
             speech.setQuestion(questionText);
             speech.setAnswer(answerText);
 
             // 处理特别的语音指令
-            if (questionText.equals(Constants.别说了)) { // 特别的指令
+            if (questionText.equals(Constants.getShutp())) { // 特别的指令
                 speech.setAction(Speech.ACTION_STOP);
             }
 
@@ -130,7 +130,7 @@ public class UnderstandPersenter {
         // 初始化对象
         mSpeechUnderstander = SpeechUnderstander.createUnderstander(cnotext, mSpeechUdrInitListener);
         // 设置参数
-        setParam(Constants.LANG);
+        setParam();
     }
 
     public void destroy() {
@@ -170,15 +170,17 @@ public class UnderstandPersenter {
         mSpeechUnderstander.stopUnderstanding();
     }
 
-    public void setParam(String lang) {
-        if (lang.equals("en_us")) {
+    public void setParam() {
+        // 清空参数
+        mSpeechUnderstander.setParameter(SpeechConstant.PARAMS, null);
+        if (Constants.LANG.equals(Constants.ZH_LANG)) {
             // 设置语言
-            mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "en_us");
-        } else {
-            // 设置语言
-            mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+            mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, Constants.ZH_LANG);
             // 设置语言区域
-            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, lang);
+            mSpeechUnderstander.setParameter(SpeechConstant.ACCENT, "mandarin");
+        } else if (Constants.LANG.equals(Constants.EN_LANG)) {
+            // 设置语言
+            mSpeechUnderstander.setParameter(SpeechConstant.LANGUAGE, Constants.EN_LANG);
         }
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
         mSpeechUnderstander.setParameter(SpeechConstant.VAD_BOS, "4000");

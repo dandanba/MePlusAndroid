@@ -143,14 +143,16 @@ public class TtsPresenter {
         mTts.resumeSpeaking();
     }
 
-    private void setParam() {
+    public void setParam() {
         // 清空参数
         mTts.setParameter(SpeechConstant.PARAMS, null);
         // 根据合成引擎设置相应参数
         if (mEngineType.equals(SpeechConstant.TYPE_CLOUD)) {
+
+
             mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
             // 设置在线合成发音人
-            mTts.setParameter(SpeechConstant.VOICE_NAME, Constants.VOICER);
+            mTts.setParameter(SpeechConstant.VOICE_NAME, Constants.LANG.equals(Constants.ZH_LANG) ? Constants.ZH_VOICER : Constants.LANG.equals(Constants.EN_LANG) ? Constants.EN_VOICER : Constants.ZH_VOICER);
             //设置合成语速
             mTts.setParameter(SpeechConstant.SPEED, "50");
             //设置合成音调

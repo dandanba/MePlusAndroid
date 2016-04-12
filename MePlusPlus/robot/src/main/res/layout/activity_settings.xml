@@ -19,97 +19,150 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/me_logo_bg_white"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent">
 
 
         <LinearLayout
-            android:id="@+id/password_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@drawable/me_logo_bg_white"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <TextView
+
+            <LinearLayout
+                android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:drawableLeft="@drawable/me_icon_password"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="系统自检"
-                android:textColor="@color/meItemTextColor"
-                android:textSize="@dimen/meTitleSize" />
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/meDivider" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:drawableLeft="@drawable/me_icon_password"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="系统自检"
+                    android:textColor="@color/meItemTextColor"
+                    android:textSize="@dimen/meTitleSize" />
 
-        </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/meDivider" />
+
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/feeback_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:drawableLeft="@drawable/me_icon_feedback"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="意见反馈"
-                android:textColor="@color/meItemTextColor"
-                android:textSize="@dimen/meTitleSize" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/meDivider" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/update_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/feeback_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:drawableLeft="@drawable/me_icon_feedback"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="版本检查"
-                android:textColor="@color/meItemTextColor"
-                android:textSize="@dimen/meTitleSize" />
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <View
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:drawableLeft="@drawable/me_icon_feedback"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="意见反馈"
+                    android:textColor="@color/meItemTextColor"
+                    android:textSize="@dimen/meTitleSize" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/meDivider" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/update_layout"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/meDivider" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:drawableLeft="@drawable/me_icon_feedback"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="版本检查"
+                    android:textColor="@color/meItemTextColor"
+                    android:textSize="@dimen/meTitleSize" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/meDivider" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/speech_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/me_icon_feedback"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="发音切换"
+                        android:textColor="@color/meItemTextColor"
+                        android:textSize="@dimen/meTitleSize" />
+
+                    <com.kyleduo.switchbutton.SwitchButton
+                        android:id="@+id/sb_text"
+                        style="@style/SwitchButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16dp"
+                        app:kswTextOff="En"
+                        app:kswTextOn="Zh" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/meDivider" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

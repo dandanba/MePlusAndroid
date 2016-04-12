@@ -7,9 +7,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.meplus.activity.BaseActivity;
+import com.meplus.events.EventUtils;
 import com.meplus.robot.R;
 import com.meplus.robot.utils.SnackBarUtils;
+import com.meplus.speech.LanEvent;
 import com.meplus.utils.FIRUtils;
 import com.meplus.utils.IntentUtils;
 
@@ -26,6 +29,9 @@ public class SettingsActivity extends BaseActivity {
     LinearLayout mRoot;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+
+    @Bind(R.id.sb_text)
+    SwitchButton mSpeechLanButton;
 
     private final VersionCheckCallback mCallback = new VersionCheckCallback() {
 
@@ -59,6 +65,13 @@ public class SettingsActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        mSpeechLanButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            com.meplus.speech.Constants.LANG = isChecked ? com.meplus.speech.Constants.ZH_LANG : com.meplus.speech.Constants.EN_LANG;
+            EventUtils.postEvent(new LanEvent(isChecked ? LanEvent.ZH_LANG : LanEvent.EN_LANG));
+        });
+
+        mSpeechLanButton.setChecked(com.meplus.speech.Constants.LANG.equals(com.meplus.speech.Constants.ZH_LANG));
     }
 
     @Override
