@@ -1,6 +1,6 @@
 package com.meplus.robot.app;
 
-import com.meplus.speech.SpeechUtil;
+import com.meplus.speech.utils.SpeechUtil;
 
 /**
  * Created by dandanba on 3/1/16.

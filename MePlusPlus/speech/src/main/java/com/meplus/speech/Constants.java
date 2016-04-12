@@ -4,7 +4,9 @@ package com.meplus.speech;
  * Created by dandanba on 4/7/16.
  */
 public class Constants {
-
+public static String TANS_APP_ID = "20160412000018503";
+public static String TANS_KEY = "s8NOOwyo2zOHi9pU7F2W";
+    // lang
     public static String LANG = "zh_cn";// "en_us"
 
     // lang
@@ -14,8 +16,7 @@ public class Constants {
     public final static String ZH_VOICER = "nannan";
     public final static String EN_VOICER = "vimary";
     // app_id
-    public static String APP_ID = "55d7d8a9";
-
+    public static String SPEECH_APP_ID = "55d7d8a9";
     // 没有结果，但是包含了service的回答
     public final static String I_DO_NOT_KNOW = "I do not know ";
 
@@ -34,6 +35,5 @@ public class Constants {
     public static String getShutp() {
         return LANG.equals(ZH_LANG) ? "别说了。" : LANG.equals(EN_LANG) ? "Don't say it." : "别说了。";
     }
-
 
 }

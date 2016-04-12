@@ -35,11 +35,11 @@ import com.meplus.robot.presenters.BluetoothPresenter;
 import com.meplus.robot.viewholder.NavHeaderViewHolder;
 import com.meplus.robot.viewholder.QRViewHolder;
 import com.meplus.speech.Constants;
-import com.meplus.speech.LanEvent;
-import com.meplus.speech.Speech;
-import com.meplus.speech.SpeechEvent;
-import com.meplus.speech.TtsPresenter;
-import com.meplus.speech.UnderstandPersenter;
+import com.meplus.speech.event.LangEvent;
+import com.meplus.speech.event.Speech;
+import com.meplus.speech.event.SpeechEvent;
+import com.meplus.speech.presents.TtsPresenter;
+import com.meplus.speech.presents.UnderstandPersenter;
 import com.meplus.utils.IntentUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -253,7 +253,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLanEvent(LanEvent event) {
+    public void onLanEvent(LangEvent event) {
         if (event.ok()) {
             mUnderstandPersenter.setParam();
             mTtsPresenter.setParam();

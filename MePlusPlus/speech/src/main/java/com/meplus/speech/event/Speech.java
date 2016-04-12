@@ -1,4 +1,4 @@
-package com.meplus.speech;
+package com.meplus.speech.event;
 
 /**
  * Created by GleasonK on 6/25/15.

@@ -1,4 +1,4 @@
-package com.meplus.speech;
+package com.meplus.speech.presents;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,20 +14,37 @@ import com.iflytek.cloud.SpeechUnderstander;
 import com.iflytek.cloud.SpeechUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
 import com.meplus.events.EventUtils;
+import com.meplus.speech.Constants;
+import com.meplus.speech.api.ApiService;
+import com.meplus.speech.event.Speech;
+import com.meplus.speech.event.SpeechEvent;
 import com.meplus.speech.model.Answer;
 import com.meplus.speech.model.Result;
+import com.meplus.speech.model.Trans;
+import com.meplus.speech.model.TransResult;
+import com.meplus.speech.utils.JsonUtils;
+import com.meplus.speech.utils.RetrofitUtil;
 
 import java.util.List;
 
+import cn.trinea.android.common.util.DigestUtils;
+import retrofit2.Retrofit;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 public class UnderstandPersenter {
     private static String TAG = UnderstandPersenter.class.getSimpleName();
-
+    // translate url
+    public final String BASE_URL = "http://api.fanyi.baidu.com/api/trans/vip/";
+    private Retrofit mRetrofit;
+    private ApiService mApiService;
     //初始化监听器（语音到语义）。
     private final InitListener mSpeechUdrInitListener = new InitListener() {
         @Override
         public void onInit(int code) {
             Log.d(TAG, "speechUnderstanderListener init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
+            if (code != ErrorCode.SUCCESS) { 
                 Log.d(TAG, "onInit：" + code);
                 final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_ERROR);
                 speech.setError(String.valueOf(code));
@@ -50,7 +67,7 @@ public class UnderstandPersenter {
 
             final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_END);
             String answerText;
-            String questionText;
+            final String questionText;
             if (result == null) {
                 questionText = TextUtils.isEmpty(text) ? "null" : text;
                 answerText = Constants.getNoAnswer();// 我真的不知道啊;
@@ -65,17 +82,48 @@ public class UnderstandPersenter {
 
                 answerText = answer == null ? moreText : answer.getText(); // moreResults
                 answerText = TextUtils.isEmpty(answerText) ? service : answerText; // service
-                answerText = TextUtils.isEmpty(answerText) ? Constants.getNoAnswer() : answerText;
             }
-            speech.setQuestion(questionText);
-            speech.setAnswer(answerText);
 
             // 处理特别的语音指令
             if (questionText.equals(Constants.getShutp())) { // 特别的指令
                 speech.setAction(Speech.ACTION_STOP);
-            }
+            } else {
+                if (!TextUtils.isEmpty(answerText)) {
+                    if (Constants.LANG.equals(Constants.ZH_LANG)) {
+                        postSpeechEvent(speech, answerText, questionText);
+                    } else if (Constants.LANG.equals(Constants.EN_LANG)) {
+                        // TODO translate
+                        final long salt = System.currentTimeMillis();
+                        mApiService.translate(Constants.TANS_APP_ID, answerText, "zh", "en", salt, sign(Constants.TANS_APP_ID, answerText, salt, Constants.TANS_KEY))
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        new Action1<TransResult>() {
+                                            @Override
+                                            public void call(TransResult transResult) {
+                                                final List<Trans> results = transResult.getTrans_result();
+                                                final int size = results == null ? 0 : results.size();
+                                                final String answerText = size > 0 ? results.get(0).getDst() : "";
+                                                postSpeechEvent(speech, answerText, questionText);
+                                            }
+                                        }, new Action1<Throwable>() {
 
-            EventUtils.postEvent(new SpeechEvent(speech));
+                                            @Override
+                                            public void call(Throwable throwable) {
+                                                final String answerText = Constants.getNoAnswer();
+                                                postSpeechEvent(speech, answerText, questionText);
+                                            }
+                                        }
+
+                                );
+                    }
+
+                } else {
+                    answerText = Constants.getNoAnswer();
+                    postSpeechEvent(speech, answerText, questionText);
+                }
+
+            }
         }
 
         @Override
@@ -119,6 +167,12 @@ public class UnderstandPersenter {
         }
     };
 
+    //    appid+q+salt+密钥 的MD5值
+    public String sign(String appid, String q, long salt, String key) {
+        final String sign = DigestUtils.md5(appid + q + salt + key);
+        return sign;
+    }
+
     private SpeechUnderstander mSpeechUnderstander;  // 语义理解对象（语音到语义）。
 
     public void create(Context cnotext) {
@@ -129,6 +183,8 @@ public class UnderstandPersenter {
          */
         // 初始化对象
         mSpeechUnderstander = SpeechUnderstander.createUnderstander(cnotext, mSpeechUdrInitListener);
+        mRetrofit = RetrofitUtil.initClient(BASE_URL);
+        mApiService = mRetrofit.create(ApiService.class);
         // 设置参数
         setParam();
     }
@@ -193,4 +249,13 @@ public class UnderstandPersenter {
         mSpeechUnderstander.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         mSpeechUnderstander.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/sud.wav");
     }
+
+    private void postSpeechEvent(Speech speech, String answerText, String questionText) {
+        answerText = TextUtils.isEmpty(answerText) ? Constants.getNoAnswer() : answerText;
+        speech.setQuestion(questionText);
+        speech.setAnswer(answerText);
+        Log.d(TAG, "postSpeechEvent: " + questionText + "," + answerText);
+        EventUtils.postEvent(new SpeechEvent(speech));
+    }
+
 }

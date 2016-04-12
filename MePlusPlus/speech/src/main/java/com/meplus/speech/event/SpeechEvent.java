@@ -1,4 +1,4 @@
-package com.meplus.speech;
+package com.meplus.speech.event;
 
 
 import com.meplus.events.BaseEvent;

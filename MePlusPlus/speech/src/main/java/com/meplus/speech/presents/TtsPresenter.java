@@ -1,4 +1,4 @@
-package com.meplus.speech;
+package com.meplus.speech.presents;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
 import com.meplus.events.EventUtils;
+import com.meplus.speech.Constants;
+import com.meplus.speech.event.Speech;
+import com.meplus.speech.event.SpeechEvent;
 
 public class TtsPresenter {
     private static String TAG = TtsPresenter.class.getSimpleName();

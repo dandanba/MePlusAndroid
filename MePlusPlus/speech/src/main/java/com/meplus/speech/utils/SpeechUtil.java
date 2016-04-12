@@ -1,8 +1,9 @@
-package com.meplus.speech;
+package com.meplus.speech.utils;
 
 import android.app.Application;
 
 import com.iflytek.cloud.SpeechUtility;
+import com.meplus.speech.Constants;
 
 /**
  * Created by dandanba on 4/7/16.
@@ -18,7 +19,7 @@ public class SpeechUtil {
 
         // 注意： appid 必须和下载的SDK保持一致，否则会出现10407错误
 
-        SpeechUtility.createUtility(application, "appid=" + Constants.APP_ID);
+        SpeechUtility.createUtility(application, "appid=" + Constants.SPEECH_APP_ID);
 
         // 以下语句用于设置日志开关（默认开启），设置成false时关闭语音云SDK日志打印
         // Setting.setShowLog(false);

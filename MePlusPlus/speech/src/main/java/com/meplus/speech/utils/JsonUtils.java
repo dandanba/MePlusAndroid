@@ -1,4 +1,4 @@
-package com.meplus.speech;
+package com.meplus.speech.utils;
 
 import android.util.Log;
 
@@ -32,4 +32,7 @@ public class JsonUtils {
         return null;
     }
 
+    public static ObjectMapper getMapper() {
+        return mapper;
+    }
 }
