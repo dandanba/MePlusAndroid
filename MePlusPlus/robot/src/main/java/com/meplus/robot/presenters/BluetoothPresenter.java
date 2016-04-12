@@ -230,20 +230,66 @@ public class BluetoothPresenter {
     public void receivedData(byte[] data, String message) {
         if (!ENABLE) return;
 
-        if (data != null && data.length >= 0x0A) {
+        if (data != null && data.length >= 0x22) {
 
             final byte Head1 = data[0];
             final byte Head2 = data[1];
             final byte Length = data[2];
 
-            if (Head1 == 0x88 && Head2 == 0xBB && Length == 0x0A) {
+            if (Head1 == 0x88 && Head2 == 0xBB && Length == 0x22) {
+//                Bit 0	充电器是否接触，1：接触，0：未接触
+//                Bit 1	充电器是否连接，1：连接，0：未连接
+//                Bit 2	电机电源状态，1：打开，0：关闭
+//                Bit 3	保留
+//                Bit 4	保留
+//                Bit 5	保留
+//                Bit 6	保留
+//                Bit 7	保留
                 final byte BMS_Status = data[3];
+//                Bit 0	电压报警
+//                Bit 1	电压错误
+//                Bit 2	电流报警
+//                Bit 3	电流错误
+//                Bit 4	温度报警
+//                Bit 5	温度错误
+//                Bit 6	容量报警
+//                Bit 7	容量错误
                 final byte BMS_Error = data[4];
+//                0-100 单位%
                 final byte SOC = data[5]; //
                 final byte Voltage_H = data[6];
                 final byte Voltage_L = data[7];
                 final byte Current_H = data[8];
                 final byte Current_L = data[9];
+                // 左轮电机编码器（4 Byte）
+                // data[10]-data[13];
+                // 右轮电机编码器（4 Byte）
+                // data[14]-data[17];
+                // 0-255 单位cm
+                // final byte U1_Dis = data[18];
+                // 0-255 单位cm
+                // final byte U2_Dis = data[19];
+                // 0-255 单位cm
+                // final byte U3_Dis = data[20];
+                // 0-255 单位cm
+                // final byte U4_Dis = data[21];
+                // 0-255 单位cm
+                // final byte U5_Dis = data[22];
+                // 防跌落传感器
+                // final byte Fall_IR = data[23];
+                // 航向角
+                // data[24]-data[25;
+                // 俯仰角
+                // data[26]-data[27];
+                // 横滚角
+                // data[28]-data[29];
+                // 通信异常
+                // data[30];
+                // 系统故障
+                // data[31];
+                // 校验和
+                // data[33];
+
                 final String info = String.format("%1$x,%2$x,%3$x,%4$x,%5$x,%6$x,%7$x,%8$x,%9$x,%10$x", Head1, Head2, Length, BMS_Status, BMS_Error, SOC, Voltage_H, Voltage_L, Current_H, Current_L);
                 Log.i(TAG, info);
                 final BluetoothEvent event = new BluetoothEvent();

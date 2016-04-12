@@ -44,7 +44,7 @@ public class UnderstandPersenter {
         @Override
         public void onInit(int code) {
             Log.d(TAG, "speechUnderstanderListener init() code = " + code);
-            if (code != ErrorCode.SUCCESS) { 
+            if (code != ErrorCode.SUCCESS) {
                 Log.d(TAG, "onInit：" + code);
                 final Speech speech = new Speech(Speech.ACTION_UNDERSTAND_ERROR);
                 speech.setError(String.valueOf(code));
