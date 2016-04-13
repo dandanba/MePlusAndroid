@@ -5,10 +5,6 @@
 
     <uses-sdk tools:overrideLibrary="com.facebook.shimmer" />
 
-    <!-- bluetooth -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <application
         android:name=".app.MPApplication"
         android:allowBackup="true"
@@ -49,11 +45,6 @@
         <activity
             android:name=".activity.TestsActivity"
             android:screenOrientation="landscape" />
-        <!-- bluetooth -->
-        <activity
-            android:name=".activity.DeviceListActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/StartAppTheme" />
         <!-- agora -->
         <activity
             android:name="com.meplus.activity.VideoActivity"
