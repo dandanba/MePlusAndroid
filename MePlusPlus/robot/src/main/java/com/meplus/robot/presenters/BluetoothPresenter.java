@@ -198,17 +198,17 @@ public class BluetoothPresenter {
         byte CheckSum;
 
         if (action.equals(Command.ACTION_UP)) {
-            V1 = V*3/2;
-            V2 = V*3/2;
+            V1 = V * 3 / 2;
+            V2 = V * 3 / 2;
         } else if (action.equals(Command.ACTION_DOWN)) {
             V1 = -V;
             V2 = -V;
         } else if (action.equals(Command.ACTION_LEFT)) {
-            V1 = -V/2;
-            V2 = V/2;
+            V1 = -V / 2;
+            V2 = V / 2;
         } else if (action.equals(Command.ACTION_RIGHT)) {
-            V1 = V/2;
-            V2 = -V/2;
+            V1 = V / 2;
+            V2 = -V / 2;
         } else if (action.equals(Command.ACTION_STOP)) {
             V1 = 0;
             V2 = 0;
@@ -237,7 +237,7 @@ public class BluetoothPresenter {
             final byte Head2 = data[1];
             final byte Length = data[2];
 
-            if (Head1 == 0x88 && Head2 == 0xBB && Length == 0x22) {
+            if (Head1 == ((byte) 0x88) && Head2 == ((byte) 0xBB) && Length == ((byte) 0x22)) {
 //                Bit 0	充电器是否接触，1：接触，0：未接触
 //                Bit 1	充电器是否连接，1：连接，0：未连接
 //                Bit 2	电机电源状态，1：打开，0：关闭

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/agora/agora.iml" filepath="$PROJECT_DIR$/agora/agora.iml" />
       <module fileurl="file://$PROJECT_DIR$/avos/avos.iml" filepath="$PROJECT_DIR$/avos/avos.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bluetoothspp/bluetoothspp.iml" filepath="$PROJECT_DIR$/bluetoothspp/bluetoothspp.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/events/events.iml" filepath="$PROJECT_DIR$/events/events.iml" />
       <module fileurl="file://$PROJECT_DIR$/fancy/fancy.iml" filepath="$PROJECT_DIR$/fancy/fancy.iml" />
