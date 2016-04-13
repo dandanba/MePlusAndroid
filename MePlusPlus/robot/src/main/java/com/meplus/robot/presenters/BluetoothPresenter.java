@@ -36,7 +36,7 @@ import hugo.weaving.DebugLog;
 public class BluetoothPresenter {
     private static final String TAG = BluetoothPresenter.class.getSimpleName();
     private final static boolean ENABLE = true;
-    private final int PERCENT = 60;
+    private final int PERCENT = 42;
     private final int MAX = 500;
     private BluetoothSPP bt;
 
@@ -186,6 +186,7 @@ public class BluetoothPresenter {
         if (!isConnected()) {
             return false;
         }
+       /* final int V = (MAX * PERCENT / 100);*/
         final int V = (MAX * PERCENT / 100);
 
         int V1 = 0;
@@ -197,17 +198,17 @@ public class BluetoothPresenter {
         byte CheckSum;
 
         if (action.equals(Command.ACTION_UP)) {
-            V1 = V;
-            V2 = V;
+            V1 = V*3/2;
+            V2 = V*3/2;
         } else if (action.equals(Command.ACTION_DOWN)) {
             V1 = -V;
             V2 = -V;
         } else if (action.equals(Command.ACTION_LEFT)) {
-            V1 = -V;
-            V2 = V;
+            V1 = -V/2;
+            V2 = V/2;
         } else if (action.equals(Command.ACTION_RIGHT)) {
-            V1 = V;
-            V2 = -V;
+            V1 = V/2;
+            V2 = -V/2;
         } else if (action.equals(Command.ACTION_STOP)) {
             V1 = 0;
             V2 = 0;

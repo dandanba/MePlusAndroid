@@ -58,8 +58,7 @@ public class MainActivity extends BaseActivity {
                         .subscribe(
                                 response -> ToastUtils.show(this, response.toString()),
                                 throwable -> ToastUtils.show(this, throwable.toString()),
-                                () -> {
-                                }
+                                () -> { }
                         );
                 break;
 
