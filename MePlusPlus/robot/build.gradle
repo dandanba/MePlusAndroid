@@ -67,6 +67,8 @@ dependencies {
     compile project(':res')
     // speech
     compile project(':speech')
+    // bluetooth
+    compile project(':bluetoothspp')
     // junit
     testCompile 'junit:junit:4.12'
     // v7
@@ -93,8 +95,6 @@ dependencies {
     compile "io.reactivex:rxjava:$rx_version"
     // rxbinding
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    // bluetooth
-    compile 'com.akexorcist:bluetoothspp:1.0.0'
     // material-dialogs
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.7@aar') {
         transitive = true
