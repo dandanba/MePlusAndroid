@@ -4,6 +4,7 @@
     package="com.meplus.robot">
 
     <uses-sdk tools:overrideLibrary="com.facebook.shimmer" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".app.MPApplication"
@@ -61,6 +62,16 @@
         <activity
             android:name="com.meplus.avos.activity.FeedbackActivity"
             android:screenOrientation="landscape" />
-    </application>
+
+        <receiver
+            android:name=".service.BootBroadcastReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+</application>
 
 </manifest>

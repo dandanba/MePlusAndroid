@@ -14,7 +14,6 @@ import rx.Observable;
  * Created by dandanba on 3/9/16.
  */
 public class FancyApi implements ApiService {
-
     @Override
     public Observable<Response<User>> getborrowlistbyrobot(@FieldMap Map<String, String> map, @Header("X-FANCY-TIMESTAMP") String timestamp, @Header("X-FANCY-SIGN") String sign) {
         return null;

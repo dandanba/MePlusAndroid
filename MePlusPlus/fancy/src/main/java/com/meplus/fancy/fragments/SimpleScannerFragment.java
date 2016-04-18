@@ -1,6 +1,8 @@
 package com.meplus.fancy.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +56,16 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
         } else {
             content = rawResult.getContents();
         }
+
+        //add------------------------------------------
+       /* if (!TextUtils.isEmpty(content)) {
+            Intent intent = new Intent();
+            intent.putExtra("scan_result", rawResult.getContents());
+            setResult(RESULT_OK, intent);
+        } else {
+            setResult(RESULT_CANCELED);
+        }*/
+        //----------------------------------------------
 
         Log.i(TAG, content);
         EventBus.getDefault().post(new ScannerEvent(content));

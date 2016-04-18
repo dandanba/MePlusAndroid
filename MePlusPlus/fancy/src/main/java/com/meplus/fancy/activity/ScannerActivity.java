@@ -1,6 +1,7 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
@@ -15,6 +16,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.TreeMap;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.trinea.android.common.util.ToastUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -28,6 +31,7 @@ public class ScannerActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
+
         EventBus.getDefault().register(this);
         replaceContainer(R.id.frame_layout, SimpleScannerFragment.newInstance());
     }
@@ -40,8 +44,8 @@ public class ScannerActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
-        ToastUtils.show(this, event.getContent());
-
+        ToastUtils.show(this, "信息" + event.getContent());//扫出的是baby的信息
+        finish();
 
         final TreeMap<String, String> args = new TreeMap<>();
         final String Data = "samplestring1";
@@ -57,7 +61,8 @@ public class ScannerActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         response -> {
-                            ToastUtils.show(this, response.toString());
+                            ToastUtils.show(this, "@@@@@" + response.toString());//提示解析二维码出错
+                            //mTextView.setText(response.toString());
                             finish();
                         },
                         throwable -> {
@@ -68,6 +73,5 @@ public class ScannerActivity extends BaseActivity {
                         () -> {
                         }
                 );
-
     }
 }
