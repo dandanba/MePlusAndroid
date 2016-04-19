@@ -1,9 +1,7 @@
 package com.meplus.fancy.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
@@ -14,7 +12,6 @@ import com.meplus.fancy.utils.SignUtils;
 
 import java.util.TreeMap;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.trinea.android.common.util.ToastUtils;
@@ -43,8 +40,6 @@ public class MainActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.button:
                 startActivity(IntentUtils.generateIntent(this, ScannerActivity.class));
-               /* Intent intent = new Intent(this, ScannerActivity.class);
-                startActivityForResult(intent, SCAN_CODE);*/
                 break;
             case R.id.button1:
                 final TreeMap<String, String> args = new TreeMap<>();
@@ -62,8 +57,7 @@ public class MainActivity extends BaseActivity {
                         .subscribe(
                                 response -> ToastUtils.show(this, response.toString()),
                                 throwable -> ToastUtils.show(this, throwable.toString()),
-                                () -> {
-                                }
+                                () -> {}
                         );
                 break;
 
@@ -72,20 +66,4 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-  /*  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case SCAN_CODE:
-                if (resultCode == RESULT_OK) {
-                    String result = data.getStringExtra("scan_result");
-                    mTextView.setText(result);
-                } else if (resultCode == RESULT_CANCELED) {
-                    mTextView.setText("扫描出错");
-                }
-                break;
-            default:
-                break;
-        }
-
-    }*/
 }

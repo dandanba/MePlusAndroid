@@ -1,7 +1,6 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
@@ -16,8 +15,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.TreeMap;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.trinea.android.common.util.ToastUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -70,8 +67,7 @@ public class ScannerActivity extends BaseActivity {
                             SimpleScannerFragment simpleScannerFragment = (SimpleScannerFragment) findFragmentById(R.id.frame_layout);
                             simpleScannerFragment.resumeScanner();
                         },
-                        () -> {
-                        }
+                        () -> {}
                 );
     }
 }

@@ -11,7 +11,7 @@
         android:title="@string/me_nav_history" />
     <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/me_iocn_set_up"
+        android:icon="@drawable/me_icon_settings"
         android:title="@string/me_nav_settings" />
 
 </menu>
