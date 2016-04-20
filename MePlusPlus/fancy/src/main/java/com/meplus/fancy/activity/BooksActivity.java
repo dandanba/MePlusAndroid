@@ -1,37 +1,23 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
-import com.meplus.fancy.events.UserEvent;
 import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.ApiService;
-import com.meplus.fancy.model.entity.User;
 import com.meplus.fancy.utils.ArgsUtils;
 import com.meplus.fancy.utils.SignUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.TreeMap;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.trinea.android.common.util.ToastUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class UserActivity extends BaseActivity {
-    private final static String TAG = UserActivity.class.getSimpleName();
-    @Bind(R.id.icon)
-    ImageView mIcon;
-    @Bind(R.id.user_id)
-    TextView mUserId;
-    @Bind(R.id.name_text)
-    TextView mNameText;
+public class BooksActivity extends BaseActivity {
+    private final static String TAG = BooksActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +29,7 @@ public class UserActivity extends BaseActivity {
 
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
-        getborrowlistbyrobot(Data, LibraryId);
+        getborrowedlistbyrobot(Data, LibraryId);
 
 
     }
@@ -54,7 +40,7 @@ public class UserActivity extends BaseActivity {
         ButterKnife.unbind(this);
     }
 
-    private void getborrowlistbyrobot(String data, String libraryId) {
+    private void getborrowedlistbyrobot(String data, String libraryId) {
         final TreeMap<String, String> args = ArgsUtils.generateArags();
         args.put("Data", data);
         args.put("LibraryId", libraryId);
@@ -62,7 +48,7 @@ public class UserActivity extends BaseActivity {
         final String timestamp = args.remove("time");
 
         final ApiService apiService = FancyApplication.getInstance().getApiService();
-        apiService.getborrowlistbyrobot(args, timestamp, sign)
+        apiService.getborrowedlistbyrobot(args, timestamp, sign)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -70,15 +56,8 @@ public class UserActivity extends BaseActivity {
                             final String message = response.getMessage();
                             ToastUtils.show(this, message);
 
-                            final User user = response.getResult();
-                            Glide.with(this).load(user.getIconUrl()).into(mIcon);
-                            mUserId.setText(user.getUserId());
-                            mNameText.setText(user.getNickName());
-
-                            EventBus.getDefault().post(new UserEvent(user));
-
                             BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
-                            fragment.updateBooks(user.getBorrowBookList());
+                            fragment.updateBooks(response.getResult());
                         },
                         throwable -> ToastUtils.show(this, throwable.toString()),
                         () -> {

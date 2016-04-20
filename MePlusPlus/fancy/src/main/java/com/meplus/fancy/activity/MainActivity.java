@@ -8,14 +8,17 @@ import android.widget.EditText;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.ScannerEvent;
-import com.meplus.fancy.fragments.SimpleScannerFragment;
+import com.meplus.fancy.events.UserEvent;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.Code;
+import com.meplus.fancy.model.entity.User;
+import com.meplus.fancy.utils.ArgsUtils;
 import com.meplus.fancy.utils.FIRUtils;
 import com.meplus.fancy.utils.IntentUtils;
 import com.meplus.fancy.utils.JsonUtils;
 import com.meplus.fancy.utils.SignUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -30,36 +33,67 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
+    private static final String UserID = "54986";
+    private static final String ISBN = "9787300152066";
+    private static final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
+
 
     @Bind(R.id.library_edit)
     EditText mLibraryEdit;
+
+    @Bind(R.id.user_edit)
+    EditText mUserEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
 
-        mLibraryEdit.setText("54986");
+        mLibraryEdit.setText(UserID);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.button, R.id.button1})
+    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4})
     public void onClick(View view) {
+
+        final String LibraryId = mLibraryEdit.getText().toString();
+        final String UserId = mUserEdit.getText().toString();
+
+        Intent intent;
         switch (view.getId()) {
             case R.id.button:
                 startActivity(IntentUtils.generateIntent(this, ScannerActivity.class));
                 break;
 
             case R.id.button1:
-                Intent intent = IntentUtils.generateIntent(this, UserActivity.class);
-                intent.putExtra("LibraryId", mLibraryEdit.getText().toString());
+                intent = IntentUtils.generateIntent(this, UserActivity.class);
+                intent.putExtra("LibraryId", LibraryId);
+                intent.putExtra("Data", Data);
+                startActivity(intent);
+                break;
+
+            case R.id.button2:
+                borrowbyrobot(UserId, ISBN, LibraryId);
+                break;
+
+            case R.id.button3:
+                returnbyrobot(UserId, ISBN, LibraryId);
+                break;
+
+            case R.id.button4:
+                intent = IntentUtils.generateIntent(this, BooksActivity.class);
+                intent.putExtra("LibraryId", LibraryId);
+                intent.putExtra("Data", UserId);
                 startActivity(intent);
                 break;
 
@@ -77,8 +111,38 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void borrowbyrobot(String data, String libraryId) {
-        final TreeMap<String, String> args = new TreeMap<>();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserEvent(UserEvent event) {
+        final User user = event.getUser();
+        mUserEdit.setText(user.getUserId());
+    }
+
+    private void returnbyrobot(String userId, String data, String libraryId) {
+        final TreeMap<String, String> args = ArgsUtils.generateArags();
+        args.put("UserId", userId);
+        args.put("Data", data);
+        args.put("LibraryId", libraryId);
+        final String sign = SignUtils.sign(args);
+        final String timestamp = args.remove("time");
+
+        final ApiService apiService = FancyApplication.getInstance().getApiService();
+        apiService.returnbyrobot(args, timestamp, sign)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response -> {
+                            final String message = response.getMessage();
+                            ToastUtils.show(this, message);
+                        },
+                        throwable -> ToastUtils.show(this, throwable.toString()),
+                        () -> {
+                        }
+                );
+    }
+
+    private void borrowbyrobot(String userId, String data, String libraryId) {
+        final TreeMap<String, String> args = ArgsUtils.generateArags();
+        args.put("UserId", userId);
         args.put("Data", data);
         args.put("LibraryId", libraryId);
         final String sign = SignUtils.sign(args);
@@ -90,13 +154,10 @@ public class MainActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         response -> {
-
+                            final String message = response.getMessage();
+                            ToastUtils.show(this, message);
                         },
-                        throwable -> {
-                            ToastUtils.show(this, throwable.toString());
-                            SimpleScannerFragment simpleScannerFragment = (SimpleScannerFragment) findFragmentById(R.id.frame_layout);
-                            simpleScannerFragment.resumeScanner();
-                        },
+                        throwable -> ToastUtils.show(this, throwable.toString()),
                         () -> {
                         }
                 );

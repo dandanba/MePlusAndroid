@@ -38,6 +38,9 @@
         <activity
             android:name=".activity.UserActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BooksActivity"
+            android:screenOrientation="portrait" />
         <!-- FancyAndroid -->
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"
