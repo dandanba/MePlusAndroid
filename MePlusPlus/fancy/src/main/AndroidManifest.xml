@@ -35,6 +35,9 @@
         <activity
             android:name=".activity.ScannerActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserActivity"
+            android:screenOrientation="portrait" />
         <!-- FancyAndroid -->
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"

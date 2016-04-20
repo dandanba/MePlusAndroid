@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 data class User(
         @JsonProperty("IconUrl") var IconUrl: String,
-        @JsonProperty("BorrowBookList") var BorrowBookList: List<Book>,
+        @JsonProperty("BorrowBookList") var BorrowBookList: List<Book>? = null,
         @JsonProperty("NickName") var NickName: String,
         @JsonProperty("UserId") var UserId: String
 )

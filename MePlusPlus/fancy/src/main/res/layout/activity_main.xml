@@ -12,11 +12,17 @@
         android:text="Scan Barcode" />
 
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/library_edit"
+        android:layout_gravity="center_horizontal" />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="api1" />
+        android:text="getborrowlistbyrobot" />
 
 </LinearLayout>
