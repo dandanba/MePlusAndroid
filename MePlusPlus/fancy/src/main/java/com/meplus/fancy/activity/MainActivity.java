@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
-    private static final String UserID = "54986";
+    private static final String LibraryId = "41676";
     private static final String ISBN = "9787300152066";
     private static final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
 
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
 
-        mLibraryEdit.setText(UserID);
+        mLibraryEdit.setText(LibraryId);
     }
 
     @Override

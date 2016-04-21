@@ -1,6 +1,7 @@
 package com.meplus.fancy.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
@@ -34,6 +35,10 @@ public class ImageUtils {
 
     public static void withFragmentInto(Fragment fragment, String url, ImageView imageView) {
         Glide.with(fragment).load(url).into(imageView);
+    }
+
+    public static void withFragmentInto(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url).into(imageView);
     }
 
 }

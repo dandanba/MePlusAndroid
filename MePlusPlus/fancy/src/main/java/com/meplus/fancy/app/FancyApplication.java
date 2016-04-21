@@ -3,6 +3,7 @@ package com.meplus.fancy.app;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -55,5 +56,9 @@ public class FancyApplication extends MultiDexApplication {
 
     public RefWatcher getRefWatcher() {
         return mRefWatcher;
+    }
+
+    public LayoutInflater getLayoutInflater() {
+        return LayoutInflater.from(this);
     }
 }

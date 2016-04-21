@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.UserEvent;
@@ -12,6 +11,7 @@ import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.User;
 import com.meplus.fancy.utils.ArgsUtils;
+import com.meplus.fancy.utils.ImageUtils;
 import com.meplus.fancy.utils.SignUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,7 +71,7 @@ public class UserActivity extends BaseActivity {
                             ToastUtils.show(this, message);
 
                             final User user = response.getResult();
-                            Glide.with(this).load(user.getIconUrl()).into(mIcon);
+                            ImageUtils.withActivityInto(this, user.getIconUrl(), mIcon);
                             mUserId.setText(user.getUserId());
                             mNameText.setText(user.getNickName());
 
