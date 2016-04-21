@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.ScannerEvent;
@@ -69,9 +70,8 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4})
+    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
     public void onClick(View view) {
-
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
         final String ISBN = mISBNEdit.getText().toString();
@@ -101,6 +101,11 @@ public class MainActivity extends BaseActivity {
                 intent = IntentUtils.generateIntent(this, BooksActivity.class);
                 intent.putExtra("LibraryId", LibraryId);
                 intent.putExtra("Data", UserId);
+                startActivity(intent);
+                break;
+
+            case R.id.button5:
+                intent = IntentUtils.generateIntent(this, Constants.MEPLUS_ROBOT_PACKAGENAME);
                 startActivity(intent);
                 break;
 

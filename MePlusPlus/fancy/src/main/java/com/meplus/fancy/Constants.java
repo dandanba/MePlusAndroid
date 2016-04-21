@@ -10,4 +10,6 @@ public class Constants {
     public static final String KEY = "c/khhXuhRxjDW10asd0+w+=";
 
     public static final String API_TOKEN = "21c6827d8237ace81b4f3b2ce7f56027"; // me+
+
+    public static final String MEPLUS_ROBOT_PACKAGENAME = "com.meplus.robot";
 }

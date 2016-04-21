@@ -63,5 +63,11 @@
             android:layout_height="wrap_content"
             android:text="getborrowedlistbyrobot" />
 
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MePlus 2" />
+
     </LinearLayout>
 </ScrollView>
