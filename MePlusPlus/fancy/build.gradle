@@ -114,5 +114,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     // flexibledivider
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
+    // swipebackhelper
+    compile 'com.jude:swipebackhelper:2.1.5'
 }
 

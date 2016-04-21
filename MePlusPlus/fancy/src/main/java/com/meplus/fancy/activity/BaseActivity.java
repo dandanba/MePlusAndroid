@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jude.swipbackhelper.SwipeBackHelper;
 import com.meplus.fancy.app.FancyApplication;
 
 public class BaseActivity extends AppCompatActivity {
@@ -13,6 +14,13 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SwipeBackHelper.onCreate(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        SwipeBackHelper.onPostCreate(this);
     }
 
     @Override
@@ -29,7 +37,9 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         FancyApplication.getInstance().getRefWatcher().watch(this);
+        SwipeBackHelper.onDestroy(this);
     }
+
 
     public void replaceContainer(int containerViewId, Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
