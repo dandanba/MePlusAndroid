@@ -106,7 +106,11 @@ public class MainActivity extends BaseActivity {
 
             case R.id.button5:
                 intent = IntentUtils.generateIntent(this, Constants.MEPLUS_ROBOT_PACKAGENAME);
-                startActivity(intent);
+                if (intent == null) {
+                    ToastUtils.show(this, "请先安装多我机器人程序！");
+                } else {
+                    startActivity(intent);
+                }
                 break;
 
             default:
