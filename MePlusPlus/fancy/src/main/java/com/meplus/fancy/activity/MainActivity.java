@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
+    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.back_button})
     public void onClick(View view) {
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
@@ -107,6 +107,10 @@ public class MainActivity extends BaseActivity {
             case R.id.button5:
                 intent = IntentUtils.generateIntent(this, Constants.MEPLUS_ROBOT_PACKAGENAME);
                 startActivity(intent);
+                break;
+
+            case R.id.back_button:
+                onBackPressed();
                 break;
 
             default:
