@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.SplashActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,16 +31,16 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ScannerActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BooksActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <!-- FancyAndroid -->
         <meta-data
             android:name="BUG_HD_SDK_GENERAL_KEY"

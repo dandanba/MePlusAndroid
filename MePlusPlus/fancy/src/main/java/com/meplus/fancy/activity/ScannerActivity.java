@@ -1,7 +1,6 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.events.ScannerEvent;
@@ -11,7 +10,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.OnClick;
 import cn.trinea.android.common.util.ToastUtils;
 
 /**
@@ -34,10 +32,6 @@ public class ScannerActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick(R.id.back_button)
-    public void onClick(View view) {
-        onBackPressed();
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {

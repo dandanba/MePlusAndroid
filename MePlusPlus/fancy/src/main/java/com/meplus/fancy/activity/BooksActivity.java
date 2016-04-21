@@ -1,8 +1,6 @@
 package com.meplus.fancy.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
@@ -13,17 +11,13 @@ import com.meplus.fancy.utils.SignUtils;
 
 import java.util.TreeMap;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.trinea.android.common.util.ToastUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class BooksActivity extends BaseActivity {
     private final static String TAG = BooksActivity.class.getSimpleName();
-    @Bind(R.id.back_button)
-    Button mBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +36,6 @@ public class BooksActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-    }
-
-    @OnClick(R.id.back_button)
-    public void onClick(View view) {
-        onBackPressed();
     }
 
     private void getborrowedlistbyrobot(String data, String libraryId) {
@@ -73,5 +62,6 @@ public class BooksActivity extends BaseActivity {
                         }
                 );
     }
+
 
 }
