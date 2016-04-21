@@ -22,7 +22,7 @@ public class BooksActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_books);
         ButterKnife.bind(this);
 
         replaceContainer(R.id.frame_layout, BooksFragment.newInstance());
@@ -30,8 +30,6 @@ public class BooksActivity extends BaseActivity {
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
         getborrowedlistbyrobot(Data, LibraryId);
-
-
     }
 
     @Override

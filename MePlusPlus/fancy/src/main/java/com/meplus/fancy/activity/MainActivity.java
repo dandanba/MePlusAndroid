@@ -8,10 +8,8 @@ import android.widget.EditText;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.ScannerEvent;
-import com.meplus.fancy.events.UserEvent;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.Code;
-import com.meplus.fancy.model.entity.User;
 import com.meplus.fancy.utils.ArgsUtils;
 import com.meplus.fancy.utils.FIRUtils;
 import com.meplus.fancy.utils.IntentUtils;
@@ -33,16 +31,22 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
+
     private static final String LibraryId = "41676";
-    private static final String ISBN = "9787300152066";
+
     private static final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
 
+    @Bind(R.id.data_edit)
+    EditText mDataEdit;
 
     @Bind(R.id.library_edit)
     EditText mLibraryEdit;
 
     @Bind(R.id.user_edit)
     EditText mUserEdit;
+
+    @Bind(R.id.isbn_edit)
+    EditText mISBNEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
 
+        mDataEdit.setText(Data);
+        mUserEdit.setText(JsonUtils.readValue(Data, Code.class).getCheck());
         mLibraryEdit.setText(LibraryId);
     }
 
@@ -68,6 +74,7 @@ public class MainActivity extends BaseActivity {
 
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
+        final String ISBN = mISBNEdit.getText().toString();
 
         Intent intent;
         switch (view.getId()) {
@@ -106,15 +113,12 @@ public class MainActivity extends BaseActivity {
     public void onScannerEvent(ScannerEvent event) {
         final String data = event.getContent();
         final Code code = JsonUtils.readValue(data, Code.class);
-        if (code != null) {
-
+        if (code != null) { // 扫描用户的二维码
+            mDataEdit.setText(data);
+            mUserEdit.setText(code.getCheck());
+        } else { // 扫描图书
+            mISBNEdit.setText(data);
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUserEvent(UserEvent event) {
-        final User user = event.getUser();
-        mUserEdit.setText(user.getUserId());
     }
 
     private void returnbyrobot(String userId, String data, String libraryId) {

@@ -6,15 +6,12 @@ import android.widget.TextView;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
-import com.meplus.fancy.events.UserEvent;
 import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.User;
 import com.meplus.fancy.utils.ArgsUtils;
 import com.meplus.fancy.utils.ImageUtils;
 import com.meplus.fancy.utils.SignUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.TreeMap;
 
@@ -44,8 +41,6 @@ public class UserActivity extends BaseActivity {
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
         getborrowlistbyrobot(Data, LibraryId);
-
-
     }
 
     @Override
@@ -74,8 +69,6 @@ public class UserActivity extends BaseActivity {
                             ImageUtils.withActivityInto(this, user.getIconUrl(), mIcon);
                             mUserId.setText(user.getUserId());
                             mNameText.setText(user.getNickName());
-
-                            EventBus.getDefault().post(new UserEvent(user));
 
                             BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
                             fragment.updateBooks(user.getBorrowBookList());
