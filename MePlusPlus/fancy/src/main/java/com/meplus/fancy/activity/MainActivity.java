@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.button, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
+    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
     public void onClick(View view) {
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
@@ -78,33 +78,29 @@ public class MainActivity extends BaseActivity {
 
         Intent intent;
         switch (view.getId()) {
-            case R.id.button:
-                startActivity(IntentUtils.generateIntent(this, ScannerActivity.class));
-                break;
-
-            case R.id.button1:
+            case R.id.button1: // 用户信息
                 intent = IntentUtils.generateIntent(this, UserActivity.class);
                 intent.putExtra("LibraryId", LibraryId);
                 intent.putExtra("Data", Data);
                 startActivity(intent);
                 break;
 
-            case R.id.button2:
+            case R.id.button2: // 借书
                 borrowbyrobot(UserId, ISBN, LibraryId);
                 break;
 
-            case R.id.button3:
+            case R.id.button3: // 还书
                 returnbyrobot(UserId, ISBN, LibraryId);
                 break;
 
-            case R.id.button4:
+            case R.id.button4://  借书列表
                 intent = IntentUtils.generateIntent(this, BooksActivity.class);
                 intent.putExtra("LibraryId", LibraryId);
                 intent.putExtra("Data", UserId);
                 startActivity(intent);
                 break;
 
-            case R.id.button5:
+            case R.id.button5: // 启动多我程序
                 intent = IntentUtils.generateIntent(this, Constants.MEPLUS_ROBOT_PACKAGENAME);
                 if (intent == null) {
                     ToastUtils.show(this, "请先安装多我机器人程序！");

@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- fabric-->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- bar code -->
-    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:name=".app.FancyApplication"
         android:allowBackup="true"
@@ -31,9 +29,6 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name=".activity.ScannerActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.UserActivity"
