@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
 
     private serial com3 = new serial();
     private ReadThread mReadThread;
-
+    private StringBuffer mBuffer = new StringBuffer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +92,18 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
         final String data = event.getContent();
-        if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
-            final Code code = JsonUtils.readValue(data, Code.class);
-            mDataEdit.setText(data);
+        mBuffer.append(data);
+
+        if (data.endsWith("}")) { // JSON 格式结束
+            final Code code = JsonUtils.readValue(mBuffer.toString(), Code.class);
+            mDataEdit.setText(mBuffer.toString());
             mUserEdit.setText(code.getCheck());
-        } else if (data.length() == 13) { // 扫描图书
-            mISBNEdit.setText(data);
-        } else {
-            mLogText.append(String.format("read data: %1$s \r\n", data));
+            mBuffer.delete(0, mBuffer.length());
+        } else { // JSON 开始
+            if (!mBuffer.toString().startsWith("{") && mBuffer.length() == 13) {
+                mISBNEdit.setText(mBuffer.toString());
+                mBuffer.delete(0, mBuffer.length());
+            }
         }
     }
 
