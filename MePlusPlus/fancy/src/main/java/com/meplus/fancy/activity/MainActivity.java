@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
-import com.meplus.fancy.events.ScannerEvent;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.Code;
 import com.meplus.fancy.utils.ArgsUtils;
@@ -16,10 +16,9 @@ import com.meplus.fancy.utils.FIRUtils;
 import com.meplus.fancy.utils.IntentUtils;
 import com.meplus.fancy.utils.JsonUtils;
 import com.meplus.fancy.utils.SignUtils;
+import com.topeet.serialtest.serial;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.TreeMap;
 
@@ -49,10 +48,22 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.isbn_edit)
     EditText mISBNEdit;
 
+    @Bind(R.id.log_text)
+    TextView mLogText;
+
+    private serial com3 = new serial();
+    private ReadThread mReadThread;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        com3.Open(1, 115200);
+        /* Create a receiving thread */
+        mReadThread = new ReadThread();
+        mReadThread.start();
 
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
@@ -66,8 +77,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mReadThread != null) {
+            mReadThread.interrupt();
+        }
+        com3.Close();
+        com3 = null;
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
+
     }
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
@@ -109,20 +126,12 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
 
+            case R.id.button6: // 清除日志
+                mLogText.setText("");
+                break;
+
             default:
                 break;
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onScannerEvent(ScannerEvent event) {
-        final String data = event.getContent();
-        final Code code = JsonUtils.readValue(data, Code.class);
-        if (code != null) { // 扫描用户的二维码
-            mDataEdit.setText(data);
-            mUserEdit.setText(code.getCheck());
-        } else { // 扫描图书
-            mISBNEdit.setText(data);
         }
     }
 
@@ -142,6 +151,12 @@ public class MainActivity extends BaseActivity {
                         response -> {
                             final String message = response.getMessage();
                             ToastUtils.show(this, message);
+                            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未借阅 2 归还失败
+//                                充磁 0x02 0x56 0x52 0x32 0x03 0x37
+                                final int[] buffer = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
+                                final int code = Write(buffer, buffer.length);
+                                mLogText.append(String.format("write code: %1$d \r\n", code));
+                            }
                         },
                         throwable -> ToastUtils.show(this, throwable.toString()),
                         () -> {
@@ -165,6 +180,12 @@ public class MainActivity extends BaseActivity {
                         response -> {
                             final String message = response.getMessage();
                             ToastUtils.show(this, message);
+                            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未预借 2 借出失败
+//                               消磁 0x02 0x56 0x52 0x31 0x03 0x34
+                                int[] buffer = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
+                                final int code = Write(buffer, buffer.length);
+                                mLogText.append(String.format("write code: %1$d \r\n", code));
+                            }
                         },
                         throwable -> ToastUtils.show(this, throwable.toString()),
                         () -> {
@@ -172,5 +193,39 @@ public class MainActivity extends BaseActivity {
                 );
     }
 
+    private int Write(int[] buffer, int len) {
+        return com3.Write(buffer, len);
+    }
 
+
+    class ReadThread extends Thread {
+        private void handleData(int[] RX) {
+            if (RX != null && RX.length > 0) { // 数据有效
+                final String data = new String(RX, 0, RX.length);
+                if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
+                    final Code code = JsonUtils.readValue(data, Code.class);
+                    mDataEdit.setText(data);
+                    mUserEdit.setText(code.getCheck());
+                } else if (data.length() >= 10) { // 扫描图书
+                    mISBNEdit.setText(data);
+                } else {
+                    mLogText.append(String.format("read data: %1$s \r\n", data));
+                }
+            }
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            while (!isInterrupted()) {
+                // 扫描二维码和条形码的结果
+                final int[] RX = com3.Read();
+                handleData(RX);
+            }
+        }
+    }
+
+    static {
+        System.loadLibrary("serialtest");
+    }
 }
