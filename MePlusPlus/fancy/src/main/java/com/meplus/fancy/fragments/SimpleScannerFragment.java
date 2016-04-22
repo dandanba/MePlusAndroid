@@ -36,7 +36,7 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
     public void onResume() {
         super.onResume();
         mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
+        mScannerView.startCamera(0);
     }
 
     @Override
