@@ -18,8 +18,6 @@ import com.meplus.fancy.utils.JsonUtils;
 import com.meplus.fancy.utils.SignUtils;
 import com.topeet.serialtest.serial;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.TreeMap;
 
 import butterknife.Bind;
@@ -65,7 +63,6 @@ public class MainActivity extends BaseActivity {
         mReadThread = new ReadThread();
         mReadThread.start();
 
-        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
 
@@ -83,8 +80,6 @@ public class MainActivity extends BaseActivity {
         com3.Close();
         com3 = null;
         ButterKnife.unbind(this);
-        EventBus.getDefault().unregister(this);
-
     }
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
