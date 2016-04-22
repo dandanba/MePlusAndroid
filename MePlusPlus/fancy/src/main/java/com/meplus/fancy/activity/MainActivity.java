@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
+import com.meplus.fancy.events.ScannerEvent;
 import com.meplus.fancy.model.ApiService;
 import com.meplus.fancy.model.entity.Code;
 import com.meplus.fancy.utils.ArgsUtils;
@@ -17,6 +18,10 @@ import com.meplus.fancy.utils.IntentUtils;
 import com.meplus.fancy.utils.JsonUtils;
 import com.meplus.fancy.utils.SignUtils;
 import com.topeet.serialtest.serial;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.TreeMap;
 
@@ -63,6 +68,7 @@ public class MainActivity extends BaseActivity {
         mReadThread = new ReadThread();
         mReadThread.start();
 
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
 
@@ -80,9 +86,25 @@ public class MainActivity extends BaseActivity {
         com3.Close();
         com3 = null;
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5})
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onScannerEvent(ScannerEvent event) {
+        final String data = event.getContent();
+        if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
+            final Code code = JsonUtils.readValue(data, Code.class);
+            mDataEdit.setText(data);
+            mUserEdit.setText(code.getCheck());
+        } else if (data.length() >= 10) { // 扫描图书
+            mISBNEdit.setText(data);
+        } else {
+            mLogText.append(String.format("read data: %1$s \r\n", data));
+        }
+    }
+
+
+    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6})
     public void onClick(View view) {
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
@@ -197,15 +219,7 @@ public class MainActivity extends BaseActivity {
         private void handleData(int[] RX) {
             if (RX != null && RX.length > 0) { // 数据有效
                 final String data = new String(RX, 0, RX.length);
-                if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
-                    final Code code = JsonUtils.readValue(data, Code.class);
-                    mDataEdit.setText(data);
-                    mUserEdit.setText(code.getCheck());
-                } else if (data.length() >= 10) { // 扫描图书
-                    mISBNEdit.setText(data);
-                } else {
-                    mLogText.append(String.format("read data: %1$s \r\n", data));
-                }
+                EventBus.getDefault().post(new ScannerEvent(data));
             }
         }
 
