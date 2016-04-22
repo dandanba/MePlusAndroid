@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity {
             final Code code = JsonUtils.readValue(data, Code.class);
             mDataEdit.setText(data);
             mUserEdit.setText(code.getCheck());
-        } else if (data.length() >= 10) { // 扫描图书
+        } else if (data.length() == 13) { // 扫描图书
             mISBNEdit.setText(data);
         } else {
             mLogText.append(String.format("read data: %1$s \r\n", data));
@@ -172,6 +172,9 @@ public class MainActivity extends BaseActivity {
 //                                充磁 0x02 0x56 0x52 0x32 0x03 0x37
                                 final int[] buffer = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
                                 final int code = Write(buffer, buffer.length);
+                                if (code == 0) {
+                                    ToastUtils.show(this, "充磁成功！");
+                                }
                                 mLogText.append(String.format("write code: %1$d \r\n", code));
                             }
                         },
@@ -201,6 +204,9 @@ public class MainActivity extends BaseActivity {
 //                               消磁 0x02 0x56 0x52 0x31 0x03 0x34
                                 int[] buffer = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
                                 final int code = Write(buffer, buffer.length);
+                                if (code == 0) {
+                                    ToastUtils.show(this, "消磁成功！");
+                                }
                                 mLogText.append(String.format("write code: %1$d \r\n", code));
                             }
                         },
