@@ -93,14 +93,17 @@ public class MainActivity extends BaseActivity {
     public void onScannerEvent(ScannerEvent event) {
         final String data = event.getContent();
         mBuffer.append(data);
+        mLogText.append(String.format("buffered data: %1$s \r\n", data));
 
-        if (data.endsWith("}")) { // JSON 格式结束
-            final Code code = JsonUtils.readValue(mBuffer.toString(), Code.class);
-            mDataEdit.setText(mBuffer.toString());
-            mUserEdit.setText(code.getCheck());
-            mBuffer.delete(0, mBuffer.length());
-        } else { // JSON 开始
-            if (!mBuffer.toString().startsWith("{") && mBuffer.length() == 13) {
+        if (mBuffer.toString().startsWith("{")) { // JSON 格式
+            if (mBuffer.toString().endsWith("}")) {// JSON 格式结束
+                final Code code = JsonUtils.readValue(mBuffer.toString(), Code.class);
+                mDataEdit.setText(mBuffer.toString());
+                mUserEdit.setText(code.getCheck());
+                mBuffer.delete(0, mBuffer.length());
+            }
+        } else {// ISBN 格式
+            if (mBuffer.length() == 13) { // 13位ISBN
                 mISBNEdit.setText(mBuffer.toString());
                 mBuffer.delete(0, mBuffer.length());
             }
