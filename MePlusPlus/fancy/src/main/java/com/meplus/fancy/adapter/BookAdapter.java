@@ -40,7 +40,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookViewHolder> {
         return mDataHolders.size();
     }
 
-
     public void addBooks(List<Book> books) {
         final int size = ListUtils.getSize(books);
         for (int i = 0; i < size; i++) {

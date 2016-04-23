@@ -58,6 +58,4 @@ public class BooksFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
         }
     }
-
-
 }

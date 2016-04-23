@@ -17,5 +17,4 @@ public class ScannerEvent {
     public ScannerEvent(String content) {
         this.content = content;
     }
-
 }

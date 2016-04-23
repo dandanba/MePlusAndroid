@@ -8,29 +8,26 @@ import android.widget.TextView;
 
 import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
-import com.meplus.fancy.app.FancyApplication;
+import com.meplus.fancy.events.ErrorEvent;
+import com.meplus.fancy.events.ResponseEvent;
 import com.meplus.fancy.events.ScannerEvent;
-import com.meplus.fancy.model.ApiService;
+import com.meplus.fancy.model.Response;
+import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.model.entity.Code;
-import com.meplus.fancy.utils.ArgsUtils;
+import com.meplus.fancy.presenters.ApiPresenter;
 import com.meplus.fancy.utils.FIRUtils;
 import com.meplus.fancy.utils.IntentUtils;
 import com.meplus.fancy.utils.JsonUtils;
-import com.meplus.fancy.utils.SignUtils;
-import com.topeet.serialtest.serial;
+import com.topeet.serialtest.presenters.SerialPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.TreeMap;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.trinea.android.common.util.ToastUtils;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -54,23 +51,19 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.log_text)
     TextView mLogText;
 
-    private serial com3 = new serial();
-    private ReadThread mReadThread;
-    private StringBuffer mBuffer = new StringBuffer();
+    private SerialPresenter mSerialPresenter = new SerialPresenter();
+    private ApiPresenter mApiPresenter = new ApiPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        com3.Open(1, 115200);
-        /* Create a receiving thread */
-        mReadThread = new ReadThread();
-        mReadThread.start();
-
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         FIRUtils.checkForUpdateInFIR(this);
+
+        mSerialPresenter.start();
 
         mDataEdit.setText(Data);
         mUserEdit.setText(JsonUtils.readValue(Data, Code.class).getCheck());
@@ -80,11 +73,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mReadThread != null) {
-            mReadThread.interrupt();
-        }
-        com3.Close();
-        com3 = null;
+        mSerialPresenter.destroy();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
     }
@@ -92,24 +81,55 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
         final String data = event.getContent();
-        mBuffer.append(data);
-        mLogText.append(String.format("buffered data: %1$s \r\n", data));
-
-        if (mBuffer.toString().startsWith("{")) { // JSON 格式
-            if (mBuffer.toString().endsWith("}")) {// JSON 格式结束
-                final Code code = JsonUtils.readValue(mBuffer.toString(), Code.class);
-                mDataEdit.setText(mBuffer.toString());
-                mUserEdit.setText(code.getCheck());
-                mBuffer.delete(0, mBuffer.length());
-            }
+        mLogText.append(String.format("data: %1$s \r\n", data));
+        if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
+            final Code code = JsonUtils.readValue(data, Code.class);
+            mDataEdit.setText(data);
+            mUserEdit.setText(code.getCheck());
         } else {// ISBN 格式
-            if (mBuffer.length() == 13) { // 13位ISBN
-                mISBNEdit.setText(mBuffer.toString());
-                mBuffer.delete(0, mBuffer.length());
+            mISBNEdit.setText(data);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseBookEvent(ResponseEvent<Book> event) {
+        final String method = event.getMethod();
+        if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
+            final Response<Book> response = event.getResponse();
+            final String message = response.getMessage();
+            ToastUtils.show(this, message);
+            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未预借 2 借出失败
+                final int code = mSerialPresenter.demagnetize();
+                if (code == 0) {
+                    ToastUtils.show(this, "消磁成功！");
+                }
+                mLogText.append(String.format("demagnetize code: %1$d \r\n", code));
+            }
+        } else if (ApiPresenter.METHOD_RETURNBYROBOT.equals(method)) {
+            final Response<Book> response = event.getResponse();
+            final String message = response.getMessage();
+            ToastUtils.show(this, message);
+            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未借阅 2 归还失败
+                final int code = mSerialPresenter.magnetize();
+                if (code == 0) {
+                    ToastUtils.show(this, "充磁成功！");
+                }
+                mLogText.append(String.format("magnetize code: %1$d \r\n", code));
             }
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(ErrorEvent event) {
+        final String method = event.getMethod();
+        if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
+            Throwable error = event.getError();
+            ToastUtils.show(this, error.toString());
+        } else if (ApiPresenter.METHOD_RETURNBYROBOT.equals(method)) {
+            Throwable error = event.getError();
+            ToastUtils.show(this, error.toString());
+        }
+    }
 
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6})
     public void onClick(View view) {
@@ -127,11 +147,11 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.button2: // 借书
-                borrowbyrobot(UserId, ISBN, LibraryId);
+                mApiPresenter.borrowbyrobot(UserId, ISBN, LibraryId);
                 break;
 
             case R.id.button3: // 还书
-                returnbyrobot(UserId, ISBN, LibraryId);
+                mApiPresenter.returnbyrobot(UserId, ISBN, LibraryId);
                 break;
 
             case R.id.button4://  借书列表
@@ -156,94 +176,6 @@ public class MainActivity extends BaseActivity {
 
             default:
                 break;
-        }
-    }
-
-    private void returnbyrobot(String userId, String data, String libraryId) {
-        final TreeMap<String, String> args = ArgsUtils.generateArags();
-        args.put("UserId", userId);
-        args.put("Data", data);
-        args.put("LibraryId", libraryId);
-        final String sign = SignUtils.sign(args);
-        final String timestamp = args.remove("time");
-
-        final ApiService apiService = FancyApplication.getInstance().getApiService();
-        apiService.returnbyrobot(args, timestamp, sign)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            final String message = response.getMessage();
-                            ToastUtils.show(this, message);
-                            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未借阅 2 归还失败
-//                                充磁 0x02 0x56 0x52 0x32 0x03 0x37
-                                final int[] buffer = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
-                                final int code = Write(buffer, buffer.length);
-                                if (code == 0) {
-                                    ToastUtils.show(this, "充磁成功！");
-                                }
-                                mLogText.append(String.format("write code: %1$d \r\n", code));
-                            }
-                        },
-                        throwable -> ToastUtils.show(this, throwable.toString()),
-                        () -> {
-                        }
-                );
-    }
-
-    private void borrowbyrobot(String userId, String data, String libraryId) {
-        final TreeMap<String, String> args = ArgsUtils.generateArags();
-        args.put("UserId", userId);
-        args.put("Data", data);
-        args.put("LibraryId", libraryId);
-        final String sign = SignUtils.sign(args);
-        final String timestamp = args.remove("time");
-
-        final ApiService apiService = FancyApplication.getInstance().getApiService();
-        apiService.borrowbyrobot(args, timestamp, sign)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            final String message = response.getMessage();
-                            ToastUtils.show(this, message);
-                            if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未预借 2 借出失败
-//                               消磁 0x02 0x56 0x52 0x31 0x03 0x34
-                                int[] buffer = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
-                                final int code = Write(buffer, buffer.length);
-                                if (code == 0) {
-                                    ToastUtils.show(this, "消磁成功！");
-                                }
-                                mLogText.append(String.format("write code: %1$d \r\n", code));
-                            }
-                        },
-                        throwable -> ToastUtils.show(this, throwable.toString()),
-                        () -> {
-                        }
-                );
-    }
-
-    private int Write(int[] buffer, int len) {
-        return com3.Write(buffer, len);
-    }
-
-
-    class ReadThread extends Thread {
-        private void handleData(int[] RX) {
-            if (RX != null && RX.length > 0) { // 数据有效
-                final String data = new String(RX, 0, RX.length);
-                EventBus.getDefault().post(new ScannerEvent(data));
-            }
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            while (!isInterrupted()) {
-                // 扫描二维码和条形码的结果
-                final int[] RX = com3.Read();
-                handleData(RX);
-            }
         }
     }
 
