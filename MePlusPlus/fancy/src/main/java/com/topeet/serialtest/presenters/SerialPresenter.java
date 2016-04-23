@@ -75,4 +75,9 @@ public class SerialPresenter {
             }
         }
     }
+
+    static {
+        System.loadLibrary("serialtest");
+    }
+
 }
