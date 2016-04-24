@@ -1,5 +1,9 @@
 package com.meplus.fancy.events;
 
+import android.content.Context;
+
+import cn.trinea.android.common.util.ToastUtils;
+
 /**
  * Created by dandanba on 3/3/16.
  */
@@ -26,5 +30,9 @@ public class ErrorEvent {
 
     public void setError(Throwable error) {
         this.error = error;
+    }
+
+    public void showError(Context context) {
+        ToastUtils.show(context, error != null ? error.toString() : "");
     }
 }

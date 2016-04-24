@@ -48,11 +48,12 @@ public class BooksActivity extends BaseActivity {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT.equals(method)) {
             final Response<List<Book>> response = event.getResponse();
-            final String message = response.getMessage();
-            ToastUtils.show(this, message);
-
-            BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
-            fragment.updateBooks(response.getResult());
+            if (response.isOk()) {
+                BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
+                fragment.updateBooks(response.getResult());
+            } else {
+                response.showMessage(this);
+            }
         }
     }
 
@@ -60,8 +61,7 @@ public class BooksActivity extends BaseActivity {
     public void onErrorEvent(ErrorEvent event) {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT.equals(method)) {
-            Throwable error = event.getError();
-            ToastUtils.show(this, error.toString());
+            event.showError(this);
         }
     }
 

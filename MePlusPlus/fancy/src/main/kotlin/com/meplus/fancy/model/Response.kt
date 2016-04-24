@@ -1,5 +1,7 @@
 package com.meplus.fancy.model
 
+import android.content.Context
+import cn.trinea.android.common.util.ToastUtils
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -12,4 +14,12 @@ data class Response<T>(
         var Message: String ? = null,
         @JsonProperty("Result")
         var Result: T ? = null
-)
+) {
+    fun isOk(): Boolean {
+        return Code.equals("OK");
+    }
+
+    fun showMessage(context: Context) {
+        ToastUtils.show(context, Message);
+    }
+}

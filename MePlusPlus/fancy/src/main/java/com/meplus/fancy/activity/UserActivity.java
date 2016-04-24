@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.trinea.android.common.util.ToastUtils;
 
 public class UserActivity extends BaseActivity {
     private final static String TAG = UserActivity.class.getSimpleName();
@@ -58,16 +57,17 @@ public class UserActivity extends BaseActivity {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWLISTBYROBOT.equals(method)) {
             final Response<User> response = event.getResponse();
-            final String message = response.getMessage();
-            ToastUtils.show(this, message);
+            if (response.isOk()) {
+                final User user = response.getResult();
+                ImageUtils.withActivityInto(this, user.getIconUrl(), mIcon);
+                mUserId.setText(user.getUserId());
+                mNameText.setText(user.getNickName());
 
-            final User user = response.getResult();
-            ImageUtils.withActivityInto(this, user.getIconUrl(), mIcon);
-            mUserId.setText(user.getUserId());
-            mNameText.setText(user.getNickName());
-
-            BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
-            fragment.updateBooks(user.getBorrowBookList());
+                BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
+                fragment.updateBooks(user.getBorrowBookList());
+            } else {
+                response.showMessage(this);
+            }
         }
     }
 
@@ -75,8 +75,7 @@ public class UserActivity extends BaseActivity {
     public void onErrorEvent(ErrorEvent event) {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWLISTBYROBOT.equals(method)) {
-            Throwable error = event.getError();
-            ToastUtils.show(this, error.toString());
+            event.showError(this);
         }
     }
 
