@@ -46,7 +46,6 @@ public class BooksFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         final Context context = getContext();
-
         mRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context).build());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(mAdapter = new BookAdapter(mDatas));
@@ -55,7 +54,6 @@ public class BooksFragment extends BaseFragment {
     public void updateBooks(List<Book> books) {
         if (!ListUtils.isEmpty(books)) {
             mAdapter.addBooks(books);
-            mAdapter.notifyDataSetChanged();
         }
     }
 }

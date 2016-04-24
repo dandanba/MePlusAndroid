@@ -23,9 +23,7 @@ import retrofit2.Retrofit;
 public class FancyApplication extends MultiDexApplication {
 
     private static FancyApplication sInstance;
-
     private Retrofit mRetrofit;
-
     private RefWatcher mRefWatcher;
 
     public static FancyApplication getInstance() {
@@ -42,7 +40,6 @@ public class FancyApplication extends MultiDexApplication {
         mRefWatcher = BuildConfig.DEBUG ? LeakCanary.install(this) : RefWatcher.DISABLED;
         sInstance = this;
     }
-
 
     @Override
     protected void attachBaseContext(Context base) {

@@ -40,7 +40,6 @@ public class BaseActivity extends AppCompatActivity {
         SwipeBackHelper.onDestroy(this);
     }
 
-
     public void replaceContainer(int containerViewId, Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();

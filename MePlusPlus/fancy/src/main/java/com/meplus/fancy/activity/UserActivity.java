@@ -20,6 +20,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * 用户信息
+ */
 public class UserActivity extends BaseActivity {
     private final static String TAG = UserActivity.class.getSimpleName();
     @Bind(R.id.icon)
@@ -42,18 +45,18 @@ public class UserActivity extends BaseActivity {
 
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
-        mApiPresenter.getborrowlistbyrobot(Data, LibraryId);
+        mApiPresenter.getborrowlistbyrobot(ApiPresenter.METHOD_GETBORROWLISTBYROBOT, Data, LibraryId);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
+        ButterKnife.unbind(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseBookEvent(ResponseEvent<User> event) {
+    public void onResponseEventUser(ResponseEvent<User> event) {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWLISTBYROBOT.equals(method)) {
             final Response<User> response = event.getResponse();
@@ -78,6 +81,5 @@ public class UserActivity extends BaseActivity {
             event.showError(this);
         }
     }
-
 
 }

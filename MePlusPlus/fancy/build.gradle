@@ -125,6 +125,5 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
     // swipebackhelper
     compile 'com.jude:swipebackhelper:2.1.5'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }
 

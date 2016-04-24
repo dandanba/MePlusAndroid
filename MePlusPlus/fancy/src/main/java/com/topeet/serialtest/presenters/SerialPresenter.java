@@ -15,8 +15,8 @@ public class SerialPresenter {
     private static final int[] demagnetize_buffer = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
 
     private serial mCom = new serial();
-    private ReadThread mReadThread;
     private StringBuffer mBuffer = new StringBuffer();
+    private ReadThread mReadThread;
 
     public void start() {
         mCom.Open(1, 115200);

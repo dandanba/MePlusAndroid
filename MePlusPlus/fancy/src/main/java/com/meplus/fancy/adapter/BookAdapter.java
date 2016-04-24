@@ -1,11 +1,8 @@
 package com.meplus.fancy.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.dataholder.DataHolder;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.viewholder.BookViewHolder;
@@ -15,6 +12,9 @@ import java.util.List;
 
 import cn.trinea.android.common.util.ListUtils;
 
+/**
+ * 图书列表对应的Adapter
+ */
 public class BookAdapter extends RecyclerView.Adapter<BookViewHolder> {
     private List<DataHolder<Book>> mDataHolders = new ArrayList<>();
 
@@ -24,9 +24,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     @Override
     public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final LayoutInflater inflater = FancyApplication.getInstance().getLayoutInflater();
-        final View itemView = inflater.inflate(BookViewHolder.getLayout(), null);
-        final BookViewHolder holder = new BookViewHolder(itemView);
+        final BookViewHolder holder = new BookViewHolder();
         return holder;
     }
 
@@ -45,5 +43,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookViewHolder> {
         for (int i = 0; i < size; i++) {
             mDataHolders.add(new DataHolder<Book>(books.get(i)));
         }
+        notifyDataSetChanged();
     }
 }

@@ -7,13 +7,19 @@ import android.os.Message;
 import com.meplus.fancy.utils.IntentUtils;
 
 public class SplashActivity extends BaseActivity implements Handler.Callback {
-    Handler handler;
+    Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler(this);
-        handler.sendEmptyMessageDelayed(1, 3000);
+        mHandler = new Handler(this);
+        mHandler.sendEmptyMessageDelayed(1, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeMessages(1);
     }
 
     @Override

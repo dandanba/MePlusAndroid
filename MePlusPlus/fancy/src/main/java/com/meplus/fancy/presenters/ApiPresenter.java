@@ -23,7 +23,7 @@ public class ApiPresenter {
     public static final String METHOD_GETBORROWEDLISTBYROBOT = "getborrowedlistbyrobot";
     public static final String METHOD_GETBORROWLISTBYROBOT = "getborrowlistbyrobot";
 
-    public void returnbyrobot(String userId, String data, String libraryId) {
+    public void returnbyrobot(String method, String userId, String data, String libraryId) {
         final TreeMap<String, String> args = ArgsUtils.generateArags();
         args.put("UserId", userId);
         args.put("Data", data);
@@ -36,14 +36,14 @@ public class ApiPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> EventBus.getDefault().post(new ResponseEvent<>(METHOD_RETURNBYROBOT, response)),
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(METHOD_RETURNBYROBOT, throwable)),
+                        response -> EventBus.getDefault().post(new ResponseEvent<>(method, response)),
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(method, throwable)),
                         () -> {
                         }
                 );
     }
 
-    public void borrowbyrobot(String userId, String data, String libraryId) {
+    public void borrowbyrobot(String method, String userId, String data, String libraryId) {
         final TreeMap<String, String> args = ArgsUtils.generateArags();
         args.put("UserId", userId);
         args.put("Data", data);
@@ -56,14 +56,14 @@ public class ApiPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> EventBus.getDefault().post(new ResponseEvent<>(METHOD_BORROWBYROBOT, response)),
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(METHOD_BORROWBYROBOT, throwable)),
+                        response -> EventBus.getDefault().post(new ResponseEvent<>(method, response)),
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(method, throwable)),
                         () -> {
                         }
                 );
     }
 
-    public void getborrowedlistbyrobot(String data, String libraryId) {
+    public void getborrowedlistbyrobot(String method, String data, String libraryId) {
         final TreeMap<String, String> args = ArgsUtils.generateArags();
         args.put("Data", data);
         args.put("LibraryId", libraryId);
@@ -75,14 +75,14 @@ public class ApiPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> EventBus.getDefault().post(new ResponseEvent<>(METHOD_GETBORROWEDLISTBYROBOT, response)),
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(METHOD_GETBORROWEDLISTBYROBOT, throwable)),
+                        response -> EventBus.getDefault().post(new ResponseEvent<>(method, response)),
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(method, throwable)),
                         () -> {
                         }
                 );
     }
 
-    public void getborrowlistbyrobot(String data, String libraryId) {
+    public void getborrowlistbyrobot(String method, String data, String libraryId) {
         final TreeMap<String, String> args = ArgsUtils.generateArags();
         args.put("Data", data);
         args.put("LibraryId", libraryId);
@@ -94,8 +94,8 @@ public class ApiPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> EventBus.getDefault().post(new ResponseEvent<>(METHOD_GETBORROWLISTBYROBOT, response)),
-                        throwable -> EventBus.getDefault().post(new ErrorEvent(METHOD_GETBORROWLISTBYROBOT, throwable)),
+                        response -> EventBus.getDefault().post(new ResponseEvent<>(method, response)),
+                        throwable -> EventBus.getDefault().post(new ErrorEvent(method, throwable)),
                         () -> {
                         }
                 );

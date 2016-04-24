@@ -2,11 +2,13 @@ package com.meplus.fancy.viewholder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.meplus.fancy.R;
+import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.dataholder.DataHolder;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.utils.ImageUtils;
@@ -17,11 +19,12 @@ import cn.trinea.android.common.util.TimeUtils;
 
 public class BookViewHolder extends RecyclerView.ViewHolder {
 
-    public static int getLayout() {
-        return R.layout.layout_item_book;
+    public static View generateItemView() {
+        final LayoutInflater inflater = FancyApplication.getInstance().getLayoutInflater();
+        final View itemView = inflater.inflate(R.layout.layout_item_book, null);
+        return itemView;
     }
 
-    View mItemView;
     @Bind(R.id.icon)
     ImageView mIcon;
     @Bind(R.id.author_text)
@@ -37,15 +40,18 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.days_text)
     TextView mDaysText;
 
+    public BookViewHolder() {
+        this(BookViewHolder.generateItemView());
+    }
+
     public BookViewHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
-        mItemView = view;
     }
 
     public void bindViewHolder(DataHolder<Book> dataHolder) {
         final Book book = dataHolder.getData();
-        final Context context = mItemView.getContext();
+        final Context context = itemView.getContext();
         ImageUtils.withFragmentInto(context, book.getBookCoverId(), mIcon);
         mAuthorText.setText(book.getAuthor());
         mNameText.setText(book.getBookName());

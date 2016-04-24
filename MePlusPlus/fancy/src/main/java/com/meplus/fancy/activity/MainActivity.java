@@ -31,23 +31,17 @@ import cn.trinea.android.common.util.ToastUtils;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
-
     private static final String LibraryId = "41676";
-
     private static final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
 
     @Bind(R.id.data_edit)
     EditText mDataEdit;
-
     @Bind(R.id.library_edit)
     EditText mLibraryEdit;
-
     @Bind(R.id.user_edit)
     EditText mUserEdit;
-
     @Bind(R.id.isbn_edit)
     EditText mISBNEdit;
-
     @Bind(R.id.log_text)
     TextView mLogText;
 
@@ -65,9 +59,10 @@ public class MainActivity extends BaseActivity {
 
         mSerialPresenter.start();
 
-        mDataEdit.setText(Data);
-        mUserEdit.setText(JsonUtils.readValue(Data, Code.class).getCheck());
         mLibraryEdit.setText(LibraryId);
+
+        mDataEdit.setText(Data);
+        mUserEdit.setText(getCheck(Data));
     }
 
     @Override
@@ -87,12 +82,13 @@ public class MainActivity extends BaseActivity {
             mDataEdit.setText(data);
             mUserEdit.setText(code.getCheck());
         } else {// ISBN 格式
+            // TODO 协议上增加开始“{” 和结束 “}”
             mISBNEdit.setText(data);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseBookEvent(ResponseEvent<Book> event) {
+    public void onResponseEventBook(ResponseEvent<Book> event) {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
             final Response<Book> response = event.getResponse();
@@ -149,11 +145,11 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.button2: // 借书
-                mApiPresenter.borrowbyrobot(UserId, ISBN, LibraryId);
+                mApiPresenter.borrowbyrobot(ApiPresenter.METHOD_BORROWBYROBOT, UserId, ISBN, LibraryId);
                 break;
 
             case R.id.button3: // 还书
-                mApiPresenter.returnbyrobot(UserId, ISBN, LibraryId);
+                mApiPresenter.returnbyrobot(ApiPresenter.METHOD_RETURNBYROBOT, UserId, ISBN, LibraryId);
                 break;
 
             case R.id.button4://  借书列表
@@ -179,6 +175,10 @@ public class MainActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    private String getCheck(String data) {
+        return JsonUtils.readValue(data, Code.class).getCheck();
     }
 
     static {

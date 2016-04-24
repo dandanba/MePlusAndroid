@@ -17,8 +17,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import cn.trinea.android.common.util.ToastUtils;
 
+/**
+ * 图书列表
+ */
 public class BooksActivity extends BaseActivity {
     private final static String TAG = BooksActivity.class.getSimpleName();
     private ApiPresenter mApiPresenter = new ApiPresenter();
@@ -33,18 +35,19 @@ public class BooksActivity extends BaseActivity {
 
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
-        mApiPresenter.getborrowedlistbyrobot(Data, LibraryId);
+        mApiPresenter.getborrowedlistbyrobot(ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT, Data, LibraryId);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+
         EventBus.getDefault().unregister(this);
+        ButterKnife.unbind(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseBookEvent(ResponseEvent<List<Book>> event) {
+    public void onResponseEventListBook(ResponseEvent<List<Book>> event) {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT.equals(method)) {
             final Response<List<Book>> response = event.getResponse();
