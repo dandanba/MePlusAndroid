@@ -92,27 +92,23 @@ public class MainActivity extends BaseActivity {
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
             final Response<Book> response = event.getResponse();
-            if (response.isOk()) {
-                if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未预借 2 借出失败
-                    final int code = mSerialPresenter.demagnetize();
-                    if (code == 0) {
-                        ToastUtils.show(this, "消磁成功！");
-                    }
-                    mLogText.append(String.format("demagnetize code: %1$d \r\n", code));
+            if (response.isOk() && response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未预借 2 借出失败
+                final int code = mSerialPresenter.demagnetize();
+                if (code == 0) {
+                    ToastUtils.show(this, "消磁成功！");
                 }
+                mLogText.append(String.format("demagnetize code: %1$d \r\n", code));
             } else {
                 response.showMessage(this);
             }
         } else if (ApiPresenter.METHOD_RETURNBYROBOT.equals(method)) {
             final Response<Book> response = event.getResponse();
-            if (response.isOk()) {
-                if (response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未借阅 2 归还失败
-                    final int code = mSerialPresenter.magnetize();
-                    if (code == 0) {
-                        ToastUtils.show(this, "充磁成功！");
-                    }
-                    mLogText.append(String.format("magnetize code: %1$d \r\n", code));
+            if (response.isOk() && response.getResult().getResultNo() == 0) {//  0 代表成功 1 代表未借阅 2 归还失败
+                final int code = mSerialPresenter.magnetize();
+                if (code == 0) {
+                    ToastUtils.show(this, "充磁成功！");
                 }
+                mLogText.append(String.format("magnetize code: %1$d \r\n", code));
             } else {
                 response.showMessage(this);
             }
