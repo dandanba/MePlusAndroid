@@ -16,7 +16,7 @@ data class Response<T>(
         var Result: T ? = null
 ) {
     fun isOk(): Boolean {
-        return Code.equals("OK");
+        return "ok".equals(Code!!.toLowerCase());
     }
 
     fun showMessage(context: Context) {

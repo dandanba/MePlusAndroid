@@ -10,9 +10,9 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class SerialPresenter {
     // 充磁 0x02 0x56 0x52 0x32 0x03 0x37
-    private static final int[] magnetize_buffer = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
+    private static final int[] MAGNETIZE_BUFFER = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
     // 消磁 0x02 0x56 0x52 0x31 0x03 0x34
-    private static final int[] demagnetize_buffer = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
+    private static final int[] DEMAGNETIZE_BUFFER = new int[]{0x02, 0x56, 0x52, 0x31, 0x03, 0x34};
 
     private serial mCom = new serial();
     private StringBuffer mBuffer = new StringBuffer();
@@ -34,11 +34,11 @@ public class SerialPresenter {
     }
 
     public int magnetize() {
-        return write(magnetize_buffer, magnetize_buffer.length);
+        return write(MAGNETIZE_BUFFER, MAGNETIZE_BUFFER.length);
     }
 
     public int demagnetize() {
-        return write(demagnetize_buffer, demagnetize_buffer.length);
+        return write(DEMAGNETIZE_BUFFER, DEMAGNETIZE_BUFFER.length);
     }
 
     private int write(int[] buffer, int len) {
@@ -55,6 +55,7 @@ public class SerialPresenter {
                 final int[] RX = mCom.Read();
                 handleRX(RX);
             }
+
         }
 
         private void handleRX(int[] RX) {
