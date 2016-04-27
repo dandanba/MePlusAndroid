@@ -13,9 +13,9 @@ import org.greenrobot.eventbus.EventBus;
  * Created by dandanba on 4/23/16.
  */
 public class SerialPresenter {
-    private static final String TAG = SerialPresenter.class.getSimpleName();
     public static final String METHOD_RUN = "SerialScannerRun";
 
+    private static final String TAG = SerialPresenter.class.getSimpleName();
     // 充磁 0x02 0x56 0x52 0x32 0x03 0x37
     private static final int[] MAGNETIZE_BUFFER = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
     // 消磁 0x02 0x56 0x52 0x31 0x03 0x34
@@ -26,15 +26,15 @@ public class SerialPresenter {
     private ReadThread mReadThread;
 
     public void start() {
-        log("start");
-        mCom.Open(1, 115200);
+        __log("start");
+        mCom.Open(1, 9600);
         /* Create a receiving thread */
         mReadThread = new ReadThread();
         mReadThread.start();
     }
 
     public void destroy() {
-        log("destroy");
+        __log("destroy");
         if (mReadThread != null && !mReadThread.isInterrupted()) {
             mReadThread.interrupt();
         }
@@ -77,19 +77,24 @@ public class SerialPresenter {
                 if (RX != null && RX.length > 0) { // 数据有效
                     mBuffer.append(new String(RX, 0, RX.length));
                     final String buffer = mBuffer.toString();
+                    __log(buffer);
                     if (buffer.startsWith("{")) { // JSON 格式
-                        log(" if (buffer.startsWith(\"{\")) {");
+                        __log(" if (buffer.startsWith(\"{\")) {");
                         if (buffer.endsWith("}")) {// JSON 格式结束
-                            log(" if (buffer.endsWith(\"}\")) {");
+                            __log(" if (buffer.endsWith(\"}\")) {");
                             mBuffer.setLength(0);
-                            log("mBuffer.setLength(0);");
+                            __log("mBuffer.setLength(0);");
                             EventBus.getDefault().post(new ScannerEvent(buffer));
-                            log("post");
+                            __log("post");
                         }
                     } else {// ISBN 格式
+                        __log("else");
                         if (mBuffer.length() == 13) { // 13位ISBN
+                            __log("if (mBuffer.length() == 13) { ");
                             mBuffer.setLength(0);
+                            __log("mBuffer.setLength(0);");
                             EventBus.getDefault().post(new ScannerEvent(buffer));
+                            __log("post");
                         }
                     }
                 }
@@ -97,7 +102,7 @@ public class SerialPresenter {
         }
     }
 
-    private void log(String text) {
+    private void __log(String text) {
         Log.i(TAG, text);
         EventBus.getDefault().post(new LogEvent(text));
     }
