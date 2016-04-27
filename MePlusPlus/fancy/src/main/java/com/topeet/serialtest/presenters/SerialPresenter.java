@@ -26,6 +26,7 @@ public class SerialPresenter {
     private ReadThread mReadThread;
 
     public void start() {
+        log("start");
         mCom.Open(1, 115200);
         /* Create a receiving thread */
         mReadThread = new ReadThread();
@@ -33,6 +34,7 @@ public class SerialPresenter {
     }
 
     public void destroy() {
+        log("destroy");
         if (mReadThread != null && !mReadThread.isInterrupted()) {
             mReadThread.interrupt();
         }
@@ -75,12 +77,14 @@ public class SerialPresenter {
                 if (RX != null && RX.length > 0) { // 数据有效
                     mBuffer.append(new String(RX, 0, RX.length));
                     final String buffer = mBuffer.toString();
-                    Log.i(TAG, buffer);
-                    EventBus.getDefault().post(new LogEvent(buffer));
                     if (buffer.startsWith("{")) { // JSON 格式
+                        log(" if (buffer.startsWith(\"{\")) {");
                         if (buffer.endsWith("}")) {// JSON 格式结束
+                            log(" if (buffer.endsWith(\"}\")) {");
                             mBuffer.setLength(0);
+                            log("mBuffer.setLength(0);");
                             EventBus.getDefault().post(new ScannerEvent(buffer));
+                            log("post");
                         }
                     } else {// ISBN 格式
                         if (mBuffer.length() == 13) { // 13位ISBN
@@ -91,6 +95,11 @@ public class SerialPresenter {
                 }
             }
         }
+    }
+
+    private void log(String text) {
+        Log.i(TAG, text);
+        EventBus.getDefault().post(new LogEvent(text));
     }
 
     static {
