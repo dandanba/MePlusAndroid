@@ -79,12 +79,12 @@ public class SerialPresenter {
                     EventBus.getDefault().post(new LogEvent(buffer));
                     if (buffer.startsWith("{")) { // JSON 格式
                         if (buffer.endsWith("}")) {// JSON 格式结束
-                            mBuffer.delete(0, mBuffer.length());
+                            mBuffer.setLength(0);
                             EventBus.getDefault().post(new ScannerEvent(buffer));
                         }
                     } else {// ISBN 格式
                         if (mBuffer.length() == 13) { // 13位ISBN
-                            mBuffer.delete(0, mBuffer.length());
+                            mBuffer.setLength(0);
                             EventBus.getDefault().post(new ScannerEvent(buffer));
                         }
                     }
