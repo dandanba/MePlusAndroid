@@ -80,14 +80,11 @@ public class SerialPresenter {
                     mBuffer.setLength(0);
                 }
                 if (buffer.contains("{")) {// JSON 格式
-                    if (buffer.contains("}")) { // JSON 格式结束
-                        final int start = buffer.indexOf("{");
-                        final int end = buffer.indexOf("}", start);
-                        if (end != -1) {// JSON 格式结束
-                            final String content = buffer.substring(start, end + 1);
-                            EventBus.getDefault().post(new ScannerEvent(content));
-                        }
-                        mBuffer.setLength(0);
+                    final int start = buffer.indexOf("{");
+                    final int end = buffer.indexOf("}", start);
+                    if (end != -1) {// JSON 格式结束
+                        final String content = buffer.substring(start, end + 1);
+                        EventBus.getDefault().post(new ScannerEvent(content));
                     }
                 } else {
                     if (buffer.length() == 13) { // 13位ISBN
