@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
 import com.meplus.fancy.events.ErrorEvent;
+import com.meplus.fancy.events.LogEvent;
 import com.meplus.fancy.events.ResponseEvent;
 import com.meplus.fancy.events.ScannerEvent;
 import com.meplus.fancy.model.Response;
@@ -71,6 +72,12 @@ public class MainActivity extends BaseActivity {
         mSerialPresenter.destroy();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogEvent(LogEvent event) {
+        final String text = event.getText();
+        mLogText.append(String.format("data: %1$s \r\n", text));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

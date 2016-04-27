@@ -2,6 +2,7 @@ package com.topeet.serialtest.presenters;
 
 import android.util.Log;
 
+import com.meplus.fancy.events.LogEvent;
 import com.meplus.fancy.events.ScannerEvent;
 import com.topeet.serialtest.serial;
 
@@ -59,7 +60,6 @@ public class SerialPresenter {
                 final int[] RX = mCom.Read();
                 handleRX(RX);
             }
-
         }
 
         private void handleRX(int[] RX) {
@@ -67,6 +67,7 @@ public class SerialPresenter {
                 mBuffer.append(new String(RX, 0, RX.length));
                 final String buffer = mBuffer.toString();
                 Log.i(TAG, buffer);
+                EventBus.getDefault().post(new LogEvent(buffer));
                 if (buffer.startsWith("{")) { // JSON 格式
                     if (buffer.endsWith("}")) {// JSON 格式结束
                         EventBus.getDefault().post(new ScannerEvent(buffer));
