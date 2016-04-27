@@ -2,6 +2,7 @@ package com.topeet.serialtest.presenters;
 
 import android.util.Log;
 
+import com.meplus.fancy.events.ErrorEvent;
 import com.meplus.fancy.events.LogEvent;
 import com.meplus.fancy.events.ScannerEvent;
 import com.topeet.serialtest.serial;
@@ -13,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class SerialPresenter {
     private static final String TAG = SerialPresenter.class.getSimpleName();
+    public static final String METHOD_RUN = "SerialScannerRun";
 
     // 充磁 0x02 0x56 0x52 0x32 0x03 0x37
     private static final int[] MAGNETIZE_BUFFER = new int[]{0x02, 0x56, 0x52, 0x32, 0x03, 0x37};
@@ -31,10 +33,12 @@ public class SerialPresenter {
     }
 
     public void destroy() {
-        if (mReadThread != null) {
+        if (mReadThread != null && !mReadThread.isInterrupted()) {
             mReadThread.interrupt();
         }
-        mCom.Close();
+        if (mCom != null) {
+            mCom.Close();
+        }
         mCom = null;
     }
 
@@ -56,9 +60,13 @@ public class SerialPresenter {
         public void run() {
             super.run();
             while (!isInterrupted()) {
-                // 扫描二维码和条形码的结果
-                final int[] RX = mCom.Read();
-                handleRX(RX);
+                if (mCom != null) {
+                    final int[] RX = mCom.Read();// 扫描二维码和条形码的结果
+                    handleRX(RX);
+                } else { // 处理底盘异常崩溃的情况
+                    interrupt();
+                    EventBus.getDefault().post(new ErrorEvent(METHOD_RUN, new IllegalArgumentException("mCom == null")));
+                }
             }
         }
 
@@ -68,17 +76,23 @@ public class SerialPresenter {
                 final String buffer = mBuffer.toString();
                 Log.i(TAG, buffer);
                 EventBus.getDefault().post(new LogEvent(buffer));
-                if (buffer.startsWith("{")) { // JSON 格式
-                    if (buffer.endsWith("}")) {// JSON 格式结束
-                        EventBus.getDefault().post(new ScannerEvent(buffer));
-                        mBuffer.delete(0, mBuffer.length());
+                if (buffer.contains("}")) {
+                    mBuffer.setLength(0);
+                }
+                if (buffer.contains("{") && buffer.contains("}")) {// JSON 格式
+                    final int start = buffer.indexOf("{");
+                    final int end = buffer.indexOf("}", start);
+                    if (end != -1) {// JSON 格式结束
+                        final String content = buffer.substring(start, end + 1);
+                        EventBus.getDefault().post(new ScannerEvent(content));
                     }
-                } else {// ISBN 格式
-                    if (mBuffer.length() == 13) { // 13位ISBN
+                } else {
+                    if (buffer.length() == 13) { // 13位ISBN
                         EventBus.getDefault().post(new ScannerEvent(buffer));
-                        mBuffer.delete(0, mBuffer.length());
+                        mBuffer.setLength(0);
                     }
                 }
+
             }
         }
     }

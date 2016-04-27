@@ -129,6 +129,8 @@ public class MainActivity extends BaseActivity {
             event.showError(this);
         } else if (ApiPresenter.METHOD_RETURNBYROBOT.equals(method)) {
             event.showError(this);
+        } else if (SerialPresenter.METHOD_RUN.equals(method)) {
+            event.showError(this);
         }
     }
 
