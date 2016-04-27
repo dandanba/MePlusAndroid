@@ -72,27 +72,23 @@ public class SerialPresenter {
 
         private void handleRX(int[] RX) {
             if (RX != null && RX.length > 0) { // 数据有效
-                mBuffer.append(new String(RX, 0, RX.length));
-                final String buffer = mBuffer.toString();
-                Log.i(TAG, buffer);
-                EventBus.getDefault().post(new LogEvent(buffer));
-                if (buffer.contains("}")) {
-                    mBuffer.setLength(0);
-                }
-                if (buffer.contains("{")) {// JSON 格式
-                    final int start = buffer.indexOf("{");
-                    final int end = buffer.indexOf("}", start);
-                    if (end != -1) {// JSON 格式结束
-                        final String content = buffer.substring(start, end + 1);
-                        EventBus.getDefault().post(new ScannerEvent(content));
-                    }
-                } else {
-                    if (buffer.length() == 13) { // 13位ISBN
-                        EventBus.getDefault().post(new ScannerEvent(buffer));
-                        mBuffer.setLength(0);
+                if (RX != null && RX.length > 0) { // 数据有效
+                    mBuffer.append(new String(RX, 0, RX.length));
+                    final String buffer = mBuffer.toString();
+                    Log.i(TAG, buffer);
+                    EventBus.getDefault().post(new LogEvent(buffer));
+                    if (buffer.startsWith("{")) { // JSON 格式
+                        if (buffer.endsWith("}")) {// JSON 格式结束
+                            mBuffer.delete(0, mBuffer.length());
+                            EventBus.getDefault().post(new ScannerEvent(buffer));
+                        }
+                    } else {// ISBN 格式
+                        if (mBuffer.length() == 13) { // 13位ISBN
+                            mBuffer.delete(0, mBuffer.length());
+                            EventBus.getDefault().post(new ScannerEvent(buffer));
+                        }
                     }
                 }
-
             }
         }
     }
