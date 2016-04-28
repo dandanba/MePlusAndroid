@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class SerialPresenter {
     public static final String METHOD_RUN = "SerialScannerRun";
+    public static final boolean LOG_EVENT = true;
 
     private static final String TAG = SerialPresenter.class.getSimpleName();
     // 充磁 0x02 0x56 0x52 0x32 0x03 0x37
@@ -75,9 +76,15 @@ public class SerialPresenter {
         private void handleRX(int[] RX) {
             if (RX != null && RX.length > 0) { // 数据有效
                 if (RX != null && RX.length > 0) { // 数据有效
+                    __log(RX);
                     mBuffer.append(new String(RX, 0, RX.length));
-                    final String buffer = mBuffer.toString();
+                    final String buffer = mBuffer.toString().trim(); // 去掉 ‘0D’
                     __log(buffer);
+                    if (RX[RX.length - 1] == 0x0d) { // 结束符号
+                        __log("RX[RX.length - 1] == 0x0d");
+                        mBuffer.setLength(0);
+                    }
+
                     if (buffer.startsWith("{")) { // JSON 格式
                         __log(" if (buffer.startsWith(\"{\")) {");
                         if (buffer.endsWith("}")) {// JSON 格式结束
@@ -104,7 +111,18 @@ public class SerialPresenter {
 
     private void __log(String text) {
         Log.i(TAG, text);
-        EventBus.getDefault().post(new LogEvent(text));
+        if (LOG_EVENT) {
+            EventBus.getDefault().post(new LogEvent(text));
+        }
+    }
+
+    private void __log(int[] array) {
+        final int size = array.length;
+        StringBuffer sb = new StringBuffer(size);
+        for (int i = 0; i < size; i++) {
+            sb.append(String.format("%1$x, ", array[i]));
+        }
+        __log(sb.toString());
     }
 
     static {
