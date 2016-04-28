@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class SerialPresenter {
     public static final String METHOD_RUN = "SerialScannerRun";
-    public static final boolean LOG_EVENT = true;
+    public static final boolean LOG_EVENT = false;
 
     private static final String TAG = SerialPresenter.class.getSimpleName();
     // 充磁 0x02 0x56 0x52 0x32 0x03 0x37
@@ -29,6 +29,7 @@ public class SerialPresenter {
     public void start() {
         __log("start");
         mCom.Open(1, 9600);
+        __log("mCom.Open(1, 9600);");
         /* Create a receiving thread */
         mReadThread = new ReadThread();
         mReadThread.start();
@@ -67,8 +68,11 @@ public class SerialPresenter {
                     final int[] RX = mCom.Read();// 扫描二维码和条形码的结果
                     handleRX(RX);
                 } else { // 处理底盘异常崩溃的情况
+                    __log(" if (mCom == null) {");
                     interrupt();
+                    __log("interrupt()");
                     EventBus.getDefault().post(new ErrorEvent(METHOD_RUN, new IllegalArgumentException("mCom == null")));
+                    __log("post");
                 }
             }
         }
@@ -80,9 +84,11 @@ public class SerialPresenter {
                     mBuffer.append(new String(RX, 0, RX.length));
                     final String buffer = mBuffer.toString().trim(); // 去掉 ‘0D’
                     __log(buffer);
+
                     if (RX[RX.length - 1] == 0x0d) { // 结束符号
                         __log("RX[RX.length - 1] == 0x0d");
                         mBuffer.setLength(0);
+                        __log("mBuffer.setLength(0);");
                     }
 
                     if (buffer.startsWith("{")) { // JSON 格式
