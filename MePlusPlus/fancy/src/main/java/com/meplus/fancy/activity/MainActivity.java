@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.meplus.fancy.Constants;
 import com.meplus.fancy.R;
+import com.meplus.fancy.events.BookEvent;
 import com.meplus.fancy.events.ErrorEvent;
 import com.meplus.fancy.events.LogEvent;
 import com.meplus.fancy.events.ResponseEvent;
@@ -41,8 +42,6 @@ public class MainActivity extends BaseActivity {
     EditText mLibraryEdit;
     @Bind(R.id.user_edit)
     EditText mUserEdit;
-    @Bind(R.id.isbn_edit)
-    EditText mISBNEdit;
     @Bind(R.id.log_text)
     TextView mLogText;
 
@@ -88,9 +87,6 @@ public class MainActivity extends BaseActivity {
             final Code code = JsonUtils.readValue(data, Code.class);
             mDataEdit.setText(data);
             mUserEdit.setText(code.getCheck());
-        } else {// ISBN 格式
-            // TODO 协议上增加开始“{” 和结束 “}”
-            mISBNEdit.setText(data);
         }
     }
 
@@ -134,11 +130,22 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6})
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBookEvent(BookEvent event) {
+        final String action = event.getAction();
+        final String ISBN = event.getISBN();
+        final String UserId = mUserEdit.getText().toString();
+        if (BookEvent.ACTION_BORROW.equals(action)) {
+            mApiPresenter.borrowbyrobot(ApiPresenter.METHOD_BORROWBYROBOT, UserId, ISBN, LibraryId);
+        } else if (BookEvent.ACTION_RETURN.equals(action)) {
+            mApiPresenter.returnbyrobot(ApiPresenter.METHOD_RETURNBYROBOT, UserId, ISBN, LibraryId);
+        }
+    }
+
+    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button5, R.id.button6})
     public void onClick(View view) {
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
-        final String ISBN = mISBNEdit.getText().toString();
 
         Intent intent;
         switch (view.getId()) {
@@ -150,15 +157,14 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.button2: // 借书
-                mApiPresenter.borrowbyrobot(ApiPresenter.METHOD_BORROWBYROBOT, UserId, ISBN, LibraryId);
+                intent = IntentUtils.generateIntent(this, BorrowBooksActivity.class);
+                intent.putExtra("LibraryId", LibraryId);
+                intent.putExtra("Data", UserId);
+                startActivity(intent);
                 break;
 
             case R.id.button3: // 还书
-                mApiPresenter.returnbyrobot(ApiPresenter.METHOD_RETURNBYROBOT, UserId, ISBN, LibraryId);
-                break;
-
-            case R.id.button4://  借书列表
-                intent = IntentUtils.generateIntent(this, BooksActivity.class);
+                intent = IntentUtils.generateIntent(this, BorrowedBooksActivity.class);
                 intent.putExtra("LibraryId", LibraryId);
                 intent.putExtra("Data", UserId);
                 startActivity(intent);
