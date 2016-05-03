@@ -125,5 +125,7 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
     // swipebackhelper
     compile 'com.jude:swipebackhelper:2.1.5'
+    // bar code
+    compile 'me.dm7.barcodescanner:zbar:1.8.4'
 }
 

@@ -9,4 +9,6 @@
     <string name="user_id_label">用户ID：</string>
     <string name="library_id_label">图书馆ID：</string>
     <string name="user_info_label">用户信息：</string>
+    <string name="scan_barcode">二维码扫描</string>
+    <string name="scan_isbn">ISBN扫描</string>
 </resources>

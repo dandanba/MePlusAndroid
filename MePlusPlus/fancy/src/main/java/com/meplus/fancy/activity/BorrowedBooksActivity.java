@@ -1,6 +1,8 @@
 package com.meplus.fancy.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.meplus.fancy.R;
 import com.meplus.fancy.events.BookEvent;
@@ -11,6 +13,7 @@ import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.presenters.ApiPresenter;
+import com.meplus.fancy.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -19,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 已经借阅的图书列表
@@ -76,5 +80,11 @@ public class BorrowedBooksActivity extends BaseActivity {
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
             EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
         }
+    }
+
+    @OnClick({R.id.scan_button})
+    public void onClick(View view) {
+        final Intent intent = IntentUtils.generateIntent(this, ScannerActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.meplus.fancy">
+    <!-- barcodescanner -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <!-- fir.im -->
     <!-- 必选 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -39,6 +41,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.BorrowBooksActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.ScannerActivity"
             android:screenOrientation="landscape" />
         <!-- FancyAndroid -->
         <meta-data

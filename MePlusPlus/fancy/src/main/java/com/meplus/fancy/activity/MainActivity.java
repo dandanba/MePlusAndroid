@@ -170,6 +170,11 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 break;
 
+            case R.id.button4: // 扫描二维码
+                intent = IntentUtils.generateIntent(this, ScannerActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.button5: // 启动多我程序
                 intent = IntentUtils.generateIntent(this, Constants.MEPLUS_ROBOT_PACKAGENAME);
                 if (intent == null) {
