@@ -34,7 +34,6 @@ import cn.trinea.android.common.util.ToastUtils;
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
     private static final String LibraryId = "41676";
-    private static final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
 
     @Bind(R.id.data_edit)
     EditText mDataEdit;
@@ -60,7 +59,8 @@ public class MainActivity extends BaseActivity {
         mSerialPresenter.start();
 
         mLibraryEdit.setText(LibraryId);
-
+        
+        final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
         mDataEdit.setText(Data);
         mUserEdit.setText(getCheck(Data));
     }
@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity {
         final String action = event.getAction();
         final String ISBN = event.getISBN();
         final String UserId = mUserEdit.getText().toString();
+
         if (BookEvent.ACTION_BORROW.equals(action)) {
             mApiPresenter.borrowbyrobot(ApiPresenter.METHOD_BORROWBYROBOT, UserId, ISBN, LibraryId);
         } else if (BookEvent.ACTION_RETURN.equals(action)) {
@@ -142,8 +143,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button5, R.id.button6})
+    @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6})
     public void onClick(View view) {
+        final String Data = mDataEdit.getText().toString();
         final String LibraryId = mLibraryEdit.getText().toString();
         final String UserId = mUserEdit.getText().toString();
 
@@ -159,7 +161,7 @@ public class MainActivity extends BaseActivity {
             case R.id.button2: // 借书
                 intent = IntentUtils.generateIntent(this, BorrowBooksActivity.class);
                 intent.putExtra("LibraryId", LibraryId);
-                intent.putExtra("Data", UserId);
+                intent.putExtra("Data", Data);
                 startActivity(intent);
                 break;
 
