@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
         mSerialPresenter.start();
 
         mLibraryEdit.setText(LibraryId);
-        
+
         final String Data = "{\"babyId\":\"0\",\"check\":\"3D0A6F20FFF74DF28E1D226A3B6C7E82\",\"parentsUserId\":\"0\",\"time\":\"0\"}";
         mDataEdit.setText(Data);
         mUserEdit.setText(getCheck(Data));
