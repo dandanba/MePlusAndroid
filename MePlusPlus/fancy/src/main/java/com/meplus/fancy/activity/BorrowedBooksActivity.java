@@ -131,7 +131,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
                 mProgressBar.setVisibility(View.VISIBLE);
                 mDelaySender.sendEmptyMessageDelayed(2, 1000);
             } else if (mCount < sMaxCount) {
-                Log.i(TAG, "count" + mCount);
+                Log.i(TAG, "count: " + mCount);
                 mProgressBar.setProgress(mCount * 100 / sMaxCount);
                 mDelaySender.sendEmptyMessageDelayed(2, 1000);
             }
