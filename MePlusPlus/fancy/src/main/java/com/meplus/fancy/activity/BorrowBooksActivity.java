@@ -101,6 +101,7 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
                 msg.what = 1;
                 msg.obj = data;
                 mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
+
                 mCount = 0;
                 mDelaySender.sendEmptyMessage(2);
             } else {

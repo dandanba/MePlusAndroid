@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -101,6 +102,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
                 msg.what = 1;
                 msg.obj = data;
                 mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
+
                 mCount = 0;
                 mDelaySender.sendEmptyMessage(2);
             } else {
@@ -119,6 +121,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     public boolean handleMessage(Message msg) {
         if (msg.what == 1) {
             mProgressBar.setVisibility(View.GONE);
+
             String data = (String) msg.obj;
             EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
             return true;
@@ -128,6 +131,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
                 mProgressBar.setVisibility(View.VISIBLE);
                 mDelaySender.sendEmptyMessageDelayed(2, 1000);
             } else if (mCount < sMaxCount) {
+                Log.i(TAG, "count" + mCount);
                 mProgressBar.setProgress(mCount * 100 / sMaxCount);
                 mDelaySender.sendEmptyMessageDelayed(2, 1000);
             }
