@@ -56,7 +56,9 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
         }
 
         Log.i(TAG, content);
-        EventBus.getDefault().post(new ScannerEvent(content));
+        final ScannerEvent scannerEvent = new ScannerEvent(content);
+        scannerEvent.setType(ScannerEvent.TYPE_CAMERA);
+        EventBus.getDefault().post(scannerEvent);
     }
 
     public void resumeScanner() {

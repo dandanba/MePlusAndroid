@@ -2,6 +2,8 @@ package com.meplus.fancy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import com.meplus.fancy.R;
@@ -25,10 +27,11 @@ import butterknife.OnClick;
 /**
  * 已经在凡学应用上订阅的图书列表
  */
-public class BorrowBooksActivity extends BaseActivity {
+public class BorrowBooksActivity extends BaseActivity implements Handler.Callback {
     private final static String TAG = BorrowBooksActivity.class.getSimpleName();
 
     private ApiPresenter mApiPresenter = new ApiPresenter();
+    private Handler mDelaySender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class BorrowBooksActivity extends BaseActivity {
         final String Data = getIntent().getStringExtra("Data");
         final String LibraryId = getIntent().getStringExtra("LibraryId");
         mApiPresenter.getborrowlistbyrobot(ApiPresenter.METHOD_GETBORROWLISTBYROBOT, Data, LibraryId);
+
+        mDelaySender = new Handler(this);
     }
 
     @Override
@@ -49,6 +54,7 @@ public class BorrowBooksActivity extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         ButterKnife.unbind(this);
+        mDelaySender.removeCallbacksAndMessages(null);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -78,7 +84,14 @@ public class BorrowBooksActivity extends BaseActivity {
     public void onScannerEvent(ScannerEvent event) {
         final String data = event.getContent();
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
-            EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_BORROW, data));
+            final String type = event.getType();
+            if (type.equals(ScannerEvent.TYPE_CAMERA)) { // 延迟发送
+                Message msg = mDelaySender.obtainMessage();
+                msg.obj = data;
+                mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
+            } else {
+                EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_BORROW, data));
+            }
         }
     }
 
@@ -87,5 +100,12 @@ public class BorrowBooksActivity extends BaseActivity {
     public void onClick(View view) {
         final Intent intent = IntentUtils.generateIntent(this, ScannerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        String data = (String) msg.obj;
+        EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_BORROW, data));
+        return true;
     }
 }
