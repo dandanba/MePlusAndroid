@@ -29,7 +29,7 @@ import butterknife.OnClick;
 /**
  * 已经借阅的图书列表
  */
-public class BorrowedBooksActivity extends BaseActivity implements Handler.Callback{
+public class BorrowedBooksActivity extends BaseActivity implements Handler.Callback {
     private final static String TAG = BorrowedBooksActivity.class.getSimpleName();
     private ApiPresenter mApiPresenter = new ApiPresenter();
     private Handler mDelaySender;
@@ -55,7 +55,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
         EventBus.getDefault().unregister(this);
         ButterKnife.unbind(this);
-        mDelaySender.removeCallbacksAndMessages(null);
+        mDelaySender.removeMessages(1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -86,7 +86,8 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
             final String type = event.getType();
             if (type.equals(ScannerEvent.TYPE_CAMERA)) { // 延迟发送
-                Message msg = mDelaySender.obtainMessage();
+                final Message msg = mDelaySender.obtainMessage();
+                msg.what = 1;
                 msg.obj = data;
                 mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
             } else {
@@ -103,8 +104,11 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
     @Override
     public boolean handleMessage(Message msg) {
-        String data = (String) msg.obj;
-        EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
-        return true;
+        if (msg.what == 1) {
+            String data = (String) msg.obj;
+            EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
+            return true;
+        }
+        return false;
     }
 }

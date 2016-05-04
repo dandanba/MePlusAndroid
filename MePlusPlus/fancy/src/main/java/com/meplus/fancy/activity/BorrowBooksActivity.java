@@ -86,7 +86,8 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
             final String type = event.getType();
             if (type.equals(ScannerEvent.TYPE_CAMERA)) { // 延迟发送
-                Message msg = mDelaySender.obtainMessage();
+                final Message msg = mDelaySender.obtainMessage();
+                msg.what = 1;
                 msg.obj = data;
                 mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
             } else {
@@ -104,8 +105,11 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
 
     @Override
     public boolean handleMessage(Message msg) {
-        String data = (String) msg.obj;
-        EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_BORROW, data));
-        return true;
+        if (msg.what == 1) {
+            String data = (String) msg.obj;
+            EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_BORROW, data));
+            return true;
+        }
+        return false;
     }
 }
