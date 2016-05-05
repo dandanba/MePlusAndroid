@@ -6,18 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.zxing.Result;
 import com.meplus.fancy.events.ScannerEvent;
-import com.meplus.fancy.utils.ISBNUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
-import me.dm7.barcodescanner.zbar.BarcodeFormat;
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class SimpleScannerFragment extends BaseFragment implements ZBarScannerView.ResultHandler {
+public class SimpleScannerFragment extends BaseFragment implements ZXingScannerView.ResultHandler {
     private static final String TAG = SimpleScannerFragment.class.getSimpleName();
-    private ZBarScannerView mScannerView;
+    private ZXingScannerView mScannerView;
 
     public static SimpleScannerFragment newInstance() {
         final SimpleScannerFragment fragment = new SimpleScannerFragment();
@@ -28,7 +26,7 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mScannerView = new ZBarScannerView(getActivity());
+        mScannerView = new ZXingScannerView(getActivity());
         return mScannerView;
     }
 
@@ -47,14 +45,7 @@ public class SimpleScannerFragment extends BaseFragment implements ZBarScannerVi
 
     @Override
     public void handleResult(Result rawResult) {
-        final String content;
-        final BarcodeFormat format = rawResult.getBarcodeFormat();
-        if (format.equals(BarcodeFormat.ISBN10)) {
-            content = ISBNUtils.getISBN13(rawResult.getContents());
-        } else {
-            content = rawResult.getContents();
-        }
-
+        final String content = rawResult.getText();
         Log.i(TAG, content);
         final ScannerEvent scannerEvent = new ScannerEvent(content);
         scannerEvent.setType(ScannerEvent.TYPE_CAMERA);
