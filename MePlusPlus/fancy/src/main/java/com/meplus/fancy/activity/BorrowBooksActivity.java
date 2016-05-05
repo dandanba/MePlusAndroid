@@ -37,7 +37,6 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
     ProgressBar mProgressBar;
 
     private ApiPresenter mApiPresenter = new ApiPresenter();
-
     private DelaySender mDelaySender = new DelaySender();
 
     @Override
