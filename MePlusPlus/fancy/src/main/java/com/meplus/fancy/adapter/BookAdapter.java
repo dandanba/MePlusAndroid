@@ -38,10 +38,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookViewHolder> {
         return mDataHolders.size();
     }
 
+    public void setBooks(List<Book> books) {
+        mDataHolders.clear();
+        addBooks(books);
+    }
+
     public void addBooks(List<Book> books) {
-        final int size = ListUtils.getSize(books);
-        for (int i = 0; i < size; i++) {
-            mDataHolders.add(new DataHolder<Book>(books.get(i)));
+        if (!ListUtils.isEmpty(books)) {
+            final int size = ListUtils.getSize(books);
+            for (int i = 0; i < size; i++) {
+                mDataHolders.add(new DataHolder<Book>(books.get(i)));
+            }
         }
         notifyDataSetChanged();
     }

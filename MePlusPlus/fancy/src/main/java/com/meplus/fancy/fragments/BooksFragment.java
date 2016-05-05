@@ -18,7 +18,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.trinea.android.common.util.ListUtils;
 
 public class BooksFragment extends BaseFragment {
     private static final String TAG = BooksFragment.class.getSimpleName();
@@ -52,8 +51,6 @@ public class BooksFragment extends BaseFragment {
     }
 
     public void updateBooks(List<Book> books) {
-        if (!ListUtils.isEmpty(books)) {
-            mAdapter.addBooks(books);
-        }
+        mAdapter.setBooks(books);
     }
 }

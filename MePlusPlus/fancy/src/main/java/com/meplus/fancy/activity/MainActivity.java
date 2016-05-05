@@ -13,6 +13,7 @@ import com.meplus.fancy.events.ErrorEvent;
 import com.meplus.fancy.events.LogEvent;
 import com.meplus.fancy.events.ResponseEvent;
 import com.meplus.fancy.events.ScannerEvent;
+import com.meplus.fancy.events.SerialEvent;
 import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.model.entity.Code;
@@ -101,6 +102,7 @@ public class MainActivity extends BaseActivity {
                 if (code == 0) {
                     ToastUtils.show(this, "消磁成功！");
                 }
+                EventBus.getDefault().post(new SerialEvent(SerialEvent.TYPE_DEMAGNETIZE));
                 mLogText.append(String.format("demagnetize code: %1$d \r\n", code));
             } else {
                 response.showMessage(this);
@@ -112,6 +114,7 @@ public class MainActivity extends BaseActivity {
                 if (code == 0) {
                     ToastUtils.show(this, "充磁成功！");
                 }
+                EventBus.getDefault().post(new SerialEvent(SerialEvent.TYPE_MAGNETIZE));
                 mLogText.append(String.format("magnetize code: %1$d \r\n", code));
             } else {
                 response.showMessage(this);

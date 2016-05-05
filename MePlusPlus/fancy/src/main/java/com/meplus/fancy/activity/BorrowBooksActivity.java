@@ -13,6 +13,7 @@ import com.meplus.fancy.events.BookEvent;
 import com.meplus.fancy.events.ErrorEvent;
 import com.meplus.fancy.events.ResponseEvent;
 import com.meplus.fancy.events.ScannerEvent;
+import com.meplus.fancy.events.SerialEvent;
 import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.User;
@@ -43,6 +44,9 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDelaySender = new Handler(this);
+
         setContentView(R.layout.activity_borrow_books);
         ButterKnife.bind(this);
 
@@ -52,11 +56,7 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
 
         replaceContainer(R.id.frame_layout, BooksFragment.newInstance());
 
-        final String Data = getIntent().getStringExtra("Data");
-        final String LibraryId = getIntent().getStringExtra("LibraryId");
-        mApiPresenter.getborrowlistbyrobot(ApiPresenter.METHOD_GETBORROWLISTBYROBOT, Data, LibraryId);
-
-        mDelaySender = new Handler(this);
+        update();
     }
 
     @Override
@@ -110,6 +110,10 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSerialEvent(SerialEvent event) {
+        update();
+    }
 
     @OnClick({R.id.scan_button})
     public void onClick(View view) {
@@ -140,4 +144,11 @@ public class BorrowBooksActivity extends BaseActivity implements Handler.Callbac
         }
         return false;
     }
+
+    private void update() {
+        final String Data = getIntent().getStringExtra("Data");
+        final String LibraryId = getIntent().getStringExtra("LibraryId");
+        mApiPresenter.getborrowlistbyrobot(ApiPresenter.METHOD_GETBORROWLISTBYROBOT, Data, LibraryId);
+    }
+
 }

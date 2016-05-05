@@ -13,6 +13,7 @@ import com.meplus.fancy.events.BookEvent;
 import com.meplus.fancy.events.ErrorEvent;
 import com.meplus.fancy.events.ResponseEvent;
 import com.meplus.fancy.events.ScannerEvent;
+import com.meplus.fancy.events.SerialEvent;
 import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.Book;
@@ -46,6 +47,8 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDelaySender = new Handler(this);
+
         setContentView(R.layout.activity_borrowed_books);
         ButterKnife.bind(this);
 
@@ -53,11 +56,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
         EventBus.getDefault().register(this);
         replaceContainer(R.id.frame_layout, BooksFragment.newInstance());
-        final String Data = getIntent().getStringExtra("Data");
-        final String LibraryId = getIntent().getStringExtra("LibraryId");
-        mApiPresenter.getborrowedlistbyrobot(ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT, Data, LibraryId);
-
-        mDelaySender = new Handler(this);
+        update();
     }
 
     @Override
@@ -111,6 +110,11 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSerialEvent(SerialEvent event) {
+        update();
+    }
+
     @OnClick({R.id.scan_button})
     public void onClick(View view) {
         final Intent intent = IntentUtils.generateIntent(this, ScannerActivity.class);
@@ -139,5 +143,11 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
             return true;
         }
         return false;
+    }
+
+    private void update() {
+        final String Data = getIntent().getStringExtra("Data");
+        final String LibraryId = getIntent().getStringExtra("LibraryId");
+        mApiPresenter.getborrowedlistbyrobot(ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT, Data, LibraryId);
     }
 }
