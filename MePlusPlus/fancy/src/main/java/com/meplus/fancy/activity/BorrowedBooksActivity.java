@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -18,6 +17,7 @@ import com.meplus.fancy.fragments.BooksFragment;
 import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.presenters.ApiPresenter;
+import com.meplus.fancy.presenters.DelaySender;
 import com.meplus.fancy.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,22 +40,19 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     ProgressBar mProgressBar;
 
     private ApiPresenter mApiPresenter = new ApiPresenter();
-    private Handler mDelaySender;
-    private final int sMaxCount = (int) (MainActivity.sDelayMillis / 1000);
-    private int mCount;
+    private DelaySender mDelaySender = new DelaySender();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDelaySender = new Handler(this);
+        mDelaySender.create(this);
 
         setContentView(R.layout.activity_borrowed_books);
         ButterKnife.bind(this);
-
         mProgressBar.setVisibility(View.GONE);
-
         EventBus.getDefault().register(this);
         replaceContainer(R.id.frame_layout, BooksFragment.newInstance());
+
         update();
     }
 
@@ -65,8 +62,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
         EventBus.getDefault().unregister(this);
         ButterKnife.unbind(this);
-        mDelaySender.removeMessages(1);
-        mDelaySender.removeMessages(2);
+        mDelaySender.removeCallback();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -79,6 +75,9 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
                 fragment.updateBooks(response.getResult());
             } else {
                 response.showMessage(this);
+                // 暂时强制更新下，需要接口修改才能完善！TODO 和接口确认确认，正确的空数据的流程。
+                BooksFragment fragment = (BooksFragment) findFragmentById(R.id.frame_layout);
+                fragment.updateBooks(response.getResult());
             }
         }
     }
@@ -97,13 +96,9 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
             final String type = event.getType();
             if (type.equals(ScannerEvent.TYPE_CAMERA)) { // 延迟发送
-                final Message msg = mDelaySender.obtainMessage();
-                msg.what = 1;
-                msg.obj = data;
-                mDelaySender.sendMessageDelayed(msg, MainActivity.sDelayMillis);
+                mDelaySender.delaySend(data);
 
-                mCount = 0;
-                mDelaySender.sendEmptyMessage(2);
+                mDelaySender.startProgress();
             } else {
                 EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
             }
@@ -123,23 +118,16 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
     @Override
     public boolean handleMessage(Message msg) {
-        if (msg.what == 1) {
+        if (msg.what == DelaySender.MSG_SEND) {
+            mProgressBar.setProgress(0);
             mProgressBar.setVisibility(View.GONE);
-
             String data = (String) msg.obj;
             EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
             return true;
-        } else if (msg.what == 2) {
-            mDelaySender.removeMessages(2);
-            if (mCount == 0) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mDelaySender.sendEmptyMessageDelayed(2, 1000);
-            } else if (mCount < sMaxCount) {
-                Log.i(TAG, "count: " + mCount);
-                mProgressBar.setProgress(mCount * 100 / sMaxCount);
-                mDelaySender.sendEmptyMessageDelayed(2, 1000);
-            }
-            mCount++;
+        } else if (msg.what == DelaySender.MSG_PROGRESS) {
+            int progress = mDelaySender.progress();
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBar.setProgress(progress);
             return true;
         }
         return false;

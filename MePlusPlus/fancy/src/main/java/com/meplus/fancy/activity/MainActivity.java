@@ -34,7 +34,6 @@ import cn.trinea.android.common.util.ToastUtils;
 
 public class MainActivity extends BaseActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
-    public static final long sDelayMillis = 10000;
     private static final String LibraryId = "41676";
 
     @Bind(R.id.data_edit)
