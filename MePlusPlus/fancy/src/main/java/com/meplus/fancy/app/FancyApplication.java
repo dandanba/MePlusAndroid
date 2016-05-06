@@ -3,12 +3,15 @@ package com.meplus.fancy.app;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.meplus.fancy.BuildConfig;
+import com.meplus.fancy.Constants;
 import com.meplus.fancy.model.ApiService;
+import com.meplus.fancy.utils.FileLog;
 import com.meplus.fancy.utils.RetrofitUtils;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -33,6 +36,7 @@ public class FancyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        FileLog.open(Constants.sLogPath.getAbsolutePath(), Log.VERBOSE, 1000000);
         Fabric.with(this, new Crashlytics(), new Answers());
 
         FIR.init(this);

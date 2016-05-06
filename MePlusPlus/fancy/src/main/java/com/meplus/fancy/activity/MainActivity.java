@@ -19,6 +19,7 @@ import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.model.entity.Code;
 import com.meplus.fancy.presenters.ApiPresenter;
 import com.meplus.fancy.utils.FIRUtils;
+import com.meplus.fancy.utils.FileLog;
 import com.meplus.fancy.utils.IntentUtils;
 import com.meplus.fancy.utils.JsonUtils;
 import com.topeet.serialtest.presenters.SerialPresenter;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FileLog.i(TAG, "onCreate");
         setContentView(R.layout.activity_main);
 
         EventBus.getDefault().register(this);
@@ -69,6 +71,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        FileLog.i(TAG, "onDestroy");
+
         mSerialPresenter.destroy();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
@@ -82,6 +86,7 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
+        FileLog.i(TAG, "onScannerEvent");
         final String data = event.getContent();
         mLogText.append(String.format("data: %1$s \r\n", data));
         if (data.startsWith("{") && data.endsWith("}")) { // JSON 格式
@@ -93,6 +98,8 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEventBook(ResponseEvent<Book> event) {
+        FileLog.i(TAG, "onResponseEventBook");
+
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
             final Response<Book> response = event.getResponse();
@@ -123,6 +130,8 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onErrorEvent(ErrorEvent event) {
+        FileLog.i(TAG, "onErrorEvent");
+
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_BORROWBYROBOT.equals(method)) {
             event.showError(this);
@@ -138,6 +147,7 @@ public class MainActivity extends BaseActivity {
         final String action = event.getAction();
         final String ISBN = event.getISBN();
         final String UserId = mUserEdit.getText().toString();
+        FileLog.i(TAG, "onBookEvent " + action + " " + ISBN + " " + UserId);
 
         if (BookEvent.ACTION_BORROW.equals(action)) {
             mApiPresenter.borrowbyrobot(ApiPresenter.METHOD_BORROWBYROBOT, UserId, ISBN, LibraryId);

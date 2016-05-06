@@ -18,6 +18,7 @@ import com.meplus.fancy.model.Response;
 import com.meplus.fancy.model.entity.Book;
 import com.meplus.fancy.presenters.ApiPresenter;
 import com.meplus.fancy.presenters.DelaySender;
+import com.meplus.fancy.utils.FileLog;
 import com.meplus.fancy.utils.IntentUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,6 +46,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FileLog.i(TAG, "onCreate");
         mDelaySender.create(this);
 
         setContentView(R.layout.activity_borrowed_books);
@@ -59,6 +61,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        FileLog.i(TAG, "onDestroy");
 
         EventBus.getDefault().unregister(this);
         ButterKnife.unbind(this);
@@ -67,6 +70,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEventListBook(ResponseEvent<List<Book>> event) {
+        FileLog.i(TAG, "onResponseEventListBook");
         final String method = event.getMethod();
         if (ApiPresenter.METHOD_GETBORROWEDLISTBYROBOT.equals(method)) {
             final Response<List<Book>> response = event.getResponse();
@@ -92,13 +96,17 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScannerEvent(ScannerEvent event) {
+        FileLog.i(TAG, "onScannerEvent");
         final String data = event.getContent();
         if (!data.startsWith("{") || !data.endsWith("}")) { // 不是JSON格式 就是 ISBN 格式
             final String type = event.getType();
             if (type.equals(ScannerEvent.TYPE_CAMERA)) { // 延迟发送
+                FileLog.i(TAG, "onScannerEvent camera");
                 mDelaySender.delaySend(data);
+                FileLog.i(TAG, "mDelaySender.delaySend(data);");
 
                 mDelaySender.startProgress();
+                FileLog.i(TAG, "mDelaySender.startProgress();");
             } else {
                 EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
             }
@@ -119,12 +127,16 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.what == DelaySender.MSG_SEND) {
+            FileLog.i(TAG, "handleMessage send");
+
             mProgressBar.setProgress(0);
             mProgressBar.setVisibility(View.GONE);
             String data = (String) msg.obj;
             EventBus.getDefault().post(new BookEvent(BookEvent.ACTION_RETURN, data));
             return true;
         } else if (msg.what == DelaySender.MSG_PROGRESS) {
+            FileLog.i(TAG, "handleMessage progress");
+
             int progress = mDelaySender.progress();
             mProgressBar.setVisibility(View.VISIBLE);
             mProgressBar.setProgress(progress);
