@@ -3,7 +3,6 @@ package com.meplus.fancy.activity;
 import android.os.Bundle;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
-import com.meplus.fancy.R;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.ScannerEvent;
 
@@ -20,10 +19,6 @@ public class CaptureActivity extends com.meplus.zbar.CaptureActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
-        setContentView(R.layout.activity_scanner);
-
-        EventBus.getDefault().register(this);
-//        replaceContainer(R.id.frame_layout, SimpleScannerFragment.newInstance());
     }
 
 
@@ -48,7 +43,6 @@ public class CaptureActivity extends com.meplus.zbar.CaptureActivity {
         super.onDestroy();
         FancyApplication.getInstance().getRefWatcher().watch(this);
         SwipeBackHelper.onDestroy(this);
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
