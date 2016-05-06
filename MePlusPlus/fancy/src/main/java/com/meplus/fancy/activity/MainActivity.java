@@ -186,7 +186,7 @@ public class MainActivity extends BaseActivity {
                 break;
 
             case R.id.button4: // 扫描二维码
-                intent = IntentUtils.generateIntent(this, ScannerActivity.class);
+                intent = IntentUtils.generateIntent(this, CaptureActivity.class);
                 startActivity(intent);
                 break;
 

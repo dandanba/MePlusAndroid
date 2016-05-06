@@ -127,5 +127,7 @@ dependencies {
     compile 'com.jude:swipebackhelper:2.1.5'
     // bar code
     compile 'me.dm7.barcodescanner:zxing:1.8.4'
+    // zbar
+    compile project(':zbar')
 }
 

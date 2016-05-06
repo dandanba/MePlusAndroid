@@ -120,7 +120,7 @@ public class BorrowedBooksActivity extends BaseActivity implements Handler.Callb
 
     @OnClick({R.id.scan_button})
     public void onClick(View view) {
-        final Intent intent = IntentUtils.generateIntent(this, ScannerActivity.class);
+        final Intent intent = IntentUtils.generateIntent(this, CaptureActivity.class);
         startActivity(intent);
     }
 
