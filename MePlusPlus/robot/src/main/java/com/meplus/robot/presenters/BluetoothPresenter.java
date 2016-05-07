@@ -152,17 +152,21 @@ public class BluetoothPresenter {
         }
     }
 
+    public boolean sendDefault() {
+        return setEn(true);
+    }
 
     @DebugLog
-    public boolean sendDefault() {
+    private boolean setEn(boolean enable) { //En：00-关闭自主避障，01-开启自主避障
         if (!ENABLE) return true;
 
         if (!isConnected()) {
             return false;
         }
+        final byte En = (byte) (enable ? 0X01 : 00);
         // 自主避障功能使能（默认关闭）
-        byte CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X10);
-        byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X10, 00, 00, 00, 00, CheckSum};
+        byte CheckSum = (byte) (0X66 + (byte) 0XAA + 0X09 + 0X10 + En);
+        byte[] buffer = new byte[]{0X66, (byte) 0XAA, 0X09, 0X10, En, 00, 00, 00, CheckSum};
         sendData(buffer);
         return true;
     }
