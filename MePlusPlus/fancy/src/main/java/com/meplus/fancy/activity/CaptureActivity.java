@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.jude.swipbackhelper.SwipeBackHelper;
 import com.meplus.fancy.app.FancyApplication;
 import com.meplus.fancy.events.ScannerEvent;
+import com.meplus.fancy.utils.ISBNUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,7 +21,6 @@ public class CaptureActivity extends com.meplus.zbar.CaptureActivity {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -48,6 +48,8 @@ public class CaptureActivity extends com.meplus.zbar.CaptureActivity {
     @Override
     public void onResult(String result) {
         super.onResult(result);
+        result = result.trim();
+        result = ISBNUtils.getISBN13(result);
 
         final ScannerEvent scannerEvent = new ScannerEvent(result);
         scannerEvent.setType(ScannerEvent.TYPE_CAMERA);
