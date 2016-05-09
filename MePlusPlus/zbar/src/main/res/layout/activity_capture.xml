@@ -20,28 +20,32 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_alignParentTop="true"
-            android:background="#9f9f9f" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/shadow" />
 
         <ImageView
             android:id="@+id/capture_mask_bottom"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_alignParentBottom="true"
-            android:background="#9f9f9f" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/shadow" />
 
         <ImageView
             android:id="@+id/capture_mask_left"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:background="#9f9f9f" />
+            android:background="@drawable/shadow" />
 
         <ImageView
             android:id="@+id/capture_mask_right"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="#9f9f9f" />
+            android:background="@drawable/shadow" />
 
         <RelativeLayout
             android:id="@+id/capture_crop_view"
