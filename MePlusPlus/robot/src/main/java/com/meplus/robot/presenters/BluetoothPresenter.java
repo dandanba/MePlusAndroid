@@ -271,19 +271,19 @@ public class BluetoothPresenter {
                 // 右轮电机编码器（4 Byte）
                 // data[14]-data[17];
                 // 0-255 单位cm
-                // final byte U1_Dis = data[18];
+                final byte U1_Dis = data[18];
                 // 0-255 单位cm
-                // final byte U2_Dis = data[19];
+                final byte U2_Dis = data[19];
                 // 0-255 单位cm
-                // final byte U3_Dis = data[20];
+                final byte U3_Dis = data[20];
                 // 0-255 单位cm
-                // final byte U4_Dis = data[21];
+                final byte U4_Dis = data[21];
                 // 0-255 单位cm
-                // final byte U5_Dis = data[22];
+                final byte U5_Dis = data[22];
                 // 防跌落传感器
-                // final byte Fall_IR = data[23];
+//                 final byte Fall_IR = data[23];
                 // 航向角
-                // data[24]-data[25;
+                // data[24]-data[25];
                 // 俯仰角
                 // data[26]-data[27];
                 // 横滚角
@@ -294,12 +294,18 @@ public class BluetoothPresenter {
                 // data[31];
                 // 校验和
                 // data[33];
-
                 final String info = String.format("%1$x,%2$x,%3$x,%4$x,%5$x,%6$x,%7$x,%8$x,%9$x,%10$x", Head1, Head2, Length, BMS_Status, BMS_Error, SOC, Voltage_H, Voltage_L, Current_H, Current_L);
                 Log.i(TAG, info);
+                final String dis = String.format("dis: %1$d,%2$d,%3$d,%4$d,%5$d", U1_Dis, U2_Dis, U3_Dis, U4_Dis, U5_Dis);
+                Log.i(TAG, dis);
                 final BluetoothEvent event = new BluetoothEvent();
                 event.setConnected(isConnected());
                 event.setSOC(SOC);
+                event.setDis1(U1_Dis);
+                event.setDis2(U2_Dis);
+                event.setDis3(U3_Dis);
+                event.setDis4(U4_Dis);
+                event.setDis5(U5_Dis);
                 EventUtils.postEvent(event);
             }
         }

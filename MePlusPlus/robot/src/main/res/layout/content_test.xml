@@ -81,7 +81,10 @@
                     android:textColor="@color/meItemTextColor"
                     android:textSize="@dimen/meTitleSize" />
 
+                <include layout="@layout/map_layout" />
+
                 <include layout="@layout/control_layout" />
+
 
             </LinearLayout>
 
@@ -92,7 +95,6 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:padding="20dp">
-
 
                 <TextView
                     android:id="@+id/net_test_button"

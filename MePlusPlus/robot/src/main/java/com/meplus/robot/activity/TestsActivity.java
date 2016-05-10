@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.marvinlabs.intents.MediaIntents;
@@ -41,6 +42,7 @@ import io.agora.sample.agora.AgoraApplication;
  * 设置
  */
 public class TestsActivity extends BaseActivity {
+    private static final byte MIN_DISTANCE = 10;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.bluetooth_state)
@@ -49,6 +51,17 @@ public class TestsActivity extends BaseActivity {
     TextView mTestEchoButton;
     @Bind(R.id.bms_state)
     ImageButton mBMSState;
+
+    @Bind(R.id.b1)
+    ImageView b1;
+    @Bind(R.id.b2)
+    ImageView b2;
+    @Bind(R.id.b3)
+    ImageView b3;
+    @Bind(R.id.b4)
+    ImageView b4;
+    @Bind(R.id.b5)
+    ImageView b5;
 
     private BluetoothPresenter mBTPresenter;
     private PubnubPresenter mPubnubPresenter = new PubnubPresenter();
@@ -70,7 +83,6 @@ public class TestsActivity extends BaseActivity {
 
         setContentView(R.layout.activity_tests);
         ButterKnife.bind(this);
-
         mBTPresenter.create(context);
 
         // 初始化
@@ -95,7 +107,7 @@ public class TestsActivity extends BaseActivity {
         updateEchoTestButton(false);
         updateBluetoothState(false);
         updateSOC(0);
-
+        updateDis(MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE, MIN_DISTANCE);
     }
 
 
@@ -140,16 +152,26 @@ public class TestsActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBluetoothEvent(BluetoothEvent event) {
         if (event.ok()) {
+            // 连接
+            final boolean isConnected = event.isConnected();
+            updateBluetoothState(isConnected);
+            if (isConnected) {// 如果保持通讯状态
+                // 电量
+                final int soc = event.getSOC();
+                if (soc > 0) {// 发送电量的数据
+                    updateSOC(soc);
+                } else { // 只发送连接的数据
+                    mBTPresenter.sendDefault();// 自主避障功能使能（默认关闭）
+                }
 
-            final int soc = event.getSOC();
-            if (soc > 0) {// 发送电量的数据
-                updateSOC(soc);
-            } else { // 只发送连接的数据
-                mBTPresenter.sendDefault();// 自主避障功能使能（默认关闭）
+                // 超声波
+                final byte dis1 = event.getDis1();
+                final byte dis2 = event.getDis2();
+                final byte dis3 = event.getDis3();
+                final byte dis4 = event.getDis4();
+                final byte dis5 = event.getDis5();
+                updateDis(dis1, dis2, dis3, dis4, dis5);
             }
-
-
-            updateBluetoothState(event.isConnected());
         }
     }
 
@@ -254,5 +276,13 @@ public class TestsActivity extends BaseActivity {
 
     private void updateBluetoothState(boolean state) {
         mBluetoothState.setText(state ? getString(R.string.bt_connect) : getString(R.string.bt_unconnect));
+    }
+
+    private void updateDis(byte dis1, byte dis2, byte dis3, byte dis4, byte dis5) {
+        b1.setImageResource(dis1 < MIN_DISTANCE ? R.drawable.b1_selected : R.drawable.b1_normal);
+        b2.setImageResource(dis2 < MIN_DISTANCE ? R.drawable.b2_selected : R.drawable.b2_normal);
+        b3.setImageResource(dis3 < MIN_DISTANCE ? R.drawable.b3_selected : R.drawable.b3_normal);
+        b4.setImageResource(dis4 < MIN_DISTANCE ? R.drawable.b4_selected : R.drawable.b4_normal);
+        b5.setImageResource(dis5 < MIN_DISTANCE ? R.drawable.b5_selected : R.drawable.b5_normal);
     }
 }
