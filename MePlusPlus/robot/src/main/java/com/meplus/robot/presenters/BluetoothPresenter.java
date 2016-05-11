@@ -271,28 +271,30 @@ public class BluetoothPresenter {
                 // 右轮电机编码器（4 Byte）
                 // data[14]-data[17];
                 // 0-255 单位cm
-                final byte U1_Dis = data[18];
+                final int U1_Dis = data[18] & 0xff;
                 // 0-255 单位cm
-                final byte U2_Dis = data[19];
+                final int U2_Dis = data[19] & 0xff;
                 // 0-255 单位cm
-                final byte U3_Dis = data[20];
+                final int U3_Dis = data[20] & 0xff;
                 // 0-255 单位cm
-                final byte U4_Dis = data[21];
+                final int U4_Dis = data[21] & 0xff;
                 // 0-255 单位cm
-                final byte U5_Dis = data[22];
+                final int U5_Dis = data[22] & 0xff;
                 // 防跌落传感器
-//                 final byte Fall_IR = data[23];
-                // 航向角
+                // final byte Fall_IR = data[23];
+                // 航向角 IMU_YAW
                 // data[24]-data[25];
-                // 俯仰角
+                // 俯仰角 IMU_PITCH
                 // data[26]-data[27];
-                // 横滚角
+                // 横滚角 IMU_ROLL
                 // data[28]-data[29];
-                // 通信异常
+                // 自动充电红外传感器 IR_Status
                 // data[30];
-                // 系统故障
+                // 通信异常
                 // data[31];
-                // 校验和
+                // 系统故障
+                // data[32];
+                // 校验和 Check Sum
                 // data[33];
                 final String info = String.format("%1$x,%2$x,%3$x,%4$x,%5$x,%6$x,%7$x,%8$x,%9$x,%10$x", Head1, Head2, Length, BMS_Status, BMS_Error, SOC, Voltage_H, Voltage_L, Current_H, Current_L);
                 Log.i(TAG, info);

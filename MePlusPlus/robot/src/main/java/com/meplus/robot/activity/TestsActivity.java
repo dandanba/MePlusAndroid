@@ -42,7 +42,7 @@ import io.agora.sample.agora.AgoraApplication;
  * 设置
  */
 public class TestsActivity extends BaseActivity {
-    private static final byte MIN_DISTANCE = 10;
+    private static final int MIN_DISTANCE = 10;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.bluetooth_state)
@@ -165,11 +165,11 @@ public class TestsActivity extends BaseActivity {
                 }
 
                 // 超声波
-                final byte dis1 = event.getDis1();
-                final byte dis2 = event.getDis2();
-                final byte dis3 = event.getDis3();
-                final byte dis4 = event.getDis4();
-                final byte dis5 = event.getDis5();
+                final int dis1 = event.getDis1();
+                final int dis2 = event.getDis2();
+                final int dis3 = event.getDis3();
+                final int dis4 = event.getDis4();
+                final int dis5 = event.getDis5();
                 updateDis(dis1, dis2, dis3, dis4, dis5);
             }
         }
@@ -278,7 +278,7 @@ public class TestsActivity extends BaseActivity {
         mBluetoothState.setText(state ? getString(R.string.bt_connect) : getString(R.string.bt_unconnect));
     }
 
-    private void updateDis(byte dis1, byte dis2, byte dis3, byte dis4, byte dis5) {
+    private void updateDis(int dis1, int dis2, int dis3, int dis4, int dis5) {
         b1.setImageResource(dis1 < MIN_DISTANCE ? R.drawable.b1_selected : R.drawable.b1_normal);
         b2.setImageResource(dis2 < MIN_DISTANCE ? R.drawable.b2_selected : R.drawable.b2_normal);
         b3.setImageResource(dis3 < MIN_DISTANCE ? R.drawable.b3_selected : R.drawable.b3_normal);
