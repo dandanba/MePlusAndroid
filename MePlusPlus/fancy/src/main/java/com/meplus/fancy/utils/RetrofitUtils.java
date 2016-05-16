@@ -2,12 +2,12 @@ package com.meplus.fancy.utils;
 
 import com.meplus.fancy.Constants;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -23,20 +23,22 @@ public class RetrofitUtils {
 
     public static Retrofit getClient() {
         // Define the interceptor, add authentication headers
-        Interceptor interceptor = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request newRequest = chain.request().newBuilder()
-                        .addHeader("X-FANCY-APPNO", Constants.APPNO)
-                        .addHeader("X-FANCY-APIVERSION", Constants.APIVERSION)
-                        .build();
-                return chain.proceed(newRequest);
-            }
+        Interceptor interceptor = chain -> {
+            Request newRequest = chain.request().newBuilder()
+                    .addHeader("X-FANCY-APPNO", Constants.APPNO)
+                    .addHeader("X-FANCY-APIVERSION", Constants.APIVERSION)
+                    .build();
+            return chain.proceed(newRequest);
         };
 
         // Add the interceptor to OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(1, 1, TimeUnit.MINUTES))
+                .followRedirects(true)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
