@@ -2,8 +2,6 @@ package com.meplus.fancy.utils;
 
 import com.meplus.fancy.Constants;
 
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,13 +31,13 @@ public class RetrofitUtils {
         // Add the interceptor to OkHttpClient
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .followRedirects(true)
-                .followSslRedirects(true)
-                .retryOnConnectionFailure(true)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .cache(null)
+//                .followRedirects(true)
+//                .followSslRedirects(true)
+//                .retryOnConnectionFailure(true)
+//                .connectTimeout(15, TimeUnit.SECONDS)
+//                .writeTimeout(30, TimeUnit.SECONDS)
+//                .readTimeout(30, TimeUnit.SECONDS)
+//                .cache(null)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
