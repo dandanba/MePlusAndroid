@@ -7,13 +7,13 @@
       <module fileurl="file://$PROJECT_DIR$/avos/avos.iml" filepath="$PROJECT_DIR$/avos/avos.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
       <module fileurl="file://$PROJECT_DIR$/bluetoothspp/bluetoothspp.iml" filepath="$PROJECT_DIR$/bluetoothspp/bluetoothspp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/clientApp/client.iml" filepath="$PROJECT_DIR$/clientApp/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/events/events.iml" filepath="$PROJECT_DIR$/events/events.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fancy/fancy.iml" filepath="$PROJECT_DIR$/fancy/fancy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fancyApp/fancy.iml" filepath="$PROJECT_DIR$/fancyApp/fancy.iml" />
       <module fileurl="file://$PROJECT_DIR$/pubnub/pubnub.iml" filepath="$PROJECT_DIR$/pubnub/pubnub.iml" />
       <module fileurl="file://$PROJECT_DIR$/res/res.iml" filepath="$PROJECT_DIR$/res/res.iml" />
-      <module fileurl="file://$PROJECT_DIR$/robot/robot.iml" filepath="$PROJECT_DIR$/robot/robot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/slamtec/slamtec.iml" filepath="$PROJECT_DIR$/slamtec/slamtec.iml" />
+      <module fileurl="file://$PROJECT_DIR$/robotApp/robot.iml" filepath="$PROJECT_DIR$/robotApp/robot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slamtecApp/slamtec.iml" filepath="$PROJECT_DIR$/slamtecApp/slamtec.iml" />
       <module fileurl="file://$PROJECT_DIR$/speech/speech.iml" filepath="$PROJECT_DIR$/speech/speech.iml" />
       <module fileurl="file://$PROJECT_DIR$/zbar/zbar.iml" filepath="$PROJECT_DIR$/zbar/zbar.iml" />
     </modules>

@@ -12,13 +12,13 @@
             <option value="$PROJECT_DIR$/avos" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/bluetoothspp" />
-            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/clientApp" />
             <option value="$PROJECT_DIR$/events" />
-            <option value="$PROJECT_DIR$/fancy" />
+            <option value="$PROJECT_DIR$/fancyApp" />
             <option value="$PROJECT_DIR$/pubnub" />
             <option value="$PROJECT_DIR$/res" />
-            <option value="$PROJECT_DIR$/robot" />
-            <option value="$PROJECT_DIR$/slamtec" />
+            <option value="$PROJECT_DIR$/robotApp" />
+            <option value="$PROJECT_DIR$/slamtecApp" />
             <option value="$PROJECT_DIR$/speech" />
             <option value="$PROJECT_DIR$/zbar" />
           </set>
@@ -30,13 +30,13 @@
             <option value="$PROJECT_DIR$/avos" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/bluetoothspp" />
-            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/clientApp" />
             <option value="$PROJECT_DIR$/events" />
-            <option value="$PROJECT_DIR$/fancy" />
+            <option value="$PROJECT_DIR$/fancyApp" />
             <option value="$PROJECT_DIR$/pubnub" />
             <option value="$PROJECT_DIR$/res" />
-            <option value="$PROJECT_DIR$/robot" />
-            <option value="$PROJECT_DIR$/slamtec" />
+            <option value="$PROJECT_DIR$/robotApp" />
+            <option value="$PROJECT_DIR$/slamtecApp" />
             <option value="$PROJECT_DIR$/speech" />
             <option value="$PROJECT_DIR$/zbar" />
           </set>
